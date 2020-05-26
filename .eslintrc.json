@@ -1,0 +1,52 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/eslint-recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "root": true,
+    "rules": {
+        "arrow-spacing": "warn",
+        "comma-dangle": ["error", {
+            "arrays": "only-multiline",
+            "objects": "never",
+            "imports": "only-multiline",
+            "exports": "only-multiline",
+            "functions": "never"
+        }],
+        "constructor-super": "error",
+        "linebreak-style": ["error", "unix"],
+        "indent": ["error", 2],
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-use-before-define": ["error", { "functions": true, "classes": true }],
+        "semi": "error",
+        "quotes": [ "error", "double"],
+        "react/prefer-stateless-function": "error",
+        "react/require-render-return": "error"
+    },
+    "settings": {
+        "eslint.workingDirectories": [
+            {"mode": "auto"}
+        ]
+    }
+}

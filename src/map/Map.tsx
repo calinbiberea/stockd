@@ -1,6 +1,6 @@
-import { GoogleMap, Marker, withGoogleMap, withScriptjs } from "react-google-maps";
+import { GoogleMap, withGoogleMap, withScriptjs } from "react-google-maps";
 import React from "react";
-import MapProps from "./MapProps";
+import type MapProps from "./MapProps";
 import mapStyles from "./MapStyles";
 
 const Map = withScriptjs(

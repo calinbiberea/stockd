@@ -22,6 +22,7 @@
     },
     "plugins": [
         "react",
+        "react-hooks",
         "@typescript-eslint"
     ],
     "root": true,
@@ -35,14 +36,15 @@
             "functions": "never"
         }],
         "constructor-super": "error",
-        "linebreak-style": ["error", "unix"],
         "indent": ["error", 2],
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "no-use-before-define": ["error", { "functions": true, "classes": true }],
         "semi": "error",
         "quotes": [ "error", "double"],
         "react/prefer-stateless-function": "error",
-        "react/require-render-return": "error"
+        "react/require-render-return": "error",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
     },
     "settings": {
         "eslint.workingDirectories": [

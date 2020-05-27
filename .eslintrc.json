@@ -6,7 +6,11 @@
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/eslint-recommended"
+        "plugin:@typescript-eslint/eslint-recommended",
+        "prettier",
+        "prettier/standard",
+        "prettier/react",
+        "plugin:prettier/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -44,7 +48,8 @@
         "react/prefer-stateless-function": "error",
         "react/require-render-return": "error",
         "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn"
+        "react-hooks/exhaustive-deps": "warn",
+        "prettier/prettier": "error"
     },
     "settings": {
         "eslint.workingDirectories": [

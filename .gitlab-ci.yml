@@ -1,0 +1,17 @@
+stages:
+  - test
+  - build
+
+test:
+  stage: test
+  image: node:12-alpine
+  script:
+    - npm install --no-progress
+    - CI=true npm test
+
+build:
+  stage: build
+  image: node:12-alpine
+  script:
+    - npm install --no-progress
+    - npm run build

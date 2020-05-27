@@ -8,6 +8,7 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
         "prettier",
         "prettier/standard",
         "prettier/react",
@@ -33,13 +34,6 @@
     "root": true,
     "rules": {
         "arrow-spacing": "warn",
-        "comma-dangle": ["error", {
-            "arrays": "only-multiline",
-            "objects": "never",
-            "imports": "only-multiline",
-            "exports": "only-multiline",
-            "functions": "never"
-        }],
         "constructor-super": "error",
         "indent": ["error", 2],
         "no-console": ["error", { "allow": ["warn", "error"] }],

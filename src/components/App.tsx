@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
-import MapScreen from "./components/map/MapScreen";
-import Header from "./components/header/Header";
+import MapScreen from "./map/MapScreen";
+import Header from "./header/Header";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PlaceIdContext = React.createContext("");

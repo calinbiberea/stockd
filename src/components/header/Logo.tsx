@@ -6,11 +6,13 @@ const cardStyle = {
   width: "160px",
   height: "40px",
   padding: "5px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 };
 
 const imgStyle = {
   width: "100%",
-  height: "100%",
 };
 
 const Logo: React.FC = () => (

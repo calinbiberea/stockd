@@ -1,0 +1,55 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": [
+        "react-app",
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier",
+        "prettier/standard",
+        "prettier/react",
+        "plugin:prettier/recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "react-hooks",
+        "@typescript-eslint"
+    ],
+    "root": true,
+    "rules": {
+        "arrow-spacing": "warn",
+        "constructor-super": "error",
+        "indent": ["error", 2],
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-use-before-define": ["error", { "functions": true, "classes": true }],
+        "semi": "off",
+        "@typescript-eslint/semi": "error",
+        "quotes": [ "error", "double"],
+        "react/prefer-stateless-function": "error",
+        "react/require-render-return": "error",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "prettier/prettier": "error"
+    },
+    "settings": {
+        "eslint.workingDirectories": [
+            {"mode": "auto"}
+        ]
+    }
+}

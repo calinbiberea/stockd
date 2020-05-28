@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
+import Splash from "./Splash";
 import MapScreen from "./map/MapScreen";
 import Header from "./header/Header";
 import Overlay from "./overlay/Overlay";
@@ -15,6 +16,7 @@ const App: React.FC = () => {
 
   return (
     <div>
+      <Splash />
       <Header />
       <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} />
       <MapScreen onPlaceClick={onPlaceClick} />

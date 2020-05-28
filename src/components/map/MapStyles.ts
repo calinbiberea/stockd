@@ -1,4 +1,4 @@
-import stockdPalette from "../../util/stockdPalette";
+import colors from "../../res/colors";
 
 const mapStyles: google.maps.MapTypeStyle[] = [
   {
@@ -6,7 +6,7 @@ const mapStyles: google.maps.MapTypeStyle[] = [
     elementType: "geometry",
     stylers: [
       {
-        hue: stockdPalette.blue1,
+        hue: colors.blue1,
       },
     ],
   },
@@ -48,7 +48,7 @@ const mapStyles: google.maps.MapTypeStyle[] = [
     elementType: "labels.icon",
     stylers: [
       {
-        color: stockdPalette.blue1,
+        color: colors.blue1,
       },
     ],
   },

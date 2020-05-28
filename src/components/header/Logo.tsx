@@ -1,4 +1,4 @@
-import logo from "./stockd.png";
+import logo from "../../res/logo.png";
 import Card from "@material-ui/core/Card";
 import React from "react";
 

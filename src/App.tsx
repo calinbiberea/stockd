@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import MapScreen from "./map/MapScreen";
+import MapScreen from "./components/map/MapScreen";
 
 const App: React.FC = () => (
   // eslint-disable-next-line no-console

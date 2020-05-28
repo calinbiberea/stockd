@@ -1,7 +1,7 @@
-import { firebaseApiKey } from "./APIKey";
+import envVars from "../envVars";
 
 export const firebaseConfig = {
-  apiKey: firebaseApiKey,
+  apiKey: envVars.firebaseKey.value,
   authDomain: "stockd-052020.firebaseapp.com",
   databaseURL: "https://stockd-052020.firebaseio.com",
   projectId: "stockd-052020",

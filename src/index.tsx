@@ -5,12 +5,14 @@ import "./index.css";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { firebaseConfig } from "./firebase/firebaseConfig";
+import { missingEnvVars } from "./envVars";
+import MissingEnvVar from "./components/errorScreens/MissingEnvVar";
 
 firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {missingEnvVars.length === 0 ? <App /> : <MissingEnvVar vars={missingEnvVars} />}
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -2,14 +2,14 @@ import React from "react";
 import { IconButton, InputBase, makeStyles } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
-import stockdPalette from "../../stockdPalette";
+import colors from "../../res/colors";
 import shadows from "@material-ui/core/styles/shadows";
 
 const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: stockdPalette.blue2,
+    backgroundColor: colors.blue2,
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(1),
       width: "auto",

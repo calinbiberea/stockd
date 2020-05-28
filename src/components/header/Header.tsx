@@ -4,7 +4,7 @@ import Logo from "./Logo";
 import Search from "./Search";
 
 const Header: React.FC = () => (
-  <AppBar position="fixed" style={{ backgroundColor: "rgba(0, 0, 0, 0)", boxShadow: "none" }} >
+  <AppBar position="fixed" style={{ backgroundColor: "rgba(0, 0, 0, 0)", boxShadow: "none" }}>
     <Toolbar>
       <Logo />
       <Search />

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
+import Splash from "./components/Splash";
 import MapScreen from "./components/map/MapScreen";
 import Header from "./components/header/Header";
 
@@ -18,6 +19,8 @@ const App: React.FC = () => {
 
   return (
     <div>
+      <Splash />
+
       <Header />
       <MapScreen onPlaceClick={onPlaceClick} />
     </div>

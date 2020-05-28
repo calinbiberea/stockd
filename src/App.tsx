@@ -3,9 +3,11 @@ import "./App.css";
 import MapScreen from "./components/map/MapScreen";
 import Header from "./components/header/Header";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PlaceIdContext = React.createContext("");
 
 const App: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentPlaceId, setCurrentPlaceId] = useState("");
 
   const onPlaceClick = (placeId: string) => {

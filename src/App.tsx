@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import MapScreen from "./components/map/MapScreen";
+import Header from "./components/header/Header";
 
 const PlaceIdContext = React.createContext("");
 
@@ -15,6 +16,7 @@ const App: React.FC = () => {
 
   return (
     <div>
+      <Header />
       <MapScreen onPlaceClick={onPlaceClick} />
     </div>
   );

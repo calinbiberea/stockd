@@ -15,10 +15,7 @@ const Map = withScriptjs(
           e.stop();
         }
       }}
-    >
-      {/*<Marker position={{ lat: 51.49781, lng: -0.18375 }} />*/}
-      {/*<Marker position={{ lat: 51.499, lng: -0.18369 }} />*/}
-    </GoogleMap>
+    />
   ))
 );
 

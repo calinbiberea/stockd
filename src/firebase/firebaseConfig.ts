@@ -1,4 +1,4 @@
-import envVars from "../envVars";
+import envVars from "../util/envVars";
 
 export const firebaseConfig = {
   apiKey: envVars.firebaseKey.value,

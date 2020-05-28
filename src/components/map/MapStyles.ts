@@ -1,4 +1,4 @@
-import stockdPalette from "../../stockdPalette";
+import stockdPalette from "../../util/stockdPalette";
 
 const mapStyles: google.maps.MapTypeStyle[] = [
   {

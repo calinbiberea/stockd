@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { firebaseConfig } from "./firebase/firebaseConfig";
-import { missingEnvVars } from "./envVars";
+import { missingEnvVars } from "./util/envVars";
 import MissingEnvVar from "./components/errorScreens/MissingEnvVar";
 
 firebase.initializeApp(firebaseConfig);

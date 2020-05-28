@@ -1,5 +1,5 @@
 import React from "react";
-import envVars from "../../envVars";
+import envVars from "../../util/envVars";
 import Map from "./Map";
 import type MapProps from "./MapProps";
 

@@ -1,14 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import firebase from "firebase";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { firebaseConfig } from "./firebase/firebaseConfig";
+
+firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <React.StrictMode>
-    <div>
-      <App />
-    </div>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

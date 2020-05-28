@@ -2,23 +2,21 @@ import React, { useState } from "react";
 import "./App.css";
 import MapScreen from "./map/MapScreen";
 import Header from "./header/Header";
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const PlaceIdContext = React.createContext("");
+import Overlay from "./overlay/Overlay";
 
 const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentPlaceId, setCurrentPlaceId] = useState("");
 
   const onPlaceClick = (placeId: string) => {
-    // eslint-disable-next-line no-console
-    console.log("Clicked on " + placeId);
     setCurrentPlaceId(placeId);
   };
+
+  const closeOverlay = () => setCurrentPlaceId("");
 
   return (
     <div>
       <Header />
+      <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} />
       <MapScreen onPlaceClick={onPlaceClick} />
     </div>
   );

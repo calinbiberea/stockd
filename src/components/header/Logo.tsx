@@ -14,6 +14,8 @@ const divStyle = {
   height: "100%",
   backgroundImage: `url(${logo})`,
   backgroundSize: "contain",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
 };
 
 const Logo: React.FC = () => (

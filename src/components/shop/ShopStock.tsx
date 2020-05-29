@@ -1,7 +1,10 @@
-import React from "react";
-import StockItem from "./StockItem";
+import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
 import Slider from "@material-ui/core/Slider";
+import StockItem from "./StockItem";
 import breadIcon from "../../res/icons/bread.svg";
+import updateStock from "../../util/firebaseOps";
+import { ShopStockProps } from "./ShopTypes";
 
 const containerStyle = {
   width: "100%",
@@ -37,21 +40,34 @@ const marks = [
   },
 ];
 
-const ShopStock: React.FC = () => (
-  <div style={containerStyle}>
-    <div style={stocksContainerStyle}>
-      <div style={stockItemSliderStyle}>
-        <StockItem icon={breadIcon} name="Bread" stock={2} />
+const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
+  const [breadStock, setBreadStock] = useState(50);
+  const [newBreadStock, setNewBreadStock] = useState(50);
 
-        <Slider
-          defaultValue={50}
-          aria-labelledby="discrete-slider-restrict"
-          step={null}
-          marks={marks}
-        />
+  const onSubmit = () => {
+    updateStock(shopId, "bread", newBreadStock);
+  };
+
+  return (
+    <div style={containerStyle}>
+      <div style={stocksContainerStyle}>
+        <div style={stockItemSliderStyle}>
+          <StockItem icon={breadIcon} name="Bread" stock={breadStock} />
+
+          <Slider
+            defaultValue={newBreadStock}
+            aria-labelledby="discrete-slider-restrict"
+            step={null}
+            marks={marks}
+          />
+        </div>
       </div>
+
+      <Button variant="contained" onClick={onSubmit}>
+        Submit
+      </Button>
     </div>
-  </div>
-);
+  );
+};
 
 export default ShopStock;

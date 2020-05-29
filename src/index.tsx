@@ -8,7 +8,9 @@ import { firebaseConfig } from "./firebase/firebaseConfig";
 import { missingEnvVars } from "./util/envVars";
 import MissingEnvVar from "./components/errorScreens/MissingEnvVar";
 
-firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+export const db = firebaseApp.firestore();
 
 ReactDOM.render(
   <React.StrictMode>

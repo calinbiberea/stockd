@@ -17,7 +17,7 @@ const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {
   if (selectedScreen === "default") {
     shopScreen = <ShopOverview />;
   } else if (selectedScreen === "stock") {
-    shopScreen = <ShopStock />;
+    shopScreen = <ShopStock shopId={shopData.id} />;
   }
 
   const onBackClick = () => {

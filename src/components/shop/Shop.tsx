@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { ShopProps } from "./ShopTypes";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
 import ShopStock from "./ShopStock";
-import type { ShopSelectedScreen } from "./ShopTypes";
 
 const shopStyle = {
   width: "60vw",
@@ -13,9 +12,12 @@ const shopStyle = {
   flexDirection: "column" as const,
 };
 
-const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {
-  const [selectedScreen, setSelectedScreen] = useState("default" as ShopSelectedScreen);
-
+const Shop: React.FC<ShopProps> = ({
+  shopData,
+  selectedScreen,
+  setSelectedScreen,
+  onBackClick,
+}: ShopProps) => {
   let shopScreen;
   if (selectedScreen === "default") {
     shopScreen = (
@@ -29,18 +31,9 @@ const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {
     shopScreen = <ShopStock shopId={shopData.id} />;
   }
 
-  const onBackClick = () => {
-    if (selectedScreen === "default") {
-      setSelectedScreen("stock");
-    } else if (selectedScreen === "stock") {
-      setSelectedScreen("default");
-    }
-  };
-
   return (
     <div style={shopStyle}>
       <ShopHeader shopData={shopData} onBackClick={onBackClick} />
-
       {shopScreen}
     </div>
   );

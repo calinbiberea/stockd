@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import type { OverlayProps } from "./OverlayTypes";
 import type { ShopData } from "../../util/googleMaps";
 import Shop from "../shop/Shop";
+import { ShopSelectedScreen } from "../shop/ShopTypes";
 
 const useStyles = makeStyles({
   centered: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles({
 const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps) => {
   const classes = useStyles();
   const [shopData, setShopData] = useState(null as ShopData | null);
+  const [selectedScreen, setSelectedScreen] = useState("default" as ShopSelectedScreen);
   const isOpen = placeId !== "";
   const isLoaded = shopData !== null && shopData.id === placeId;
 
@@ -31,6 +33,14 @@ const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps
     });
   }, [placeId, isLoaded, isOpen]);
 
+  const onBackClick = () => {
+    if (selectedScreen === "default") {
+      closeOverlay();
+    } else {
+      setSelectedScreen("default");
+    }
+  };
+
   return (
     <div style={{ position: "absolute", zIndex: 2000 }}>
       <Fade in={isOpen && !isLoaded}>
@@ -42,12 +52,19 @@ const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps
       <Slide direction="up" in={isOpen && isLoaded}>
         <div>
           <Card className={classes.centered}>
-            {shopData !== null ? <Shop shopData={shopData} /> : undefined}
+            {shopData !== null ? (
+              <Shop
+                shopData={shopData}
+                selectedScreen={selectedScreen}
+                setSelectedScreen={setSelectedScreen}
+                onBackClick={onBackClick}
+              />
+            ) : undefined}
           </Card>
         </div>
       </Slide>
 
-      <Backdrop open={isOpen} onClick={closeOverlay}>
+      <Backdrop open={isOpen} onClick={onBackClick}>
         &nbsp;
       </Backdrop>
     </div>

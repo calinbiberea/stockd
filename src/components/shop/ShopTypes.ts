@@ -3,6 +3,9 @@ import { ShopData } from "../../util/googleMaps";
 
 export interface ShopProps {
   shopData: ShopData;
+  selectedScreen: ShopSelectedScreen;
+  setSelectedScreen: (value: ShopSelectedScreen) => void;
+  onBackClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export type ShopSelectedScreen = "default" | "safety" | "stock" | "reviews";

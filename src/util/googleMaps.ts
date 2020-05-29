@@ -38,7 +38,6 @@ export const getInfoForPlace = (placeId: string): Promise<ShopData | null> =>
             place.address_components?.find((component) => component.types.includes("route"))
               ?.long_name ?? null,
         };
-        console.log(shopData.photoReference);
         resolve(shopData);
       } else {
         console.error(`Place details request failed with ${status}\n\n${place}`);

@@ -4,7 +4,7 @@ import { firebaseConfig } from "./firebaseConfig";
 export let firebaseApp: firebase.app.App;
 export let db: firebase.firestore.Firestore;
 
-export const setupFirebase = () => {
+export const setupFirebase = (): void => {
   firebaseApp = firebase.initializeApp(firebaseConfig);
   db = firebaseApp.firestore();
 };

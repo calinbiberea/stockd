@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Slider from "@material-ui/core/Slider";
 import StockItem from "./StockItem";
@@ -7,6 +7,7 @@ import breadIcon from "../../res/icons/bread.svg";
 import updateStock from "../../util/firebaseOps";
 import { ShopStockProps } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
+import { getInfoForPlace } from "../../util/googleMaps";
 
 const containerStyle = {
   width: "100%",
@@ -64,6 +65,15 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
     updateStock(shopId, "bread", newBreadStock);
   };
 
+  const unsub = db.collection("s").onSnapshot(() => {
+    // eslint-disable-next-line no-console
+    console.log("Unsubbed");
+  });
+
+  useEffect(() => {
+    return unsub;
+  });
+
   const shopDBData = db.collection("shops").doc(shopId);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -80,14 +90,11 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
     }
   );
 
-  /* firebase listener for any changes the current id. */
-
   return (
     <div style={containerStyle}>
       <div style={stocksContainerStyle}>
         <div style={stockItemSliderStyle}>
           <StockItem icon={breadIcon} name="Bread" stock={breadStock} />
-
           <Slider
             aria-labelledby="discrete-slider-restrict"
             step={null}

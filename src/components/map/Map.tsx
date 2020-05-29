@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { GoogleMap } from "@react-google-maps/api";
 import React from "react";
 import type MapProps from "./MapProps";

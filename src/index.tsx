@@ -4,16 +4,15 @@ import firebase from "firebase";
 import "./index.css";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
-import { firebaseConfig } from "./firebase/firebaseConfig";
 import { missingEnvVars } from "./util/envVars";
 import MissingEnvVar from "./components/errorScreens/MissingEnvVar";
 import { loadGoogleMapsScript } from "./util/googleMaps";
+import { setupFirebase } from "./firebase/firebaseApp";
 
 export let db: firebase.firestore.Firestore;
 
 const runApp = async () => {
-  const firebaseApp = firebase.initializeApp(firebaseConfig);
-  db = firebaseApp.firestore();
+  setupFirebase();
   await loadGoogleMapsScript();
 
   ReactDOM.render(

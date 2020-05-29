@@ -11,12 +11,17 @@ const shopHeaderStyle = {
   height: "20%",
   display: "flex",
   flexDirection: "row" as const,
+  backgroundColor: colors.blue1,
 };
 
 const imgContainerStyle = {
+  flex: 1,
   width: "50%",
   display: "flex",
   alignItems: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "center",
 };
 
 const iconButtonStyle = {
@@ -24,17 +29,13 @@ const iconButtonStyle = {
   marginLeft: "16px",
 };
 
-const imgStyle = {
-  width: "100%",
-};
-
 const nameContainerStyle = {
+  flex: 1,
   width: "50%",
   display: "flex",
   flexDirection: "column" as const,
   justifyContent: "center" as const,
   alignItems: "center" as const,
-  backgroundColor: colors.blue1,
 };
 
 const dividerStyle = {
@@ -43,12 +44,10 @@ const dividerStyle = {
 
 const ShopHeader: React.FC<ShopHeaderProps> = ({ shopData, onBackClick }: ShopHeaderProps) => (
   <div style={shopHeaderStyle}>
-    <div style={imgContainerStyle}>
+    <div style={{ backgroundImage: `url(${shopData.photoReference})`, ...imgContainerStyle }}>
       <IconButton size="medium" style={iconButtonStyle} color="primary" onClick={onBackClick}>
         <ArrowBackIcon />
       </IconButton>
-
-      <img src={logo} alt="Shop preview" style={imgStyle} />
     </div>
 
     <div style={nameContainerStyle}>

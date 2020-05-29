@@ -9,8 +9,11 @@ import { missingEnvVars } from "./util/envVars";
 import MissingEnvVar from "./components/errorScreens/MissingEnvVar";
 import { loadGoogleMapsScript } from "./util/googleMaps";
 
+export let db: firebase.firestore.Firestore;
+
 const runApp = async () => {
-  firebase.initializeApp(firebaseConfig);
+  const firebaseApp = firebase.initializeApp(firebaseConfig);
+  db = firebaseApp.firestore();
   await loadGoogleMapsScript();
 
   ReactDOM.render(

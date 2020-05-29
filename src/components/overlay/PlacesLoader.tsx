@@ -1,8 +1,9 @@
-import type { OverlayProps, ShopData } from "./OverlayTypes";
 import React, { useEffect, useState } from "react";
 import { Box, Card, CircularProgress, Fade, Slide } from "@material-ui/core";
 import { getInfoForPlace } from "../../util/googleMaps";
 import { makeStyles } from "@material-ui/core/styles";
+import type { OverlayProps } from "./OverlayTypes";
+import type { ShopData } from "../../util/googleMaps";
 
 const useStyles = makeStyles({
   centered: {

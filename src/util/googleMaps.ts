@@ -1,6 +1,10 @@
 import { google, Loader } from "google-maps";
 import envVars from "./envVars";
-import { ShopData } from "../components/overlay/OverlayTypes";
+
+export interface ShopData {
+  name: string;
+  id: string;
+}
 
 let googleClient: google;
 let placesService: google.maps.places.PlacesService;

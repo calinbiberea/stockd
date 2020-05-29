@@ -5,6 +5,7 @@ import { OverlayProps } from "./OverlayTypes";
 
 const Overlay: React.FC<OverlayProps> = (props: OverlayProps) => {
   const isOpen = props.placeId !== "";
+
   return (
     <div style={{ position: "absolute", zIndex: 2000 }}>
       <PlacesLoader {...props} />

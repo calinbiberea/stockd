@@ -1,4 +1,5 @@
 import React from "react";
+import { ShopData } from "../../util/googleMaps";
 
 export interface ShopProps {
   shopData: ShopData;
@@ -14,11 +15,6 @@ export interface ShopHeaderProps {
 
 export interface ShopStockProps {
   shopId: string;
-}
-
-export interface ShopData {
-  name: string;
-  id: string;
 }
 
 export interface StockItemProps {

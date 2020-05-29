@@ -4,6 +4,7 @@ import { getInfoForPlace } from "../../util/googleMaps";
 import { makeStyles } from "@material-ui/core/styles";
 import type { OverlayProps } from "./OverlayTypes";
 import type { ShopData } from "../../util/googleMaps";
+import Shop from "../shop/Shop";
 
 const useStyles = makeStyles({
   centered: {
@@ -39,7 +40,7 @@ const PlacesLoader: React.FC<OverlayProps> = ({ placeId, closeOverlay }: Overlay
       <Slide direction="up" in={isOpen && isLoaded}>
         <div>
           <Card className={classes.centered}>
-            {shopData !== null ? <b>{shopData.name}</b> : undefined}
+            {shopData !== null ? <Shop shopData={shopData} /> : undefined}
           </Card>
         </div>
       </Slide>

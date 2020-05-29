@@ -6,8 +6,9 @@ import ShopStock from "./ShopStock";
 import type { ShopSelectedScreen } from "./ShopTypes";
 
 const shopStyle = {
-  width: "40vw",
+  width: "60vw",
   height: "45vh",
+  minWidth: "500px",
 };
 
 const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {

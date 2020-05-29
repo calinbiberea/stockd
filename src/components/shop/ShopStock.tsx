@@ -9,8 +9,7 @@ import { ShopStockProps } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
 
 const containerStyle = {
-  width: "100%",
-  height: "80%",
+  flex: 4,
   display: "flex",
   flexDirection: "column" as const,
   alignItems: "center",

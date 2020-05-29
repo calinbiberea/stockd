@@ -9,6 +9,8 @@ const shopStyle = {
   width: "60vw",
   height: "45vh",
   minWidth: "500px",
+  display: "flex",
+  flexDirection: "column" as const,
 };
 
 const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {

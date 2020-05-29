@@ -7,21 +7,30 @@ import pastaIcon from "../../res/icons/pasta.svg";
 import { FloatingActionButton } from "./floatingActionButton/FloatingActionButton";
 
 const containerStyle = {
-  width: "100%",
-  height: "80%",
+  flex: 4,
   display: "flex",
+  flexDirection: "column" as const,
   justifyContent: "space-around",
   alignItems: "center",
+};
+
+const stockOverviewStyle = {
+  display: "flex",
   flexDirection: "row" as const,
   flexWrap: "wrap" as const,
+  justifyContent: "space-around",
+  alignItems: "center",
 };
 
 const ShopOverview: React.FC = () => (
   <div style={containerStyle}>
-    <StockItem icon={breadIcon} name="Bread" stock={2} />
-    <StockItem icon={eggsIcon} name="Eggs" stock={2} />
-    <StockItem icon={milkIcon} name="Milk" stock={2} />
-    <StockItem icon={pastaIcon} name="Pasta" stock={2} />
+    <div style={stockOverviewStyle}>
+      <StockItem icon={breadIcon} name="Bread" stock={2} />
+      <StockItem icon={eggsIcon} name="Eggs" stock={2} />
+      <StockItem icon={milkIcon} name="Milk" stock={2} />
+      <StockItem icon={pastaIcon} name="Pasta" stock={2} />
+    </div>
+
     <FloatingActionButton />
   </div>
 );

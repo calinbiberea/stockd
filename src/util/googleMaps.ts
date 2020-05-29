@@ -5,12 +5,13 @@ export interface ShopData {
   name: string;
   id: string;
   photoReference: string | null;
+  roadName: string | null;
 }
 
 let googleClient: google;
 let placesService: google.maps.places.PlacesService;
 
-const detailsRequestField = ["name", "photos"];
+const detailsRequestField = ["name", "photos", "address_components"];
 
 export const loadGoogleMapsScript = async (): Promise<void> => {
   googleClient = await new Loader(envVars.googleMapsKey.value, { libraries: ["places"] }).load();
@@ -33,6 +34,9 @@ export const getInfoForPlace = (placeId: string): Promise<ShopData | null> =>
               ? place.photos[0].getUrl({ maxWidth: 500 })
               : null
             : null,
+          roadName:
+            place.address_components?.find((component) => component.types.includes("route"))
+              ?.long_name ?? null,
         };
         console.log(shopData.photoReference);
         resolve(shopData);

@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { ChangeEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Slider from "@material-ui/core/Slider";
 import StockItem from "./StockItem";
@@ -12,19 +12,33 @@ const containerStyle = {
   width: "100%",
   height: "80%",
   display: "flex",
+  flexDirection: "column" as const,
+  alignItems: "center",
 };
 
 const stocksContainerStyle = {
   width: "100%",
-  height: "100%",
   display: "flex",
+  flex: 1,
   flexDirection: "column" as const,
 };
 
 const stockItemSliderStyle = {
+  display: "flex",
   flex: 1,
   width: "100%",
   flexDirection: "row" as const,
+  alignItems: "center",
+  justifyContent: "space-around",
+};
+
+const sliderStyle = {
+  width: "200px",
+};
+
+const buttonStyle = {
+  width: "20%",
+  marginBottom: "8px",
 };
 
 const marks = [
@@ -50,31 +64,32 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
     updateStock(shopId, "bread", newBreadStock);
   };
 
-  const shopDBData = db.collection("shops").doc(shopId);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const databaseListener = shopDBData.onSnapshot(
-    (shopSnapshot) => {
-      const data = shopSnapshot.get("breadStock");
-      setBreadStock(data);
-      // eslint-disable-next-line no-console
-      console.log({ data });
-    },
-    (err) => {
-      // eslint-disable-next-line no-console,no-template-curly-in-string
-      console.log("Encountered error: ${err}");
-    }
-  );
-
-  /* firebase listener for any changes the current id. */
+  useEffect(() => {
+    return db
+      .collection("shops")
+      .doc(shopId)
+      .onSnapshot(
+        (shopSnapshot) => {
+          const data = shopSnapshot.get("breadStock");
+          setBreadStock(data);
+          console.warn({ data });
+        },
+        (err) => {
+          console.error(`Encountered error: ${err}`);
+        }
+      );
+  }, [shopId]);
 
   return (
     <div style={containerStyle}>
       <div style={stocksContainerStyle}>
         <div style={stockItemSliderStyle}>
           <StockItem icon={breadIcon} name="Bread" stock={breadStock} />
-
           <Slider
+            aria-labelledby="discrete-slider-restrict"
+            step={null}
+            marks={marks}
+            style={sliderStyle}
             value={newBreadStock}
             onChange={(event, value) => {
               /* TODO: ugly, fix, please */
@@ -85,14 +100,11 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
                 console.error("Undefined value type in Slider onChange");
               }
             }}
-            aria-labelledby="discrete-slider-restrict"
-            step={null}
-            marks={marks}
           />
         </div>
       </div>
 
-      <Button variant="contained" onClick={onSubmit}>
+      <Button variant="contained" color="primary" style={buttonStyle} onClick={onSubmit}>
         Submit
       </Button>
     </div>

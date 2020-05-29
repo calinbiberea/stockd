@@ -4,6 +4,7 @@ import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
 import milkIcon from "../../res/icons/milk.svg";
 import pastaIcon from "../../res/icons/pasta.svg";
+import { FloatingActionButton } from "./floatingActionButton/FloatingActionButton";
 
 const containerStyle = {
   width: "100%",
@@ -21,6 +22,7 @@ const ShopOverview: React.FC = () => (
     <StockItem icon={eggsIcon} name="Eggs" stock={2} />
     <StockItem icon={milkIcon} name="Milk" stock={2} />
     <StockItem icon={pastaIcon} name="Pasta" stock={2} />
+    <FloatingActionButton />
   </div>
 );
 

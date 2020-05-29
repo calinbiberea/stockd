@@ -1,4 +1,4 @@
-import { ShopData } from "../components/overlay/OverlayTypes";
+import { ShopData } from "../components/shop/ShopTypes";
 
 export const getInfoForPlace = (placeId: string): Promise<ShopData> =>
   new Promise((resolve) => {

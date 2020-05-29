@@ -1,8 +1,10 @@
-import type { OverlayProps, ShopData } from "./OverlayTypes";
 import React, { useEffect, useState } from "react";
 import { Box, Card, CircularProgress, Fade, Slide } from "@material-ui/core";
 import { getInfoForPlace } from "../../util/googlePlaces";
 import { makeStyles } from "@material-ui/core/styles";
+import type { OverlayProps } from "./OverlayTypes";
+import type { ShopData } from "../shop/ShopTypes";
+import Shop from "../shop/Shop";
 
 const useStyles = makeStyles({
   centered: {
@@ -20,13 +22,12 @@ const PlacesLoader: React.FC<OverlayProps> = ({ placeId, closeOverlay }: Overlay
   const isLoaded = shopData !== null && shopData.id === placeId;
 
   useEffect(() => {
-    if (placeId === "" || (shopData !== null && placeId === shopData.id)) {
+    if (!isOpen || isLoaded) {
       return;
     }
-    getInfoForPlace(placeId).then((data) => {
-      setShopData(data);
-    });
-  }, [placeId, shopData]);
+
+    getInfoForPlace(placeId).then((data) => setShopData(data));
+  }, [placeId, isOpen, isLoaded]);
 
   return (
     <div>
@@ -35,10 +36,11 @@ const PlacesLoader: React.FC<OverlayProps> = ({ placeId, closeOverlay }: Overlay
           <CircularProgress style={{ color: "#FFF" }} />
         </Box>
       </Fade>
+
       <Slide direction="up" in={isOpen && isLoaded}>
         <div>
           <Card className={classes.centered}>
-            {shopData !== null ? <b>{shopData.name}</b> : undefined}
+            {shopData !== null ? <Shop shopData={shopData} /> : undefined}
           </Card>
         </div>
       </Slide>

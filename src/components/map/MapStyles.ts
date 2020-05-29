@@ -1,4 +1,15 @@
+import colors from "../../res/colors";
+
 const mapStyles: google.maps.MapTypeStyle[] = [
+  {
+    featureType: "all",
+    elementType: "geometry",
+    stylers: [
+      {
+        hue: colors.blue1,
+      },
+    ],
+  },
   {
     featureType: "landscape.man_made",
     stylers: [
@@ -37,7 +48,7 @@ const mapStyles: google.maps.MapTypeStyle[] = [
     elementType: "labels.icon",
     stylers: [
       {
-        color: "#0080ff",
+        color: colors.blue1,
       },
     ],
   },

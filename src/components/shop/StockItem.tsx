@@ -5,10 +5,11 @@ import { StockItemProps } from "./ShopTypes";
 
 const itemContainerStyle = {
   width: "40%",
-  height: "20%",
+  height: "64px",
   padding: "8px",
   margin: "8px",
   display: "flex",
+  flexDirection: "row" as const,
   alignItems: "center",
   justifyContent: "space-between",
 };

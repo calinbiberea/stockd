@@ -14,7 +14,7 @@ const Map: React.FC<MapProps> = ({ onPlaceClick }: MapProps) => (
       const e = e_ as google.maps.IconMouseEvent;
       if (e.placeId) {
         onPlaceClick(e.placeId);
-        // e.stop();
+        e.stop();
       }
     }}
     onLoad={setupGooglePlacesService}

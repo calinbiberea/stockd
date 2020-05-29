@@ -25,7 +25,9 @@ const imgContainerStyle = {
 
 const iconButtonStyle = {
   position: "absolute" as const,
-  marginLeft: "16px",
+  marginLeft: "24px",
+  color: "#FFF",
+  backgroundColor: colors.blue1,
 };
 
 const nameContainerStyle = {
@@ -44,7 +46,7 @@ const dividerStyle = {
 const ShopHeader: React.FC<ShopHeaderProps> = ({ shopData, onBackClick }: ShopHeaderProps) => (
   <div style={shopHeaderStyle}>
     <div style={{ backgroundImage: `url(${shopData.photoReference})`, ...imgContainerStyle }}>
-      <IconButton size="medium" style={iconButtonStyle} color="primary" onClick={onBackClick}>
+      <IconButton size="medium" style={iconButtonStyle} onClick={onBackClick}>
         <ArrowBackIcon />
       </IconButton>
     </div>
@@ -57,7 +59,7 @@ const ShopHeader: React.FC<ShopHeaderProps> = ({ shopData, onBackClick }: ShopHe
       <div style={dividerStyle} />
 
       <Typography variant="subtitle1" style={{ color: colors.blue3 }}>
-        {shopData.id}
+        {shopData.roadName}
       </Typography>
     </div>
   </div>

@@ -4,7 +4,7 @@ import App from "./App";
 import { loadGoogleMapsScript } from "../util/googleMaps";
 
 beforeAll(async () => {
-  await loadGoogleMapsScript();
+  // await loadGoogleMapsScript();
 });
 
 test("renders learn react link", () => {

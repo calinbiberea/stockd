@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Slider from "@material-ui/core/Slider";
 import StockItem from "./StockItem";
@@ -55,7 +55,16 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
           <StockItem icon={breadIcon} name="Bread" stock={breadStock} />
 
           <Slider
-            defaultValue={newBreadStock}
+            value={newBreadStock}
+            onChange={(event, value) => {
+              /* TODO: ugly, fix, please */
+
+              if (typeof value === "number") {
+                setNewBreadStock(value);
+              } else {
+                console.error("Undefined value type in Slider onChange");
+              }
+            }}
             aria-labelledby="discrete-slider-restrict"
             step={null}
             marks={marks}

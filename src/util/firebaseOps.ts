@@ -1,9 +1,11 @@
 import { db } from "../index";
 
 const updateStock = (shopId: string, stockName: string, newValue: number): void => {
+  /* todo: update breadStock to use stockName */
+
   db.collection("shops")
     .doc(shopId)
-    .update(`${stockName}stock`, newValue)
+    .set({ breadStock: newValue }, { merge: true })
     .then(() => console.warn("successful"))
     .catch(() => console.error("unsuccessful"));
 };

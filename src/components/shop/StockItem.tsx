@@ -2,7 +2,6 @@ import React from "react";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import { StockItemProps } from "./ShopTypes";
-import { Button } from "@material-ui/core";
 import colors from "../../res/colors";
 
 const itemContainerStyle = {

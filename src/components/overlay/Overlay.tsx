@@ -25,6 +25,7 @@ const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps
     if (!isOpen || isLoaded) {
       return;
     }
+
     getInfoForPlace(placeId).then((data) => {
       setShopData(data);
     });
@@ -37,6 +38,7 @@ const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps
           <CircularProgress style={{ color: "#FFF" }} />
         </Box>
       </Fade>
+
       <Slide direction="up" in={isOpen && isLoaded}>
         <div>
           <Card className={classes.centered}>
@@ -44,6 +46,7 @@ const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps
           </Card>
         </div>
       </Slide>
+
       <Backdrop open={isOpen} onClick={closeOverlay}>
         &nbsp;
       </Backdrop>

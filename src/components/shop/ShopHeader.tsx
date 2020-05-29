@@ -6,8 +6,7 @@ import colors from "../../res/colors";
 import { ShopHeaderProps } from "./ShopTypes";
 
 const shopHeaderStyle = {
-  width: "100%",
-  height: "20%",
+  flex: 1,
   display: "flex",
   flexDirection: "row" as const,
   backgroundColor: colors.blue1,

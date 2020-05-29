@@ -9,8 +9,7 @@ import { ShopStockProps } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
 
 const containerStyle = {
-  width: "100%",
-  height: "80%",
+  flex: 4,
   display: "flex",
   flexDirection: "column" as const,
   alignItems: "center",
@@ -84,7 +83,15 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
     <div style={containerStyle}>
       <div style={stocksContainerStyle}>
         <div style={stockItemSliderStyle}>
-          <StockItem icon={breadIcon} name="Bread" stock={breadStock} />
+          <StockItem
+            icon={breadIcon}
+            name="Bread"
+            stock={breadStock}
+            canUpdate={false}
+            onUpdateClick={() => {
+              /**/
+            }}
+          />
           <Slider
             aria-labelledby="discrete-slider-restrict"
             step={null}

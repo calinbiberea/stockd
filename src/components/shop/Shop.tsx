@@ -9,6 +9,8 @@ const shopStyle = {
   width: "60vw",
   height: "45vh",
   minWidth: "500px",
+  display: "flex",
+  flexDirection: "column" as const,
 };
 
 const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {
@@ -16,7 +18,13 @@ const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {
 
   let shopScreen;
   if (selectedScreen === "default") {
-    shopScreen = <ShopOverview />;
+    shopScreen = (
+      <ShopOverview
+        onUpdateClicked={() => {
+          setSelectedScreen("stock");
+        }}
+      />
+    );
   } else if (selectedScreen === "stock") {
     shopScreen = <ShopStock shopId={shopData.id} />;
   }

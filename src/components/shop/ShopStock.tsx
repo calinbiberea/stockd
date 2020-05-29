@@ -7,7 +7,6 @@ import breadIcon from "../../res/icons/bread.svg";
 import updateStock from "../../util/firebaseOps";
 import { ShopStockProps } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
-import { getInfoForPlace } from "../../util/googleMaps";
 
 const containerStyle = {
   width: "100%",

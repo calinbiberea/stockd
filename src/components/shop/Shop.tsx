@@ -30,7 +30,7 @@ const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {
 
   return (
     <div style={shopStyle}>
-      <ShopHeader name={shopData.name} id={shopData.id} onBackClick={onBackClick} />
+      <ShopHeader shopData={shopData} onBackClick={onBackClick} />
 
       {shopScreen}
     </div>

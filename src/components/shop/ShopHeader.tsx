@@ -41,7 +41,7 @@ const dividerStyle = {
   height: "5%",
 };
 
-const ShopHeader: React.FC<ShopHeaderProps> = ({ name, id, onBackClick }: ShopHeaderProps) => (
+const ShopHeader: React.FC<ShopHeaderProps> = ({ shopData, onBackClick }: ShopHeaderProps) => (
   <div style={shopHeaderStyle}>
     <div style={imgContainerStyle}>
       <IconButton size="medium" style={iconButtonStyle} color="primary" onClick={onBackClick}>
@@ -53,13 +53,13 @@ const ShopHeader: React.FC<ShopHeaderProps> = ({ name, id, onBackClick }: ShopHe
 
     <div style={nameContainerStyle}>
       <Typography variant="h6" style={{ color: "white" }}>
-        {name}
+        {shopData.name}
       </Typography>
 
       <div style={dividerStyle} />
 
       <Typography variant="subtitle1" style={{ color: colors.blue3 }}>
-        {id}
+        {shopData.id}
       </Typography>
     </div>
   </div>

@@ -8,8 +8,7 @@ export interface ShopProps {
 export type ShopSelectedScreen = "default" | "safety" | "stock" | "reviews";
 
 export interface ShopHeaderProps {
-  name: string;
-  id: string;
+  shopData: ShopData;
   onBackClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 

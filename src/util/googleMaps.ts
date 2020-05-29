@@ -4,6 +4,7 @@ import envVars from "./envVars";
 export interface ShopData {
   name: string;
   id: string;
+  photoReference: string | null;
 }
 
 let googleClient: google;

@@ -1,4 +1,4 @@
-import { db } from "../index";
+import { db } from "../firebase/firebaseApp";
 
 const updateStock = (shopId: string, stockName: string, newValue: number): void => {
   /* todo: update breadStock to use stockName */

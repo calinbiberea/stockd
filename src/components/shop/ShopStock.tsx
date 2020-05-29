@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { ChangeEvent, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Slider from "@material-ui/core/Slider";
@@ -51,6 +52,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
 
   const shopDBData = db.collection("shops").doc(shopId);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const databaseListener = shopDBData.onSnapshot(
     (shopSnapshot) => {
       const data = shopSnapshot.get("breadStock");

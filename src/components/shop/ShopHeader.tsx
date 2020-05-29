@@ -2,7 +2,6 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import logo from "../../res/logo.png";
 import colors from "../../res/colors";
 import { ShopHeaderProps } from "./ShopTypes";
 

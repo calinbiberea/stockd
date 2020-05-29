@@ -14,11 +14,14 @@ const shopHeaderStyle = {
 };
 
 const imgContainerStyle = {
-  flex: 1,
+  width: "50%",
+  display: "flex",
+  alignItems: "center",
 };
 
 const iconButtonStyle = {
   position: "absolute" as const,
+  marginLeft: "16px",
 };
 
 const imgStyle = {
@@ -26,7 +29,7 @@ const imgStyle = {
 };
 
 const nameContainerStyle = {
-  flex: 1,
+  width: "50%",
   display: "flex",
   flexDirection: "column" as const,
   justifyContent: "center" as const,
@@ -41,7 +44,7 @@ const dividerStyle = {
 const ShopHeader: React.FC<ShopHeaderProps> = ({ name, id, onBackClick }: ShopHeaderProps) => (
   <div style={shopHeaderStyle}>
     <div style={imgContainerStyle}>
-      <IconButton size="medium" style={iconButtonStyle} onClick={onBackClick}>
+      <IconButton size="medium" style={iconButtonStyle} color="primary" onClick={onBackClick}>
         <ArrowBackIcon />
       </IconButton>
 

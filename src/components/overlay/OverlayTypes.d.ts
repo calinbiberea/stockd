@@ -6,4 +6,5 @@ export interface OverlayProps {
 export interface ShopData {
   name: string;
   id: string;
+  photoReference: string | null;
 }

@@ -7,15 +7,21 @@ import * as serviceWorker from "./serviceWorker";
 import { firebaseConfig } from "./firebase/firebaseConfig";
 import { missingEnvVars } from "./util/envVars";
 import MissingEnvVar from "./components/errorScreens/MissingEnvVar";
+import { loadGoogleMapsScript } from "./util/googleMaps";
 
-firebase.initializeApp(firebaseConfig);
+const runApp = async () => {
+  firebase.initializeApp(firebaseConfig);
+  await loadGoogleMapsScript();
 
-ReactDOM.render(
-  <React.StrictMode>
-    {missingEnvVars.length === 0 ? <App /> : <MissingEnvVar vars={missingEnvVars} />}
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+  ReactDOM.render(
+    <React.StrictMode>
+      {missingEnvVars.length === 0 ? <App /> : <MissingEnvVar vars={missingEnvVars} />}
+    </React.StrictMode>,
+    document.getElementById("root")
+  );
+};
+
+runApp();
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

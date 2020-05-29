@@ -1,7 +1,7 @@
 import type { OverlayProps, ShopData } from "./OverlayTypes";
 import React, { useEffect, useState } from "react";
 import { Box, Card, CircularProgress, Fade, Slide } from "@material-ui/core";
-import { getInfoForPlace } from "../../util/googlePlaces";
+import { getInfoForPlace } from "../../util/googleMaps";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -20,13 +20,13 @@ const PlacesLoader: React.FC<OverlayProps> = ({ placeId, closeOverlay }: Overlay
   const isLoaded = shopData !== null && shopData.id === placeId;
 
   useEffect(() => {
-    if (placeId === "" || (shopData !== null && placeId === shopData.id)) {
+    if (!isOpen || isLoaded) {
       return;
     }
     getInfoForPlace(placeId).then((data) => {
       setShopData(data);
     });
-  }, [placeId, shopData]);
+  }, [placeId, isLoaded, isOpen]);
 
   return (
     <div>

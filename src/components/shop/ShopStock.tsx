@@ -83,7 +83,15 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
     <div style={containerStyle}>
       <div style={stocksContainerStyle}>
         <div style={stockItemSliderStyle}>
-          <StockItem icon={breadIcon} name="Bread" stock={breadStock} />
+          <StockItem
+            icon={breadIcon}
+            name="Bread"
+            stock={breadStock}
+            canUpdate={false}
+            onUpdateClick={() => {
+              /**/
+            }}
+          />
           <Slider
             aria-labelledby="discrete-slider-restrict"
             step={null}

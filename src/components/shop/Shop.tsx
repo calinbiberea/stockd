@@ -18,7 +18,13 @@ const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {
 
   let shopScreen;
   if (selectedScreen === "default") {
-    shopScreen = <ShopOverview />;
+    shopScreen = (
+      <ShopOverview
+        onUpdateClicked={() => {
+          setSelectedScreen("stock");
+        }}
+      />
+    );
   } else if (selectedScreen === "stock") {
     shopScreen = <ShopStock shopId={shopData.id} />;
   }

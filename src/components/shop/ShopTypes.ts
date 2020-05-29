@@ -20,4 +20,6 @@ export interface StockItemProps {
   icon: string;
   name: string;
   stock: number;
+  canUpdate: boolean;
+  onUpdateClick: () => void;
 }

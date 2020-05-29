@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import StockItem from "./StockItem";
 import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
@@ -22,17 +22,52 @@ const stockOverviewStyle = {
   alignItems: "center",
 };
 
-const ShopOverview: React.FC = () => (
-  <div style={containerStyle}>
-    <div style={stockOverviewStyle}>
-      <StockItem icon={breadIcon} name="Bread" stock={2} />
-      <StockItem icon={eggsIcon} name="Eggs" stock={2} />
-      <StockItem icon={milkIcon} name="Milk" stock={2} />
-      <StockItem icon={pastaIcon} name="Pasta" stock={2} />
-    </div>
+export interface ShopOverviewProps {
+  onUpdateClicked: () => void;
+}
 
-    <FloatingActionButton />
-  </div>
-);
+const ShopOverview: React.FC<ShopOverviewProps> = ({ onUpdateClicked }: ShopOverviewProps) => {
+  const [updateClicked, setUpdateClicked] = useState(false);
+
+  const onFABClick = () => {
+    setUpdateClicked(!updateClicked);
+  };
+
+  return (
+    <div style={containerStyle}>
+      <div style={stockOverviewStyle}>
+        <StockItem
+          icon={breadIcon}
+          name="Bread"
+          stock={2}
+          canUpdate={updateClicked}
+          onUpdateClick={onUpdateClicked}
+        />
+        <StockItem
+          icon={eggsIcon}
+          name="Eggs"
+          stock={2}
+          canUpdate={false}
+          onUpdateClick={onUpdateClicked}
+        />
+        <StockItem
+          icon={milkIcon}
+          name="Milk"
+          stock={2}
+          canUpdate={false}
+          onUpdateClick={onUpdateClicked}
+        />
+        <StockItem
+          icon={pastaIcon}
+          name="Pasta"
+          stock={2}
+          canUpdate={false}
+          onUpdateClick={onUpdateClicked}
+        />
+      </div>
+      <FloatingActionButton onClick={onFABClick} />
+    </div>
+  );
+};
 
 export default ShopOverview;

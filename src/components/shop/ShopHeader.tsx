@@ -38,32 +38,28 @@ const dividerStyle = {
   height: "5%",
 };
 
-const ShopHeader: React.FC<ShopHeaderProps> = ({ name, id, selectedScreen }: ShopHeaderProps) => {
-  const onBackClick = () => console.warn("Clicked back.");
+const ShopHeader: React.FC<ShopHeaderProps> = ({ name, id, onBackClick }: ShopHeaderProps) => (
+  <div style={shopHeaderStyle}>
+    <div style={imgContainerStyle}>
+      <IconButton size="medium" style={iconButtonStyle} onClick={onBackClick}>
+        <ArrowBackIcon />
+      </IconButton>
 
-  return (
-    <div style={shopHeaderStyle}>
-      <div style={imgContainerStyle}>
-        <IconButton size="medium" style={iconButtonStyle} onClick={onBackClick}>
-          <ArrowBackIcon />
-        </IconButton>
-
-        <img src={logo} alt="Shop preview" style={imgStyle} />
-      </div>
-
-      <div style={nameContainerStyle}>
-        <Typography variant="h6" style={{ color: "white" }}>
-          {name}
-        </Typography>
-
-        <div style={dividerStyle} />
-
-        <Typography variant="subtitle1" style={{ color: colors.blue3 }}>
-          {id}
-        </Typography>
-      </div>
+      <img src={logo} alt="Shop preview" style={imgStyle} />
     </div>
-  );
-};
+
+    <div style={nameContainerStyle}>
+      <Typography variant="h6" style={{ color: "white" }}>
+        {name}
+      </Typography>
+
+      <div style={dividerStyle} />
+
+      <Typography variant="subtitle1" style={{ color: colors.blue3 }}>
+        {id}
+      </Typography>
+    </div>
+  </div>
+);
 
 export default ShopHeader;

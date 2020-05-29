@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface ShopProps {
   shopData: ShopData;
 }
@@ -7,7 +9,7 @@ export type ShopSelectedScreen = "default" | "safety" | "stock" | "reviews";
 export interface ShopHeaderProps {
   name: string;
   id: string;
-  selectedScreen: ShopSelectedScreen;
+  onBackClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface ShopData {

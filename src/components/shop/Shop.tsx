@@ -20,9 +20,17 @@ const Shop: React.FC<ShopProps> = ({ shopData }: ShopProps) => {
     shopScreen = <ShopStock />;
   }
 
+  const onBackClick = () => {
+    if (selectedScreen === "default") {
+      setSelectedScreen("stock");
+    } else if (selectedScreen === "stock") {
+      setSelectedScreen("default");
+    }
+  };
+
   return (
     <div style={shopStyle}>
-      <ShopHeader name={shopData.name} id={shopData.id} selectedScreen={selectedScreen} />
+      <ShopHeader name={shopData.name} id={shopData.id} onBackClick={onBackClick} />
 
       {shopScreen}
     </div>

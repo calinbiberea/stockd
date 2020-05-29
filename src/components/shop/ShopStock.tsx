@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Slider from "@material-ui/core/Slider";
 import StockItem from "./StockItem";
@@ -64,30 +64,21 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
     updateStock(shopId, "bread", newBreadStock);
   };
 
-  const unsub = db.collection("s").onSnapshot(() => {
-    // eslint-disable-next-line no-console
-    console.log("Unsubbed");
-  });
-
   useEffect(() => {
-    return unsub;
-  });
-
-  const shopDBData = db.collection("shops").doc(shopId);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const databaseListener = shopDBData.onSnapshot(
-    (shopSnapshot) => {
-      const data = shopSnapshot.get("breadStock");
-      setBreadStock(data);
-      // eslint-disable-next-line no-console
-      console.log({ data });
-    },
-    (err) => {
-      // eslint-disable-next-line no-console,no-template-curly-in-string
-      console.log("Encountered error: ${err}");
-    }
-  );
+    return db
+      .collection("shops")
+      .doc(shopId)
+      .onSnapshot(
+        (shopSnapshot) => {
+          const data = shopSnapshot.get("breadStock");
+          setBreadStock(data);
+          console.warn({ data });
+        },
+        (err) => {
+          console.error(`Encountered error: ${err}`);
+        }
+      );
+  }, [shopId]);
 
   return (
     <div style={containerStyle}>

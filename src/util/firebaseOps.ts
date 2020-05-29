@@ -1,11 +1,13 @@
 import { db } from "../firebase/firebaseApp";
 
 const updateStock = (shopId: string, stockName: string, newValue: number): void => {
-  /* todo: update breadStock to use stockName */
+  /* todo: fix type */
+  const data: any = {};
+  data[`${stockName}Stock`] = newValue;
 
   db.collection("shops")
     .doc(shopId)
-    .set({ breadStock: newValue }, { merge: true })
+    .set(data, { merge: true })
     .then(() => console.warn("successful"))
     .catch(() => console.error("unsuccessful"));
 };

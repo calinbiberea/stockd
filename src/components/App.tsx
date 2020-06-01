@@ -1,27 +1,11 @@
 import React, { useState } from "react";
 import "./App.css";
-import Splash from "./Splash";
-import Map from "./map/Map";
-import Header from "./header/Header";
-import Overlay from "./overlay/Overlay";
+import Landing from "./landing/Landing";
 
-const App: React.FC = () => {
-  const [currentPlaceId, setCurrentPlaceId] = useState("");
-
-  const onPlaceClick = (placeId: string) => {
-    setCurrentPlaceId(placeId);
-  };
-
-  const closeOverlay = () => setCurrentPlaceId("");
-
-  return (
-    <div>
-      <Splash />
-      <Header />
-      <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} />
-      <Map onPlaceClick={onPlaceClick} />
-    </div>
-  );
-};
+const App: React.FC = () => (
+  <div>
+    <Landing />
+  </div>
+);
 
 export default App;

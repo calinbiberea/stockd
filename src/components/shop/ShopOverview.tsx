@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import Grid from "@material-ui/core/Grid";
 import StockItem from "./StockItem";
 import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
 import milkIcon from "../../res/icons/milk.svg";
 import pastaIcon from "../../res/icons/pasta.svg";
 import { FloatingActionButton } from "./floatingActionButton/FloatingActionButton";
+import { ShopOverviewProps } from "./ShopTypes";
 
 const containerStyle = {
   flex: 4,
@@ -12,59 +14,59 @@ const containerStyle = {
   flexDirection: "column" as const,
   justifyContent: "space-around",
   alignItems: "center",
+  padding: "12px",
 };
 
-const stockOverviewStyle = {
-  display: "flex",
-  flexDirection: "row" as const,
-  flexWrap: "wrap" as const,
-  justifyContent: "space-around",
-  alignItems: "center",
+const gridItemStyle = {
+  width: "50%",
 };
 
-export interface ShopOverviewProps {
-  onUpdateClicked: () => void;
-}
+const stocks: { icon: string; name: string; stock: number }[] = [
+  {
+    icon: breadIcon,
+    name: "Bread",
+    stock: 2,
+  },
+  {
+    icon: eggsIcon,
+    name: "Eggs",
+    stock: 2,
+  },
+  {
+    icon: milkIcon,
+    name: "Milk",
+    stock: 2,
+  },
+  {
+    icon: pastaIcon,
+    name: "Pasta",
+    stock: 2,
+  },
+];
 
 const ShopOverview: React.FC<ShopOverviewProps> = ({ onUpdateClicked }: ShopOverviewProps) => {
   const [updateClicked, setUpdateClicked] = useState(false);
 
-  const onFABClick = () => {
-    setUpdateClicked(!updateClicked);
-  };
+  const onFABClick = () => setUpdateClicked((prevUpdateClicked) => !prevUpdateClicked);
+
+  const stockItems = stocks.map(({ icon, name, stock }) => (
+    <Grid item key={name} style={gridItemStyle}>
+      <StockItem
+        icon={icon}
+        name={name}
+        stock={stock}
+        canUpdate={updateClicked}
+        onUpdateClick={onUpdateClicked}
+      />
+    </Grid>
+  ));
 
   return (
     <div style={containerStyle}>
-      <div style={stockOverviewStyle}>
-        <StockItem
-          icon={breadIcon}
-          name="Bread"
-          stock={2}
-          canUpdate={updateClicked}
-          onUpdateClick={onUpdateClicked}
-        />
-        <StockItem
-          icon={eggsIcon}
-          name="Eggs"
-          stock={2}
-          canUpdate={false}
-          onUpdateClick={onUpdateClicked}
-        />
-        <StockItem
-          icon={milkIcon}
-          name="Milk"
-          stock={2}
-          canUpdate={false}
-          onUpdateClick={onUpdateClicked}
-        />
-        <StockItem
-          icon={pastaIcon}
-          name="Pasta"
-          stock={2}
-          canUpdate={false}
-          onUpdateClick={onUpdateClicked}
-        />
-      </div>
+      <Grid container spacing={3}>
+        {stockItems}
+      </Grid>
+
       <FloatingActionButton onClick={onFABClick} />
     </div>
   );

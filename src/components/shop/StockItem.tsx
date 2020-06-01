@@ -5,7 +5,6 @@ import { StockItemProps } from "./ShopTypes";
 import colors from "../../res/colors";
 
 const itemContainerStyle = {
-  width: "40%",
   height: "64px",
   padding: "8px",
   margin: "8px",
@@ -41,7 +40,9 @@ const StockItem: React.FC<StockItemProps> = ({
   return (
     <Card style={style} onClick={onClick}>
       <img src={icon} alt="Stock Item icon" style={iconStyle} />
+
       <Typography variant="h5">{name}</Typography>
+
       <Typography variant="h5">Stock {stock}</Typography>
     </Card>
   );

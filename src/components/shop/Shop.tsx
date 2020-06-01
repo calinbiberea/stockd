@@ -18,15 +18,9 @@ const Shop: React.FC<ShopProps> = ({
   setSelectedScreen,
   onBackClick,
 }: ShopProps) => {
-  let shopScreen;
+  let shopScreen = null;
   if (selectedScreen === "default") {
-    shopScreen = (
-      <ShopOverview
-        onUpdateClicked={() => {
-          setSelectedScreen("stock");
-        }}
-      />
-    );
+    shopScreen = <ShopOverview onUpdateClicked={() => setSelectedScreen("stock")} />;
   } else if (selectedScreen === "stock") {
     shopScreen = <ShopStock shopId={shopData.id} />;
   }
@@ -34,6 +28,7 @@ const Shop: React.FC<ShopProps> = ({
   return (
     <div style={shopStyle}>
       <ShopHeader shopData={shopData} onBackClick={onBackClick} />
+
       {shopScreen}
     </div>
   );

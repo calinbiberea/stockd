@@ -31,6 +31,10 @@ const gridItemStyle = {
   justifyContent: "space-around",
 };
 
+const stockItemStyle = {
+  width: "50%",
+};
+
 const sliderStyle = {
   width: "200px",
 };
@@ -64,15 +68,17 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, shopId }: ShopStockProps)
 
   const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => (
     <Grid item key={name} style={gridItemStyle}>
-      <StockItem
-        icon={icon}
-        name={name}
-        stock={stock}
-        canUpdate={false}
-        onUpdateClick={() => {
-          /**/
-        }}
-      />
+      <div style={stockItemStyle}>
+        <StockItem
+          icon={icon}
+          name={name}
+          stock={stock}
+          canUpdate={false}
+          onUpdateClick={() => {
+            /**/
+          }}
+        />
+      </div>
 
       <Slider
         aria-labelledby="discrete-slider-restrict"

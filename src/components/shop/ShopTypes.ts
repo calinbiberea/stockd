@@ -26,3 +26,9 @@ export interface StockItemProps {
   canUpdate: boolean;
   onUpdateClick: () => void;
 }
+
+export interface ShopListItemProps {
+  shopData: ShopData;
+  startTime: string;
+  endTime: string;
+}

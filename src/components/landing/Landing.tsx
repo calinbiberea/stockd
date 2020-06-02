@@ -58,6 +58,7 @@ const tileContainerStyle = {
 const FlexedLandingTile: React.FC<LandingTileProps> = (props: LandingTileProps) => (
   <div style={flexElemStyle}>
     <div style={dividerStyle} />
+
     <LandingTile {...props} />
   </div>
 );
@@ -65,6 +66,7 @@ const FlexedLandingTile: React.FC<LandingTileProps> = (props: LandingTileProps) 
 const Landing: React.FC<LandingProps> = ({ setRoute }: LandingProps) => (
   <div style={containerStyle}>
     <LandingHeader />
+
     <div style={tileContainerStyle}>
       <FlexedLandingTile
         headerText="I'm looking for..."
@@ -72,12 +74,14 @@ const Landing: React.FC<LandingProps> = ({ setRoute }: LandingProps) => (
         buttonText="Where should I go?"
         onClick={() => setRoute("filterShops")}
       />
+
       <FlexedLandingTile
         headerText="I'm going to shop at..."
         items={shopExamples}
         buttonText="What will I find there?"
         onClick={() => setRoute("findShop")}
       />
+
       <FlexedLandingTile
         headerText="I'm currently at..."
         items={shopExamples}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Landing from "./landing/Landing";
+import ShopList from "./shop/ShopList";
 import FilterShops from "./filterShops/FilterShops";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import colors from "../res/colors";
@@ -14,7 +15,7 @@ const theme = createMuiTheme({
 });
 
 const App: React.FC = () => {
-  const [route, setRoute] = useState("filterShops" as Route);
+  const [route, setRoute] = useState("landing" as Route);
 
   let currentScreen;
   switch (route) {
@@ -25,7 +26,7 @@ const App: React.FC = () => {
       currentScreen = <FilterShops />;
       break;
     case "findShop":
-      currentScreen = null; // TODO: add screen
+      currentScreen = <ShopList />; // TODO: add screen
       break;
     case "editShop":
       currentScreen = null; // TODO: add screen

@@ -12,3 +12,8 @@ export interface LandingTileProps {
 export interface LandingScrollTextProps {
   items: string[];
 }
+
+export interface NewHeaderProps {
+  title: string;
+  onBackClick: () => void;
+}

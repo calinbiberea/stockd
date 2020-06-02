@@ -31,7 +31,7 @@ const containerStyle = {
   height: "100vh",
   display: "flex",
   flexDirection: "column" as const,
-  backgroundColor: colors.blue3,
+  backgroundColor: "white",
 };
 
 const flexElemStyle = {
@@ -70,21 +70,18 @@ const Landing: React.FC<LandingProps> = ({ setRoute }: LandingProps) => (
         headerText="I'm looking for..."
         items={itemExamples}
         buttonText="Where should I go?"
-        altButton={false}
         onClick={() => setRoute("filterShops")}
       />
       <FlexedLandingTile
         headerText="I'm going to shop at..."
         items={shopExamples}
         buttonText="What will I find there?"
-        altButton={false}
         onClick={() => setRoute("findShop")}
       />
       <FlexedLandingTile
         headerText="I'm currently at..."
         items={shopExamples}
         buttonText="I'd like to contribute some data!"
-        altButton={true}
         onClick={() => setRoute("findShop")}
       />
     </div>

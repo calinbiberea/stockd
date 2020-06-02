@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./App.css";
 import Landing from "./landing/Landing";
+import FilterShops from "./filterShops/FilterShops";
 
 const App: React.FC = () => {
-  const [route, setRoute] = useState("landing" as Route);
+  const [route, setRoute] = useState("filterShops" as Route);
 
   let currentScreen;
   switch (route) {
@@ -11,7 +12,7 @@ const App: React.FC = () => {
       currentScreen = <Landing setRoute={setRoute} />;
       break;
     case "filterShops":
-      currentScreen = null; // TODO: add screen
+      currentScreen = <FilterShops />;
       break;
     case "findShop":
       currentScreen = null; // TODO: add screen

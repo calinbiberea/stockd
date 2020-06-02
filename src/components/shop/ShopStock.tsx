@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Slider from "@material-ui/core/Slider";
@@ -84,11 +83,11 @@ const stocks: { icon: string; name: string; stock: number }[] = [
 ];
 
 const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
-  const [breadStock, setBreadStock] = useState(50);
-  const [newBreadStock, setNewBreadStock] = useState(50);
+  const [localStocks, setLocalStocks] = useState({} as Record<string, number>);
+  const [serverStocks, setServerStocks] = useState({} as Record<string, number>);
 
   const onSubmit = () => {
-    updateStock(shopId, "bread", newBreadStock);
+    Object.entries(localStocks).forEach(([key, value]) => updateStock(shopId, key, value));
   };
 
   useEffect(() => {
@@ -97,9 +96,20 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
       .doc(shopId)
       .onSnapshot(
         (shopSnapshot) => {
-          const data = shopSnapshot.get("breadStock");
-          setBreadStock(data);
-          console.warn({ data });
+          const data = shopSnapshot.data();
+
+          if (data) {
+            const newData: Record<string, number> = Object.entries(data)
+              .filter(([key, value]) => {
+                return !key.includes("Stock") && typeof value === "number";
+              })
+              .reduce((acc: Record<string, number>, [key, value]) => {
+                acc[key] = value;
+                return acc;
+              }, {});
+
+            setServerStocks((prevState) => ({ ...prevState, ...newData }));
+          }
         },
         (err) => {
           console.error(`Encountered error: ${err}`);
@@ -112,7 +122,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
       <StockItem
         icon={icon}
         name={name}
-        stock={breadStock}
+        stock={serverStocks[name]}
         canUpdate={false}
         onUpdateClick={() => {
           /**/
@@ -124,12 +134,11 @@ const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
         step={null}
         marks={marks}
         style={sliderStyle}
-        value={newBreadStock}
+        value={localStocks[name] | 0} /* TODO: find fix for default value */
         onChange={(event, value) => {
           /* TODO: ugly, fix, please */
-
           if (typeof value === "number") {
-            setNewBreadStock(value);
+            setLocalStocks((prevState) => ({ ...prevState, [name]: value }));
           } else {
             console.error("Undefined value type in Slider onChange");
           }

@@ -19,8 +19,8 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
   const selectedCount = Object.values(selected).filter((selected) => selected).length;
   return (
     <ExpansionPanel defaultExpanded>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon style={{ color: colors.blue1 }} />}>
-        <Typography style={{ color: colors.blue1 }}>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon color="primary" />}>
+        <Typography color="primary">
           Products <i>({selectedCount} selected)</i>
           <Button
             variant="contained"
@@ -46,7 +46,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                 size="large"
                 variant="contained"
                 color={selected ? "primary" : "default"}
-                style={{ backgroundColor: selected ? colors.blue1 : "#FFF" }}
+                style={selected ? {} : { backgroundColor: "#FFF" }}
                 onClick={() => onSelect(product as Product)}
               >
                 {product}

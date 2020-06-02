@@ -1,5 +1,4 @@
 import { Button, Card } from "@material-ui/core";
-import colors from "../../res/colors";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
 import React from "react";
 import LandingScrollText from "./LandingScrollText";
@@ -28,7 +27,6 @@ const innerContainerStyle = {
 };
 
 const buttonStyle = {
-  backgroundColor: colors.blue1,
   textTransform: "none" as const,
   fontSize: "18px",
 };

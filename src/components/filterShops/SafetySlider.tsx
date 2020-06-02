@@ -10,7 +10,6 @@ import {
 import StarFull from "@material-ui/icons/Star";
 import StarHalf from "@material-ui/icons/StarHalf";
 import StarEmpty from "@material-ui/icons/StarBorder";
-import colors from "../../res/colors";
 import type { SafetyRating, SafetySliderProps } from "./FilterShopsTypes";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
@@ -23,7 +22,7 @@ const SafetySlider: React.FC<SafetySliderProps> = ({
   setMinRating,
 }: SafetySliderProps) => {
   const starForIx = (i: number) => {
-    const starProps = { key: i, style: { fontSize: "72px", color: colors.blue1 } };
+    const starProps = { key: i, color: "primary" as const, style: { fontSize: "72px" } };
     const n = minRating - i;
     if (n <= 0) {
       return <StarEmpty {...starProps} />;
@@ -36,8 +35,8 @@ const SafetySlider: React.FC<SafetySliderProps> = ({
 
   return (
     <ExpansionPanel defaultExpanded>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon style={{ color: colors.blue1 }} />}>
-        <Typography style={{ color: colors.blue1 }}>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon color="primary" />}>
+        <Typography color="primary">
           Safety Rating{" "}
           <i>
             (

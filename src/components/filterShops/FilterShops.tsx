@@ -39,7 +39,7 @@ const FilterShops: React.FC = () => {
     <div style={containerStyle}>
       <div style={sectionContainerStyle}>
         <Card style={{ margin: "20px", display: "inline-block", padding: "20px" }}>
-          <Typography variant="h4" style={{ color: colors.blue1 }}>
+          <Typography variant="h4" color="primary">
             What are you looking for?
           </Typography>
         </Card>
@@ -59,7 +59,7 @@ const FilterShops: React.FC = () => {
           size="large"
           color="primary"
           variant="contained"
-          style={{ backgroundColor: colors.blue1, textTransform: "none", fontSize: "large" }}
+          style={{ textTransform: "none", fontSize: "large" }}
         >
           {"Let's go!"}
           <ArrowIcon style={{ marginLeft: "15px" }} />

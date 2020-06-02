@@ -21,7 +21,6 @@ const cardStyle = {
 
 const welcomeStyle = {
   fontSize: "1.5vh",
-  color: colors.blue1,
 };
 
 const logoStyle = {
@@ -31,7 +30,7 @@ const logoStyle = {
 const LandingHeader: React.FC = () => (
   <div style={containerStyle}>
     <Card style={cardStyle}>
-      <Typography variant="h6" style={welcomeStyle}>
+      <Typography variant="h6" color="primary" style={welcomeStyle}>
         Welcome to
       </Typography>
       <img style={logoStyle} src={Logo} alt="stockd logo" />

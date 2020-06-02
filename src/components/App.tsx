@@ -2,6 +2,16 @@ import React, { useState } from "react";
 import "./App.css";
 import Landing from "./landing/Landing";
 import FilterShops from "./filterShops/FilterShops";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import colors from "../res/colors";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: colors.blue1,
+    },
+  },
+});
 
 const App: React.FC = () => {
   const [route, setRoute] = useState("filterShops" as Route);
@@ -22,7 +32,7 @@ const App: React.FC = () => {
       break;
   }
 
-  return currentScreen;
+  return <ThemeProvider theme={theme}>{currentScreen}</ThemeProvider>;
 };
 
 export default App;

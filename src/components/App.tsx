@@ -8,15 +8,13 @@ import Overlay from "./overlay/Overlay";
 const App: React.FC = () => {
   const [currentPlaceId, setCurrentPlaceId] = useState("");
 
-  const onPlaceClick = (placeId: string) => {
-    setCurrentPlaceId(placeId);
-  };
-
   const closeOverlay = () => setCurrentPlaceId("");
+  const onPlaceClick = (placeId: string) => setCurrentPlaceId(placeId);
 
   return (
     <div>
       <Splash />
+
       <Header />
       <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} />
       <Map onPlaceClick={onPlaceClick} />

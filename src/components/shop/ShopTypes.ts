@@ -15,7 +15,20 @@ export interface ShopHeaderProps {
   onBackClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
+export interface Stocks {
+  [name: string]: {
+    icon: string;
+    stock: number;
+  };
+}
+
+export interface ShopOverviewProps {
+  stocks: Stocks;
+  onUpdateClicked: () => void;
+}
+
 export interface ShopStockProps {
+  stocks: Stocks;
   shopId: string;
 }
 

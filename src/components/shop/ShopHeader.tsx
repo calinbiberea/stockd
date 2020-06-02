@@ -5,7 +5,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import colors from "../../res/colors";
 import { ShopHeaderProps } from "./ShopTypes";
 
-const shopHeaderStyle = {
+const containerStyle = {
   flex: 1,
   display: "flex",
   flexDirection: "row" as const,
@@ -43,7 +43,7 @@ const dividerStyle = {
 };
 
 const ShopHeader: React.FC<ShopHeaderProps> = ({ shopData, onBackClick }: ShopHeaderProps) => (
-  <div style={shopHeaderStyle}>
+  <div style={containerStyle}>
     <div style={{ backgroundImage: `url(${shopData.photoReference})`, ...imgContainerStyle }}>
       <IconButton size="medium" style={iconButtonStyle} onClick={onBackClick}>
         <ArrowBackIcon />

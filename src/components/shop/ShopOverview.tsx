@@ -11,6 +11,14 @@ const containerStyle = {
   justifyContent: "space-around",
   alignItems: "center",
   padding: "12px",
+  overflow: "auto",
+};
+
+const gridContainerStyle = {
+  flex: 1,
+  flexDirection: "row" as const,
+  spacing: 3,
+  overflow: "auto",
 };
 
 const gridItemStyle = {
@@ -39,7 +47,7 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({
 
   return (
     <div style={containerStyle}>
-      <Grid container spacing={3}>
+      <Grid container style={gridContainerStyle}>
         {stockItems}
       </Grid>
 

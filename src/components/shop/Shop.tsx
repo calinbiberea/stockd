@@ -9,6 +9,8 @@ import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
 import milkIcon from "../../res/icons/milk.svg";
 import pastaIcon from "../../res/icons/pasta.svg";
+import medicineIcon from "../../res/icons/medicineIcon.svg";
+import toiletPaperIcon from "../../res/icons/toiletPaperIcon.svg";
 
 const shopStyle = {
   width: "60vw",
@@ -48,6 +50,14 @@ const defaultStocks: Stocks = {
   },
   Pasta: {
     icon: pastaIcon,
+    stock: 0,
+  },
+  Medicine: {
+    icon: medicineIcon,
+    stock: 0,
+  },
+  ToiletPaper: {
+    icon: toiletPaperIcon,
     stock: 0,
   },
 };

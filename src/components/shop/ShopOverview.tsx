@@ -17,7 +17,6 @@ const containerStyle = {
 const gridContainerStyle = {
   flex: 1,
   flexDirection: "row" as const,
-  spacing: 3,
   overflow: "auto",
 };
 

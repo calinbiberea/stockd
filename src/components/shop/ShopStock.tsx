@@ -19,6 +19,7 @@ const gridContainerStyle = {
   display: "flex",
   flex: 1,
   flexDirection: "column" as const,
+  overflow: "auto",
 };
 
 const gridItemStyle = {
@@ -93,7 +94,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, shopId }: ShopStockProps)
 
   return (
     <div style={containerStyle}>
-      <Grid container style={gridContainerStyle}>
+      <Grid container wrap="nowrap" style={gridContainerStyle}>
         {stocksAndSliders}
       </Grid>
 

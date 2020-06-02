@@ -1,7 +1,7 @@
 import React from "react";
 import colors from "../../res/colors";
 import LandingTile from "./LandingTile";
-import type { LandingTileProps } from "./LandingTypes";
+import type { LandingProps, LandingTileProps } from "./LandingTypes";
 import LandingHeader from "./LandingHeader";
 
 const itemExamples = [
@@ -62,7 +62,7 @@ const FlexedLandingTile: React.FC<LandingTileProps> = (props: LandingTileProps) 
   </div>
 );
 
-const Landing: React.FC = () => (
+const Landing: React.FC<LandingProps> = ({ setRoute }: LandingProps) => (
   <div style={containerStyle}>
     <LandingHeader />
     <div style={tileContainerStyle}>
@@ -71,18 +71,21 @@ const Landing: React.FC = () => (
         items={itemExamples}
         buttonText="Where should I go?"
         altButton={false}
+        onClick={() => setRoute("filterShops")}
       />
       <FlexedLandingTile
         headerText="I'm going to shop at..."
         items={shopExamples}
         buttonText="What will I find there?"
         altButton={false}
+        onClick={() => setRoute("findShop")}
       />
       <FlexedLandingTile
         headerText="I'm currently at..."
         items={shopExamples}
         buttonText="I'd like to contribute some data!"
         altButton={true}
+        onClick={() => setRoute("findShop")}
       />
     </div>
   </div>

@@ -48,6 +48,7 @@ const LandingTile: React.FC<LandingTileProps> = ({
   items,
   buttonText,
   altButton,
+  onClick,
 }: LandingTileProps) => (
   <div style={containerStyle}>
     <Card style={cardStyle}>
@@ -57,7 +58,13 @@ const LandingTile: React.FC<LandingTileProps> = ({
           &nbsp;
           <LandingScrollText items={items} />
         </div>
-        <Button variant="contained" size="large" color="primary" style={buttonStyle}>
+        <Button
+          variant="contained"
+          size="large"
+          color="primary"
+          style={buttonStyle}
+          onClick={onClick}
+        >
           {altButton ? <b>{buttonText}</b> : buttonText}
           <ArrowIcon style={buttonIconStyle} />
         </Button>

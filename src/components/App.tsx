@@ -11,6 +11,9 @@ const theme = createMuiTheme({
     primary: {
       main: colors.blue1,
     },
+    secondary: {
+      main: colors.blue3,
+    },
   },
 });
 

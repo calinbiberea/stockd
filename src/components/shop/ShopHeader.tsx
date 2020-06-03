@@ -23,7 +23,7 @@ const imgContainerStyle = {
 };
 
 const iconButtonStyle = {
-  position: "absolute" as const,
+  position: "relative" as const,
   marginLeft: "24px",
   color: "#FFF",
   backgroundColor: colors.blue1,

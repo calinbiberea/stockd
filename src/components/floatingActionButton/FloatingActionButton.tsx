@@ -26,7 +26,7 @@ export const FloatingActionButton: React.FC<FABProps> = ({ onClick }: FABProps) 
 
   return (
     <div className={classes.root}>
-      <Fab variant="extended" style={{ backgroundColor: colors.blue3 }} onClick={onClick}>
+      <Fab variant="extended" style={{ backgroundColor: colors.blue1 }} onClick={onClick}>
         <EditIcon className={classes.extendedIcon} />
         Update Info
       </Fab>

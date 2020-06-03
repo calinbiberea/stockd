@@ -65,6 +65,7 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({ onUpdateClicked }: ShopOver
           onUpdateClick={onUpdateClicked}
         />
       </div>
+
       <FloatingActionButton onClick={onFABClick} />
     </div>
   );

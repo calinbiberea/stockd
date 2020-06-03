@@ -10,7 +10,8 @@ const containerStyle = {
   position: "absolute" as const,
   width: "100vw",
   height: "100vh",
-  backgroundColor: colors.blue3,
+  backgroundColor: "white",
+  overflow: "auto",
 };
 
 const sectionContainerStyle = {
@@ -38,7 +39,10 @@ const FilterShops: React.FC = () => {
   return (
     <div style={containerStyle}>
       <div style={sectionContainerStyle}>
-        <Card style={{ margin: "20px", display: "inline-block", padding: "20px" }}>
+        <Card
+          style={{ margin: "20px", display: "inline-block", padding: "20px" }}
+          variant={"outlined"}
+        >
           <Typography variant="h4" color="primary">
             What are you looking for?
           </Typography>

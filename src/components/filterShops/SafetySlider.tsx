@@ -34,7 +34,7 @@ const SafetySlider: React.FC<SafetySliderProps> = ({
   };
 
   return (
-    <ExpansionPanel defaultExpanded>
+    <ExpansionPanel defaultExpanded variant={"outlined"}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon color="primary" />}>
         <Typography color="primary">
           Safety Rating{" "}

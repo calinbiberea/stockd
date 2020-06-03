@@ -18,7 +18,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
 }: ProductSelectorProps) => {
   const selectedCount = Object.values(selected).filter((selected) => selected).length;
   return (
-    <ExpansionPanel defaultExpanded>
+    <ExpansionPanel defaultExpanded variant={"outlined"}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon color="primary" />}>
         <Typography color="primary">
           Products <i>({selectedCount} selected)</i>

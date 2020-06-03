@@ -1,4 +1,5 @@
-export const products = ["Milk", "Bread", "Pasta", "Flour", "Cheese"] as const;
+export const products = ["Milk", "Bread", "Pasta", "Eggs", "Toilet Paper", "Medicine"] as const;
+
 export type Product = typeof products[number];
 
 export interface FilterShopsProps {

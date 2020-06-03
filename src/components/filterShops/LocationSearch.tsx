@@ -7,42 +7,40 @@ import Typography from "@material-ui/core/Typography";
 import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
 
-const autocompleteService = { current: null };
+let autocompleteService: google.maps.places.AutocompleteService;
 
-interface PlaceType {
-  description: string;
-  structured_formatting: {
-    main_text: string;
-    secondary_text: string;
-    main_text_matched_substrings: [
-      {
-        offset: number;
-        length: number;
-      }
-    ];
-  };
-}
+const containerStyle = {
+  width: 300,
+  margin: "16px",
+};
 
 const LocationSearch: React.FC = () => {
-  const [value, setValue] = useState<PlaceType | null>(null);
+  const [value, setValue] = useState<google.maps.places.AutocompletePrediction | null>(null);
   const [inputValue, setInputValue] = useState("");
-  const [options, setOptions] = useState<PlaceType[]>([]);
+  const [options, setOptions] = useState<google.maps.places.AutocompletePrediction[]>([]);
 
   const fetch = useMemo(
     () =>
-      throttle((request: { input: string }, callback: (results?: PlaceType[]) => void) => {
-        (autocompleteService.current as any).getPlacePredictions(request, callback);
-      }, 200),
+      throttle(
+        (
+          request: { input: string },
+          callback: (results?: google.maps.places.AutocompletePrediction[]) => void
+        ) => {
+          autocompleteService.getPlacePredictions(request, callback);
+        },
+        200
+      ),
     []
   );
 
   useEffect(() => {
     let active = true;
 
-    if (!autocompleteService.current && (window as any).google) {
-      autocompleteService.current = new (window as any).google.maps.places.AutocompleteService();
+    if (!autocompleteService && window.google) {
+      autocompleteService = new window.google.maps.places.AutocompleteService();
     }
-    if (!autocompleteService.current) {
+
+    if (!autocompleteService) {
       return undefined;
     }
 
@@ -51,9 +49,9 @@ const LocationSearch: React.FC = () => {
       return undefined;
     }
 
-    fetch({ input: inputValue }, (results?: PlaceType[]) => {
+    fetch({ input: inputValue }, (results?: google.maps.places.AutocompletePrediction[]) => {
       if (active) {
-        let newOptions = [] as PlaceType[];
+        let newOptions = [] as google.maps.places.AutocompletePrediction[];
 
         if (value) {
           newOptions = [value];
@@ -74,8 +72,7 @@ const LocationSearch: React.FC = () => {
 
   return (
     <Autocomplete
-      id="google-map-demo"
-      style={{ width: 300 }}
+      style={containerStyle}
       getOptionLabel={(option) => (typeof option === "string" ? option : option.description)}
       filterOptions={(x) => x}
       options={options}
@@ -83,7 +80,7 @@ const LocationSearch: React.FC = () => {
       includeInputInList
       filterSelectedOptions
       value={value}
-      onChange={(event: any, newValue: PlaceType | null) => {
+      onChange={(event, newValue: google.maps.places.AutocompletePrediction | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
       }}
@@ -91,13 +88,13 @@ const LocationSearch: React.FC = () => {
         setInputValue(newInputValue);
       }}
       renderInput={(params) => (
-        <TextField {...params} label="Add a location" variant="outlined" fullWidth />
+        <TextField {...params} label="Location" variant="outlined" fullWidth />
       )}
       renderOption={(option) => {
         const matches = option.structured_formatting.main_text_matched_substrings;
         const parts = parse(
           option.structured_formatting.main_text,
-          matches.map((match: any) => [match.offset, match.offset + match.length])
+          matches.map((match) => [match.offset, match.offset + match.length])
         );
 
         return (

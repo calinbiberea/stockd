@@ -8,17 +8,27 @@ import Header from "../header/Header";
 import LocationSearch from "./LocationSearch";
 
 const containerStyle = {
-  position: "absolute" as const,
   width: "100vw",
   height: "100vh",
-  backgroundColor: "white",
-  overflow: "auto",
+  display: "flex",
+  flexDirection: "column" as const,
+  alignItems: "center",
 };
 
-const sectionContainerStyle = {
-  display: "inline-block",
-  width: "100%",
-  textAlign: "center" as const,
+const subtitleContainerStyle = {
+  margin: "20px",
+  padding: "20px",
+};
+
+const contentContainerStyle = {
+  margin: "20px",
+  display: "flex",
+  flexDirection: "column" as const,
+  alignItems: "center",
+};
+
+const buttonStyle = {
+  textTransform: "none" as const,
 };
 
 const defaultSelectedProducts = Object.fromEntries(products.map((product) => [product, false])) as {
@@ -41,39 +51,35 @@ const FilterShops: React.FC<FilterShopsProps> = ({ onBack }: FilterShopsProps) =
     <div style={containerStyle}>
       <Header title="Stockd" onBackClick={onBack} />
 
-      <div style={sectionContainerStyle}>
-        <Card
-          style={{ margin: "20px", display: "inline-block", padding: "20px" }}
-          variant={"outlined"}
-        >
-          <Typography variant="h4" color="primary">
-            What are you looking for?
-          </Typography>
-        </Card>
-      </div>
+      <Card style={subtitleContainerStyle} variant={"outlined"}>
+        <Typography variant="h4" color="primary">
+          What are you looking for?
+        </Typography>
+      </Card>
 
-      <div style={{ margin: "0 20px" }}>
+      <div style={contentContainerStyle}>
         <ProductSelector
           selected={selectedProducts}
           onSelect={toggleProduct}
           onReset={() => setSelectedProducts(defaultSelectedProducts)}
         />
+
         <SafetySlider minRating={minRating} setMinRating={setMinRating} />
+
+        <LocationSearch />
       </div>
 
-      <LocationSearch />
+      <Button
+        size="large"
+        color="primary"
+        variant="contained"
+        onClick={() => console.warn("eh")}
+        style={buttonStyle}
+      >
+        <Typography variant="h6">{"Let's go!"}</Typography>
 
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <Button
-          size="large"
-          color="primary"
-          variant="contained"
-          style={{ textTransform: "none", fontSize: "large" }}
-        >
-          {"Let's go!"}
-          <ArrowIcon style={{ marginLeft: "15px" }} />
-        </Button>
-      </div>
+        <ArrowIcon style={{ marginLeft: "16px" }} />
+      </Button>
     </div>
   );
 };

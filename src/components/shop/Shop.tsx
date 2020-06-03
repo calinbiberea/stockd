@@ -20,7 +20,6 @@ const shopStyle = {
   flexDirection: "column" as const,
 };
 
-/* TODO: ugly, please fix */
 const getIconByName = (name: string): string => {
   if (name === "Bread") {
     return breadIcon;
@@ -38,27 +37,27 @@ const getIconByName = (name: string): string => {
 const defaultStocks: Stocks = {
   Bread: {
     icon: breadIcon,
-    stock: 0,
+    stock: -1,
   },
   Eggs: {
     icon: eggsIcon,
-    stock: 0,
+    stock: -1,
   },
   Milk: {
     icon: milkIcon,
-    stock: 0,
+    stock: -1,
   },
   Pasta: {
     icon: pastaIcon,
-    stock: 0,
+    stock: -1,
   },
   Medicine: {
     icon: medicineIcon,
-    stock: 0,
+    stock: -1,
   },
   ToiletPaper: {
     icon: toiletPaperIcon,
-    stock: 0,
+    stock: -1,
   },
 };
 

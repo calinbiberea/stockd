@@ -3,9 +3,11 @@ import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import { StockItemProps } from "./ShopTypes";
 import colors from "../../res/colors";
+import few from "../../res/stock/few.png";
+import some from "../../res/stock/some.png";
+import full from "../../res/stock/full.png";
 
 const itemContainerStyle = {
-  width: "40%",
   height: "64px",
   padding: "8px",
   margin: "8px",
@@ -24,6 +26,15 @@ const iconStyle = {
   height: "100%",
 };
 
+const getIconByNumber = (stock: number): string => {
+  if (stock === 0) {
+    return few;
+  } else if (stock === 50) {
+    return some;
+  }
+  return full;
+};
+
 const StockItem: React.FC<StockItemProps> = ({
   icon,
   name,
@@ -38,11 +49,15 @@ const StockItem: React.FC<StockItemProps> = ({
     }
   };
 
+  const stockIcon = getIconByNumber(stock);
+
   return (
     <Card style={style} onClick={onClick}>
       <img src={icon} alt="Stock Item icon" style={iconStyle} />
+
       <Typography variant="h5">{name}</Typography>
-      <Typography variant="h5">Stock {stock}</Typography>
+
+      <img src={stockIcon} alt="Stock Item value" style={iconStyle} />
     </Card>
   );
 };

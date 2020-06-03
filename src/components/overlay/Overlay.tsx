@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Backdrop, Box, Card, CircularProgress, Fade, Slide } from "@material-ui/core";
-import { getInfoForPlace } from "../../util/googleMaps";
+import { Card, CircularProgress, Fade, Slide, Modal } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import type { OverlayProps } from "./OverlayTypes";
 import type { ShopData } from "../../util/googleMaps";
-import Shop from "../shop/Shop";
+import { getInfoForPlace } from "../../util/googleMaps";
 import { ShopSelectedScreen } from "../shop/ShopTypes";
+import Shop from "../shop/Shop";
 
 const useStyles = makeStyles({
   centered: {
@@ -16,21 +16,31 @@ const useStyles = makeStyles({
   },
 });
 
+const modalStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+const modalChildStyle = {
+  outline: 0,
+};
+
+const circularProgressStyle = {
+  color: "#FFF",
+};
+
 const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps) => {
   const classes = useStyles();
   const [shopData, setShopData] = useState(null as ShopData | null);
   const [selectedScreen, setSelectedScreen] = useState("default" as ShopSelectedScreen);
   const isOpen = placeId !== "";
-  const isLoaded = shopData !== null && shopData.id === placeId;
+  const isLoaded = shopData?.id === placeId;
 
   useEffect(() => {
-    if (!isOpen || isLoaded) {
-      return;
+    if (isOpen && !isLoaded) {
+      getInfoForPlace(placeId).then((data) => setShopData(data));
     }
-
-    getInfoForPlace(placeId).then((data) => {
-      setShopData(data);
-    });
   }, [placeId, isLoaded, isOpen]);
 
   const onBackClick = () => {
@@ -42,16 +52,16 @@ const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps
   };
 
   return (
-    <div style={{ position: "absolute", zIndex: 2000 }}>
-      <Fade in={isOpen && !isLoaded}>
-        <Box className={classes.centered}>
-          <CircularProgress style={{ color: "#FFF" }} />
-        </Box>
-      </Fade>
+    <Modal open={isOpen} style={modalStyle} onClose={closeOverlay}>
+      <div style={modalChildStyle}>
+        <Fade in={!isLoaded}>
+          <div className={classes.centered}>
+            <CircularProgress style={circularProgressStyle} />
+          </div>
+        </Fade>
 
-      <Slide direction="up" in={isOpen && isLoaded}>
-        <div>
-          <Card className={classes.centered}>
+        <Slide direction="up" in={isLoaded}>
+          <Card>
             {shopData !== null ? (
               <Shop
                 shopData={shopData}
@@ -59,15 +69,11 @@ const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps
                 setSelectedScreen={setSelectedScreen}
                 onBackClick={onBackClick}
               />
-            ) : undefined}
+            ) : null}
           </Card>
-        </div>
-      </Slide>
-
-      <Backdrop open={isOpen} onClick={onBackClick}>
-        &nbsp;
-      </Backdrop>
-    </div>
+        </Slide>
+      </div>
+    </Modal>
   );
 };
 

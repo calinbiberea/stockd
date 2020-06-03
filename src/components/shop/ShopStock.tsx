@@ -1,34 +1,38 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Slider from "@material-ui/core/Slider";
+import Grid from "@material-ui/core/Grid";
 import StockItem from "./StockItem";
-import breadIcon from "../../res/icons/bread.svg";
 import updateStock from "../../util/firebaseOps";
 import { ShopStockProps } from "./ShopTypes";
-import { db } from "../../firebase/firebaseApp";
 
 const containerStyle = {
   flex: 4,
   display: "flex",
   flexDirection: "column" as const,
   alignItems: "center",
+  overflow: "auto",
 };
 
-const stocksContainerStyle = {
+const gridContainerStyle = {
   width: "100%",
   display: "flex",
   flex: 1,
   flexDirection: "column" as const,
+  overflow: "auto",
 };
 
-const stockItemSliderStyle = {
+const gridItemStyle = {
+  width: "100%",
   display: "flex",
   flex: 1,
-  width: "100%",
   flexDirection: "row" as const,
   alignItems: "center",
   justifyContent: "space-around",
+};
+
+const stockItemStyle = {
+  width: "50%",
 };
 
 const sliderStyle = {
@@ -55,61 +59,50 @@ const marks = [
   },
 ];
 
-const ShopStock: React.FC<ShopStockProps> = ({ shopId }: ShopStockProps) => {
-  const [breadStock, setBreadStock] = useState(50);
-  const [newBreadStock, setNewBreadStock] = useState(50);
+const ShopStock: React.FC<ShopStockProps> = ({ stocks, shopId }: ShopStockProps) => {
+  const [localStocks, setLocalStocks] = useState({} as Record<string, number>);
 
   const onSubmit = () => {
-    updateStock(shopId, "bread", newBreadStock);
+    Object.entries(localStocks).forEach(([key, value]) => updateStock(shopId, key, value));
   };
 
-  useEffect(() => {
-    return db
-      .collection("shops")
-      .doc(shopId)
-      .onSnapshot(
-        (shopSnapshot) => {
-          const data = shopSnapshot.get("breadStock");
-          setBreadStock(data);
-          console.warn({ data });
-        },
-        (err) => {
-          console.error(`Encountered error: ${err}`);
-        }
-      );
-  }, [shopId]);
+  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => (
+    <Grid item key={name} style={gridItemStyle}>
+      <div style={stockItemStyle}>
+        <StockItem
+          icon={icon}
+          name={name}
+          stock={stock}
+          canUpdate={false}
+          onUpdateClick={() => {
+            /**/
+          }}
+        />
+      </div>
+
+      <Slider
+        aria-labelledby="discrete-slider-restrict"
+        step={null}
+        marks={marks}
+        style={sliderStyle}
+        value={localStocks[name] | 0} /* TODO: find fix for default value */
+        onChange={(event, value) => {
+          /* TODO: ugly, fix, please */
+          if (typeof value === "number") {
+            setLocalStocks((prevState) => ({ ...prevState, [name]: value }));
+          } else {
+            console.error("Undefined value type in Slider onChange");
+          }
+        }}
+      />
+    </Grid>
+  ));
 
   return (
     <div style={containerStyle}>
-      <div style={stocksContainerStyle}>
-        <div style={stockItemSliderStyle}>
-          <StockItem
-            icon={breadIcon}
-            name="Bread"
-            stock={breadStock}
-            canUpdate={false}
-            onUpdateClick={() => {
-              /**/
-            }}
-          />
-          <Slider
-            aria-labelledby="discrete-slider-restrict"
-            step={null}
-            marks={marks}
-            style={sliderStyle}
-            value={newBreadStock}
-            onChange={(event, value) => {
-              /* TODO: ugly, fix, please */
-
-              if (typeof value === "number") {
-                setNewBreadStock(value);
-              } else {
-                console.error("Undefined value type in Slider onChange");
-              }
-            }}
-          />
-        </div>
-      </div>
+      <Grid container wrap="nowrap" style={gridContainerStyle}>
+        {stocksAndSliders}
+      </Grid>
 
       <Button variant="contained" color="primary" style={buttonStyle} onClick={onSubmit}>
         Submit

@@ -1,9 +1,8 @@
 import { db } from "../firebase/firebaseApp";
 
 const updateStock = (shopId: string, stockName: string, newValue: number): void => {
-  /* todo: fix type */
-  const data: any = {};
-  data[`${stockName}Stock`] = newValue;
+  const data: Record<string, number> = {};
+  data[stockName] = newValue;
 
   db.collection("shops")
     .doc(shopId)

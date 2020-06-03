@@ -38,8 +38,11 @@ const defaultSelectedProducts = Object.fromEntries(products.map((product) => [pr
 };
 
 const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps) => {
-  const [selectedProducts, setSelectedProducts] = useState(defaultSelectedProducts);
+  const [selectedProducts, setSelectedProducts] = useState<{ [p in Product]: boolean }>(
+    defaultSelectedProducts
+  );
   const [minRating, setMinRating] = useState<SafetyRating>(0);
+  const [location, setLocation] = useState<google.maps.places.AutocompletePrediction | null>(null);
 
   const toggleProduct = (product: Product) => {
     const newSelected = Object.assign({}, selectedProducts) as { [p in Product]: boolean };
@@ -50,7 +53,32 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   };
 
   const onLetsGoClick = () => {
-    /**/
+    if (location) {
+      geocodeByPlaceId(location.place_id)
+        .then((latLng) => {
+          const lat = latLng.lat();
+          const lng = latLng.lng();
+
+          const productsString = Object.entries(selectedProducts)
+            .filter(([_, selected]) => selected)
+            .map(([product, _]) => product)
+            .join(",");
+
+          const request = {
+            products: productsString,
+            minSafetyRating: minRating,
+            lat,
+            lng,
+          };
+
+          findShops(request)
+            .then((result) => console.warn(result.data))
+            .catch((error) => console.error(`FindShops failed with error: ${error}`));
+        })
+        .catch((reason) => console.error(`Geocoding failed with status ${reason}`));
+    } else {
+      console.error("Location required");
+    }
   };
 
   return (
@@ -72,7 +100,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
 
         <SafetySlider minRating={minRating} setMinRating={setMinRating} />
 
-        <LocationSearch />
+        <LocationSearch location={location} setLocation={setLocation} />
       </div>
 
       <Button

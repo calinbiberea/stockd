@@ -18,3 +18,8 @@ export interface SafetySliderProps {
   minRating: SafetyRating;
   setMinRating: (value: SafetyRating) => void;
 }
+
+export interface LocationSearchProps {
+  location: google.maps.places.AutocompletePrediction | null;
+  setLocation: (value: google.maps.places.AutocompletePrediction | null) => void;
+}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Card, Typography } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
-import { FilterShopsProps, Product, products, SafetyRating } from "./FilterShopsTypes";
+import { FilterShopsProps, Product, products, SafetyRating } from "./FilterShopsTypes.d";
 import SafetySlider from "./SafetySlider";
 import ProductSelector from "./ProductSelector";
 import Header from "../header/Header";
@@ -35,7 +35,7 @@ const defaultSelectedProducts = Object.fromEntries(products.map((product) => [pr
   [p in Product]: boolean;
 };
 
-const FilterShops: React.FC<FilterShopsProps> = ({ onBack }: FilterShopsProps) => {
+const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps) => {
   const [selectedProducts, setSelectedProducts] = useState(defaultSelectedProducts);
   const [minRating, setMinRating] = useState<SafetyRating>(0);
 
@@ -49,7 +49,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ onBack }: FilterShopsProps) =
 
   return (
     <div style={containerStyle}>
-      <Header title="Stockd" onBackClick={onBack} />
+      <Header title="Stockd" onBackClick={() => setRoute("landing")} />
 
       <Card style={subtitleContainerStyle} variant={"outlined"}>
         <Typography variant="h4" color="primary">
@@ -73,7 +73,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ onBack }: FilterShopsProps) =
         size="large"
         color="primary"
         variant="contained"
-        onClick={() => console.warn("eh")}
+        onClick={() => setRoute("shopList")}
         style={buttonStyle}
       >
         <Typography variant="h6">{"Let's go!"}</Typography>

@@ -3,7 +3,7 @@ export const products = ["Milk", "Bread", "Pasta", "Eggs", "Toilet Paper", "Medi
 export type Product = typeof products[number];
 
 export interface FilterShopsProps {
-  onBack: () => void;
+  setRoute: (Route) => void;
 }
 
 export interface ProductSelectorProps {

@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import ShopListItem from "./ShopListItem";
 import Header from "../header/Header";
 import { ShopData } from "../../util/googleMaps";
+import { ShopListProps } from "./ShopListTypes.d";
 
 const containerStyle = {
   width: "100vw",
@@ -75,7 +76,7 @@ const shops: { shopData: ShopData; startTime: string; endTime: string }[] = [
   },
 ];
 
-const ShopList: React.FC = () => {
+const ShopList: React.FC<ShopListProps> = ({ setRoute }: ShopListProps) => {
   const shopListItems = shops.map(({ shopData, startTime, endTime }) => (
     <Grid item key={shopData.name + shopData.roadName}>
       <ShopListItem shopData={shopData} startTime={startTime} endTime={endTime} />
@@ -84,7 +85,7 @@ const ShopList: React.FC = () => {
 
   return (
     <div style={containerStyle}>
-      <Header title="Shop List" onBackClick={() => console.error("fix Route import :)")} />
+      <Header title="Shop List" onBackClick={() => setRoute("filterShops")} />
 
       <div style={contentContainerStyle}>
         <div style={sectionContainerStyle}>

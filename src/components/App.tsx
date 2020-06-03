@@ -19,7 +19,6 @@ const theme = createMuiTheme({
 
 const App: React.FC = () => {
   const [route, setRoute] = useState("landing" as Route);
-  const resetRoute = () => setRoute("landing");
 
   let currentScreen;
   switch (route) {
@@ -27,13 +26,16 @@ const App: React.FC = () => {
       currentScreen = <Landing setRoute={setRoute} />;
       break;
     case "filterShops":
-      currentScreen = <FilterShops onBack={resetRoute} />;
+      currentScreen = <FilterShops setRoute={setRoute} />;
       break;
     case "findShop":
-      currentScreen = <ShopList />;
+      currentScreen = null; // TODO: add screen
       break;
     case "editShop":
       currentScreen = null; // TODO: add screen
+      break;
+    case "shopList":
+      currentScreen = <ShopList setRoute={setRoute} />;
       break;
   }
 

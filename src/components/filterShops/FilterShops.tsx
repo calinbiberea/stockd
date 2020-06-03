@@ -6,6 +6,8 @@ import SafetySlider from "./SafetySlider";
 import ProductSelector from "./ProductSelector";
 import Header from "../header/Header";
 import LocationSearch from "./LocationSearch";
+import { findShops } from "../../firebase/firebaseApp";
+import { geocodeByPlaceId } from "../../util/googleMaps";
 
 const containerStyle = {
   width: "100vw",
@@ -47,6 +49,10 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
     }
   };
 
+  const onLetsGoClick = () => {
+    /**/
+  };
+
   return (
     <div style={containerStyle}>
       <Header title="Stockd" onBackClick={() => setRoute("landing")} />
@@ -73,7 +79,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
         size="large"
         color="primary"
         variant="contained"
-        onClick={() => setRoute("shopList")}
+        onClick={onLetsGoClick}
         style={buttonStyle}
       >
         <Typography variant="h6">{"Let's go!"}</Typography>

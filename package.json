@@ -19,7 +19,7 @@
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "autosuggest-highlight": "^3.1.1",
-    "firebase": "^7.14.5",
+    "firebase": "^7.14.6",
     "google-maps": "^4.2.3",
     "lodash": "^4.17.15",
     "react": "^16.13.1",

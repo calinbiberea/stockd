@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import "./App.css";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import Landing from "./landing/Landing";
 import ShopList from "./shopList/ShopList";
 import FilterShops from "./filterShops/FilterShops";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import colors from "../res/colors";
 
 const theme = createMuiTheme({
@@ -18,9 +17,9 @@ const theme = createMuiTheme({
 });
 
 const App: React.FC = () => {
-  const [route, setRoute] = useState("landing" as Route);
+  const [route, setRoute] = useState<Route>("landing");
 
-  let currentScreen;
+  let currentScreen: React.ReactNode;
   switch (route) {
     case "landing":
       currentScreen = <Landing setRoute={setRoute} />;

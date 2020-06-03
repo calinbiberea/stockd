@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface FABProps {
+interface FABProps {
   onClick: () => void;
 }
 

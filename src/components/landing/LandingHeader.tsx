@@ -32,6 +32,7 @@ const LandingHeader: React.FC = () => (
       <Typography variant="h6" color="primary" style={welcomeStyle}>
         Welcome to
       </Typography>
+
       <img style={logoStyle} src={Logo} alt="stockd logo" />
     </Card>
   </div>

@@ -51,10 +51,12 @@ const LandingTile: React.FC<LandingTileProps> = ({
     <Card variant={"outlined"} style={cardStyle}>
       <div style={innerContainerStyle}>
         {headerText}
+
         <div style={scrollTextContainerStyle}>
           &nbsp;
           <LandingScrollText items={items} />
         </div>
+
         <Button
           variant="contained"
           size="large"

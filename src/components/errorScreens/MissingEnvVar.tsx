@@ -5,6 +5,7 @@ import type MissingEnvProps from "./MissingEnvVarProps";
 const MissingEnvVar: React.FC<MissingEnvProps> = ({ vars }: MissingEnvProps) => (
   <div>
     <Typography variant="h1">Oops!</Typography>
+
     <Typography variant="h4">
       The following environment variables are missing:
       <ul>

@@ -5,6 +5,7 @@ import { FilterShopsProps, Product, products, SafetyRating } from "./FilterShops
 import SafetySlider from "./SafetySlider";
 import ProductSelector from "./ProductSelector";
 import Header from "../header/Header";
+import LocationSearch from "./LocationSearch";
 
 const containerStyle = {
   position: "absolute" as const,
@@ -59,6 +60,8 @@ const FilterShops: React.FC<FilterShopsProps> = ({ onBack }: FilterShopsProps) =
         />
         <SafetySlider minRating={minRating} setMinRating={setMinRating} />
       </div>
+
+      <LocationSearch />
 
       <div style={{ textAlign: "center", marginTop: "20px" }}>
         <Button

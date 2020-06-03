@@ -13,7 +13,7 @@ const iconButtonStyle = {
 
 const Header: React.FC<HeaderProps> = ({ title, onBackClick }: HeaderProps) => (
   <div>
-    <AppBar position="fixed">
+    <AppBar>
       <Toolbar>
         <IconButton edge="start" aria-label="back" style={iconButtonStyle} onClick={onBackClick}>
           <ArrowBackIcon />

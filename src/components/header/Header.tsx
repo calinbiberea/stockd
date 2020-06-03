@@ -1,27 +1,30 @@
 import React from "react";
-import { AppBar, Toolbar } from "@material-ui/core";
-import Logo from "./Logo";
-import Search from "./Search";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import Typography from "@material-ui/core/Typography";
+import { HeaderProps } from "./HeaderTypes";
 
-const appBarStyle = {
-  boxShadow: "none",
-  backgroundColor: "transparent",
+const iconButtonStyle = {
+  color: "#FFF",
+  marginRight: "16px",
 };
 
-const dividerStyle = {
-  width: "16px",
-};
+const Header: React.FC<HeaderProps> = ({ title, onBackClick }: HeaderProps) => (
+  <div>
+    <AppBar position="fixed">
+      <Toolbar>
+        <IconButton edge="start" aria-label="back" style={iconButtonStyle} onClick={onBackClick}>
+          <ArrowBackIcon />
+        </IconButton>
 
-const Header: React.FC = () => (
-  <AppBar position="fixed" style={appBarStyle}>
-    <Toolbar>
-      <Logo />
+        <Typography variant="h6">{title}</Typography>
+      </Toolbar>
+    </AppBar>
 
-      <div style={dividerStyle} />
-
-      <Search />
-    </Toolbar>
-  </AppBar>
+    <Toolbar />
+  </div>
 );
 
 export default Header;

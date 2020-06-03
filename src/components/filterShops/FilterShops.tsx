@@ -4,7 +4,7 @@ import ArrowIcon from "@material-ui/icons/ArrowForward";
 import { FilterShopsProps, Product, products, SafetyRating } from "./FilterShopsTypes";
 import SafetySlider from "./SafetySlider";
 import ProductSelector from "./ProductSelector";
-import NewHeader from "../landing/NewHeader";
+import Header from "../header/Header";
 
 const containerStyle = {
   position: "absolute" as const,
@@ -38,7 +38,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ onBack }: FilterShopsProps) =
 
   return (
     <div style={containerStyle}>
-      <NewHeader title="Stockd" onBackClick={onBack} />
+      <Header title="Stockd" onBackClick={onBack} />
 
       <div style={sectionContainerStyle}>
         <Card

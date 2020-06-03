@@ -1,10 +1,10 @@
 import React from "react";
-import Typography from "@material-ui/core/Typography";
+import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
-import NewHeader from "../landing/NewHeader";
+import Typography from "@material-ui/core/Typography";
 import ShopListItem from "./ShopListItem";
+import Header from "../header/Header";
 import { ShopData } from "../../util/googleMaps";
-import { Card } from "@material-ui/core";
 
 const containerStyle = {
   width: "100vw",
@@ -84,7 +84,7 @@ const ShopList: React.FC = () => {
 
   return (
     <div style={containerStyle}>
-      <NewHeader title="Shop List" onBackClick={() => console.error("fix Route import :)")} />
+      <Header title="Shop List" onBackClick={() => console.error("fix Route import :)")} />
 
       <div style={contentContainerStyle}>
         <div style={sectionContainerStyle}>

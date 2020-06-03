@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Button, Card, Typography } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
-import colors from "../../res/colors";
 import { Product, products, SafetyRating } from "./FilterShopsTypes";
 import SafetySlider from "./SafetySlider";
 import ProductSelector from "./ProductSelector";
+import NewHeader from "../landing/NewHeader";
 
 const containerStyle = {
   position: "absolute" as const,
@@ -38,6 +38,8 @@ const FilterShops: React.FC = () => {
 
   return (
     <div style={containerStyle}>
+      <NewHeader title="Stockd" onBackClick={() => console.error("fix Route import :)")} />
+
       <div style={sectionContainerStyle}>
         <Card
           style={{ margin: "20px", display: "inline-block", padding: "20px" }}

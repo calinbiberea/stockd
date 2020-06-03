@@ -1,5 +1,4 @@
 import { Card, Typography } from "@material-ui/core";
-import colors from "../../res/colors";
 import Logo from "../../res/logo.png";
 import React from "react";
 

@@ -22,7 +22,7 @@ const SafetySlider: React.FC<SafetySliderProps> = ({
   setMinRating,
 }: SafetySliderProps) => {
   const starForIx = (i: number) => {
-    const starProps = { key: i, color: "primary" as const, style: { fontSize: "72px" } };
+    const starProps = { key: i, color: "primary" as const, style: { fontSize: "50px" } };
     const n = minRating - i;
     if (n <= 0) {
       return <StarEmpty {...starProps} />;

@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import colors from "../../res/colors";
 import React from "react";
 import { Product, ProductSelectorProps } from "./FilterShopsTypes";
 

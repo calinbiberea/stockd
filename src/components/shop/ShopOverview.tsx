@@ -4,7 +4,7 @@ import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
 import milkIcon from "../../res/icons/milk.svg";
 import pastaIcon from "../../res/icons/pasta.svg";
-import { FloatingActionButton } from "./floatingActionButton/FloatingActionButton";
+import { FloatingActionButton } from "../floatingActionButton/FloatingActionButton";
 
 const containerStyle = {
   flex: 4,

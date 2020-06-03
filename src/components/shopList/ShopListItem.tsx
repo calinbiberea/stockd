@@ -1,8 +1,8 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
-import ShopHeader from "./ShopHeader";
-import { ShopListItemProps } from "./ShopTypes";
+import ShopHeader from "../shop/ShopHeader";
+import { ShopListItemProps } from "../shop/ShopTypes";
 
 const shopCardStyle = {
   width: "30vw",

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Card, Typography } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
-import { Product, products, SafetyRating } from "./FilterShopsTypes";
+import { FilterShopsProps, Product, products, SafetyRating } from "./FilterShopsTypes";
 import SafetySlider from "./SafetySlider";
 import ProductSelector from "./ProductSelector";
 import NewHeader from "../landing/NewHeader";
@@ -24,7 +24,7 @@ const defaultSelectedProducts = Object.fromEntries(products.map((product) => [pr
   [p in Product]: boolean;
 };
 
-const FilterShops: React.FC = () => {
+const FilterShops: React.FC<FilterShopsProps> = ({ onBack }: FilterShopsProps) => {
   const [selectedProducts, setSelectedProducts] = useState(defaultSelectedProducts);
   const [minRating, setMinRating] = useState<SafetyRating>(0);
 
@@ -38,7 +38,7 @@ const FilterShops: React.FC = () => {
 
   return (
     <div style={containerStyle}>
-      <NewHeader title="Stockd" onBackClick={() => console.error("fix Route import :)")} />
+      <NewHeader title="Stockd" onBackClick={onBack} />
 
       <div style={sectionContainerStyle}>
         <Card

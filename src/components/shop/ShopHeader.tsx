@@ -42,7 +42,10 @@ const dividerStyle = {
   height: "5%",
 };
 
-const ShopHeader: React.FC<ShopHeaderProps> = ({ shopData, onBackClick }: ShopHeaderProps) => (
+export const ShopHeader: React.FC<ShopHeaderProps> = ({
+  shopData,
+  onBackClick,
+}: ShopHeaderProps) => (
   <div style={shopHeaderStyle}>
     <div style={{ backgroundImage: `url(${shopData.photoReference})`, ...imgContainerStyle }}>
       <IconButton size="medium" style={iconButtonStyle} onClick={onBackClick}>

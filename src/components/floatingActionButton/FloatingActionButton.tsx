@@ -2,7 +2,7 @@ import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import EditIcon from "@material-ui/icons/Edit";
-import colors from "../../../res/colors";
+import colors from "../../res/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

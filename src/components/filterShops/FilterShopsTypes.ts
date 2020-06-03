@@ -1,6 +1,10 @@
 export const products = ["Milk", "Bread", "Pasta", "Flour", "Cheese"] as const;
 export type Product = typeof products[number];
 
+export interface FilterShopsProps {
+  onBack: () => void;
+}
+
 export interface ProductSelectorProps {
   selected: { [p in Product]: boolean };
   onSelect: (value: Product) => void;

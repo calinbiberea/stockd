@@ -31,6 +31,8 @@ const gridContainerStyle = {
   overflow: "auto",
   padding: "12px",
   height: "100%",
+  margin: 0,
+  width: "100%",
 };
 
 const defaultShopData: ShopData = {

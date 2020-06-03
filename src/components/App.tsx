@@ -15,7 +15,7 @@ const theme = createMuiTheme({
 });
 
 const App: React.FC = () => {
-  const [route, setRoute] = useState("landing" as Route);
+  const [route, setRoute] = useState("findShop" as Route);
   const resetRoute = () => setRoute("landing");
 
   let currentScreen;

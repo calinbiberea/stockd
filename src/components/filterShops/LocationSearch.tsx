@@ -7,8 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
 import { LocationSearchProps } from "./FilterShopsTypes";
-
-let autocompleteService: google.maps.places.AutocompleteService;
+import { getPlacePredictions } from "../../util/googleMaps";
 
 const containerStyle = {
   width: 300,
@@ -29,7 +28,7 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
           request: { input: string },
           callback: (results?: google.maps.places.AutocompletePrediction[]) => void
         ) => {
-          autocompleteService.getPlacePredictions(request, callback);
+          getPlacePredictions(request, callback);
         },
         200
       ),
@@ -38,14 +37,6 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
 
   useEffect(() => {
     let active = true;
-
-    if (!autocompleteService && window.google) {
-      autocompleteService = new window.google.maps.places.AutocompleteService();
-    }
-
-    if (!autocompleteService) {
-      return undefined;
-    }
 
     if (inputValue === "") {
       setOptions(location ? [location] : []);

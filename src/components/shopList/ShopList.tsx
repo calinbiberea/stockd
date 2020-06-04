@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import ShopListItem from "./ShopListItem";
 import Header from "../header/Header";
 import { ShopData } from "../../util/googleMaps";
-import { ShopListProps } from "./ShopListTypes.d";
+import { ShopListProps } from "./ShopListTypes";
 
 const containerStyle = {
   width: "100vw",

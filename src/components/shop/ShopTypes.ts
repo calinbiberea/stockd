@@ -24,7 +24,6 @@ export interface Stocks {
 
 export interface ShopOverviewProps {
   stocks: Stocks;
-  onUpdateClicked: () => void;
 }
 
 export interface ShopStockProps {
@@ -36,6 +35,4 @@ export interface StockItemProps {
   icon: string;
   name: string;
   stock: number;
-  canUpdate: boolean;
-  onUpdateClick: () => void;
 }

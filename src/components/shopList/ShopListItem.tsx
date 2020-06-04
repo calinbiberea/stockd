@@ -35,6 +35,7 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
   shopData,
   startTime,
   endTime,
+  onGetDetailsClick,
 }: ShopListItemProps) => (
   <Card style={shopCardStyle}>
     <ShopHeader locationData={shopData.locationData} onBackClick={() => console.error("eh")} />
@@ -50,7 +51,7 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
       size="large"
       color="secondary"
       style={buttonStyle}
-      onClick={() => console.error("Button pressed, open za view.")}
+      onClick={() => onGetDetailsClick(shopData.id)}
     >
       Click here for details
       <MoreHorizIcon style={buttonIconStyle} />

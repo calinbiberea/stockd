@@ -2,7 +2,6 @@ import React from "react";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import { StockItemProps } from "./ShopTypes";
-import colors from "../../res/colors";
 import few from "../../res/stock/few.png";
 import some from "../../res/stock/some.png";
 import full from "../../res/stock/full.png";
@@ -16,11 +15,6 @@ const itemContainerStyle = {
   flexDirection: "row" as const,
   alignItems: "center",
   justifyContent: "space-between",
-};
-
-const clickableStyle = {
-  backgroundColor: colors.blue3,
-  cursor: "pointer",
 };
 
 const iconStyle = {
@@ -38,24 +32,13 @@ const getIconByNumber = (stock: number): string => {
   return full;
 };
 
-const StockItem: React.FC<StockItemProps> = ({
-  icon,
-  name,
-  stock,
-  canUpdate,
-  onUpdateClick,
-}: StockItemProps) => {
-  const style = { ...(canUpdate ? clickableStyle : {}), ...itemContainerStyle };
-  const onClick = () => {
-    if (canUpdate) {
-      onUpdateClick();
-    }
-  };
+const StockItem: React.FC<StockItemProps> = ({ icon, name, stock }: StockItemProps) => {
+  const style = { ...itemContainerStyle };
 
   const stockIcon = getIconByNumber(stock);
 
   return (
-    <Card style={style} onClick={onClick}>
+    <Card style={style}>
       <img src={icon} alt="Stock Item icon" style={iconStyle} />
 
       <Typography variant="h5">{name}</Typography>

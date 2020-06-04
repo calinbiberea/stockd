@@ -9,6 +9,7 @@ import Header from "../header/Header";
 import { DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
 import { geocodeByPlaceId } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
+import Overlay from "../overlay/Overlay";
 
 const containerStyle = {
   width: "100vw",
@@ -41,6 +42,7 @@ const gridContainerStyle = {
 
 const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: ShopListProps) => {
   const [shopList, setShopList] = useState<DBShopData[] | undefined>(undefined);
+  const [currentPlaceId, setCurrentPlaceId] = useState("");
 
   useEffect(() => {
     const getUserLocation = async () => {
@@ -96,9 +98,17 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
     );
   }
 
+  const closeOverlay = () => setCurrentPlaceId("");
+  const onGetDetailsClick = (placeId: string) => setCurrentPlaceId(placeId);
+
   const shopListItems = shopList.map((shop) => (
     <Grid item key={shop.id}>
-      <ShopListItem shopData={shop} startTime={"9:00"} endTime={"21:00"} />
+      <ShopListItem
+        shopData={shop}
+        startTime={"9:00"}
+        endTime={"21:00"}
+        onGetDetailsClick={onGetDetailsClick}
+      />
     </Grid>
   ));
 
@@ -117,6 +127,8 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
             </Typography>
           </Card>
         </div>
+
+        <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} />
 
         <Grid container direction="column" spacing={3} wrap="nowrap" style={gridContainerStyle}>
           {shopListItems}

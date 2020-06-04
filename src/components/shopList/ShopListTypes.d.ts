@@ -13,6 +13,7 @@ export interface ShopListItemProps {
   shopData: DBShopData;
   startTime: string;
   endTime: string;
+  onGetDetailsClick: (placeId: string) => void;
 }
 
 export interface DBShopData {

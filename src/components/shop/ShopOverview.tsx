@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
 import StockItem from "./StockItem";
-import { FloatingActionButton } from "../floatingActionButton/FloatingActionButton";
 import { ShopOverviewProps } from "./ShopTypes";
 
 const containerStyle = {
@@ -24,23 +23,10 @@ const gridItemStyle = {
   width: "50%",
 };
 
-const ShopOverview: React.FC<ShopOverviewProps> = ({
-  stocks,
-  onUpdateClicked,
-}: ShopOverviewProps) => {
-  const [updateClicked, setUpdateClicked] = useState(false);
-
-  const onFABClick = () => setUpdateClicked((prevUpdateClicked) => !prevUpdateClicked);
-
+const ShopOverview: React.FC<ShopOverviewProps> = ({ stocks }: ShopOverviewProps) => {
   const stockItems = Object.entries(stocks).map(([name, { icon, stock }]) => (
     <Grid item key={name} style={gridItemStyle}>
-      <StockItem
-        icon={icon}
-        name={name}
-        stock={stock}
-        canUpdate={updateClicked}
-        onUpdateClick={onUpdateClicked}
-      />
+      <StockItem icon={icon} name={name} stock={stock} />
     </Grid>
   ));
 
@@ -49,8 +35,6 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({
       <Grid container style={gridContainerStyle}>
         {stockItems}
       </Grid>
-
-      <FloatingActionButton onClick={onFABClick} />
     </div>
   );
 };

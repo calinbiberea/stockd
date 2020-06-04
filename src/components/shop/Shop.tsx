@@ -48,12 +48,7 @@ const defaultStocks: Stocks = {
   },
 };
 
-const Shop: React.FC<ShopProps> = ({
-  locationData,
-  selectedScreen,
-  setSelectedScreen,
-  onBackClick,
-}: ShopProps) => {
+const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, onBackClick }: ShopProps) => {
   const [stocks, setStocks] = useState(defaultStocks);
 
   useEffect(() => {
@@ -91,10 +86,9 @@ const Shop: React.FC<ShopProps> = ({
   }, [locationData.id]);
 
   let shopScreen: React.ReactNode;
+
   if (selectedScreen === "default") {
-    shopScreen = (
-      <ShopOverview stocks={stocks} onUpdateClicked={() => setSelectedScreen("stock")} />
-    );
+    shopScreen = <ShopOverview stocks={stocks} />;
   } else if (selectedScreen === "stock") {
     shopScreen = <ShopStock stocks={stocks} locationData={locationData} />;
   }

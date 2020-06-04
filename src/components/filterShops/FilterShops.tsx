@@ -6,6 +6,8 @@ import SafetySlider from "./SafetySlider";
 import ProductSelector from "./ProductSelector";
 import Header from "../header/Header";
 import LocationSearch from "./LocationSearch";
+import { findShops } from "../../firebase/firebaseApp";
+import { geocodeByPlaceId } from "../../util/googleMaps";
 
 const containerStyle = {
   width: "100vw",
@@ -36,14 +38,46 @@ const defaultSelectedProducts = Object.fromEntries(products.map((product) => [pr
 };
 
 const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps) => {
-  const [selectedProducts, setSelectedProducts] = useState(defaultSelectedProducts);
+  const [selectedProducts, setSelectedProducts] = useState<{ [p in Product]: boolean }>(
+    defaultSelectedProducts
+  );
   const [minRating, setMinRating] = useState<SafetyRating>(0);
+  const [location, setLocation] = useState<google.maps.places.AutocompletePrediction | null>(null);
 
   const toggleProduct = (product: Product) => {
     const newSelected = Object.assign({}, selectedProducts) as { [p in Product]: boolean };
     if (newSelected[product] !== undefined) {
       newSelected[product] = !newSelected[product];
       setSelectedProducts(newSelected);
+    }
+  };
+
+  const onLetsGoClick = () => {
+    if (location) {
+      geocodeByPlaceId(location.place_id)
+        .then((latLng) => {
+          const lat = latLng.lat();
+          const lng = latLng.lng();
+
+          const productsString = Object.entries(selectedProducts)
+            .filter(([_, selected]) => selected)
+            .map(([product, _]) => product)
+            .join(",");
+
+          const request = {
+            products: productsString,
+            minSafetyRating: 2 * minRating,
+            lat,
+            lng,
+          };
+
+          findShops(request)
+            .then((result) => console.warn(result.data[0].location))
+            .catch((error) => console.error(`FindShops failed with error: ${error}`));
+        })
+        .catch((reason) => console.error(`Geocoding failed with status ${reason}`));
+    } else {
+      console.error("Location required");
     }
   };
 
@@ -66,14 +100,14 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
 
         <SafetySlider minRating={minRating} setMinRating={setMinRating} />
 
-        <LocationSearch />
+        <LocationSearch location={location} setLocation={setLocation} />
       </div>
 
       <Button
         size="large"
         color="primary"
         variant="contained"
-        onClick={() => setRoute("shopList")}
+        onClick={onLetsGoClick}
         style={buttonStyle}
       >
         <Typography variant="h6">{"Let's go!"}</Typography>

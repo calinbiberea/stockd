@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
+import { LocationSearchProps } from "./FilterShopsTypes";
 
 let autocompleteService: google.maps.places.AutocompleteService;
 
@@ -14,8 +15,10 @@ const containerStyle = {
   margin: "16px",
 };
 
-const LocationSearch: React.FC = () => {
-  const [value, setValue] = useState<google.maps.places.AutocompletePrediction | null>(null);
+const LocationSearch: React.FC<LocationSearchProps> = ({
+  location,
+  setLocation,
+}: LocationSearchProps) => {
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<google.maps.places.AutocompletePrediction[]>([]);
 
@@ -45,7 +48,7 @@ const LocationSearch: React.FC = () => {
     }
 
     if (inputValue === "") {
-      setOptions(value ? [value] : []);
+      setOptions(location ? [location] : []);
       return undefined;
     }
 
@@ -53,8 +56,8 @@ const LocationSearch: React.FC = () => {
       if (active) {
         let newOptions = [] as google.maps.places.AutocompletePrediction[];
 
-        if (value) {
-          newOptions = [value];
+        if (location) {
+          newOptions = [location];
         }
 
         if (results) {
@@ -68,7 +71,7 @@ const LocationSearch: React.FC = () => {
     return () => {
       active = false;
     };
-  }, [value, inputValue, fetch]);
+  }, [location, inputValue, fetch]);
 
   return (
     <Autocomplete
@@ -79,10 +82,10 @@ const LocationSearch: React.FC = () => {
       autoComplete
       includeInputInList
       filterSelectedOptions
-      value={value}
+      value={location}
       onChange={(event, newValue: google.maps.places.AutocompletePrediction | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
-        setValue(newValue);
+        setLocation(newValue);
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);

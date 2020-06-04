@@ -10,6 +10,7 @@ export interface ShopData {
 
 let googleClient: google;
 let placesService: google.maps.places.PlacesService;
+let geocoder: google.maps.Geocoder;
 
 const detailsRequestField = ["name", "photos", "address_components"];
 
@@ -21,6 +22,22 @@ export const loadGoogleMapsScript = async (): Promise<void> => {
 export const setupGooglePlacesService = (map: google.maps.Map): void => {
   placesService = new googleClient.maps.places.PlacesService(map);
 };
+
+export const setupGoogleGeocoder = (): void => {
+  geocoder = new googleClient.maps.Geocoder();
+};
+
+export const geocodeByPlaceId = (placeId: string): Promise<google.maps.LatLng> =>
+  new Promise((resolve, reject) => {
+    geocoder.geocode({ placeId }, (results, status) => {
+      if (status === googleClient.maps.GeocoderStatus.OK) {
+        const data = results[0].geometry.location;
+        resolve(data);
+      } else {
+        reject(status);
+      }
+    });
+  });
 
 export const getInfoForPlace = (placeId: string): Promise<ShopData | null> =>
   new Promise((resolve) => {

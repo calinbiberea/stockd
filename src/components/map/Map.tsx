@@ -4,18 +4,13 @@ import type MapProps from "./MapProps";
 import mapStyles from "./MapStyles";
 import { setupGooglePlacesService } from "../../util/googleMaps";
 
-const mapCenter = {
-  lat: 51.49788,
-  lng: -0.183699,
-};
-
 const mapContainerStyle = {
   height: "100vh",
 };
 
-const Map: React.FC<MapProps> = ({ onPlaceClick }: MapProps) => (
+const Map: React.FC<MapProps> = ({ onPlaceClick, currentCenter }: MapProps) => (
   <GoogleMap
-    center={mapCenter}
+    center={currentCenter}
     zoom={17}
     mapContainerStyle={mapContainerStyle}
     options={{ disableDefaultUI: true, styles: mapStyles }}

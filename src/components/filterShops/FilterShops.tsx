@@ -66,13 +66,13 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
 
           const request = {
             products: productsString,
-            minSafetyRating: minRating,
+            minSafetyRating: 2 * minRating,
             lat,
             lng,
           };
 
           findShops(request)
-            .then((result) => console.warn(result.data))
+            .then((result) => console.warn(result.data[0].location))
             .catch((error) => console.error(`FindShops failed with error: ${error}`));
         })
         .catch((reason) => console.error(`Geocoding failed with status ${reason}`));

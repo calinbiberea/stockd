@@ -86,7 +86,7 @@ const Landing: React.FC<LandingProps> = ({ setRoute }: LandingProps) => (
         headerText="I'm currently at..."
         items={shopExamples}
         buttonText="I'd like to contribute some data!"
-        onClick={() => setRoute("findShop")}
+        onClick={() => setRoute("editShop")}
       />
     </div>
   </div>

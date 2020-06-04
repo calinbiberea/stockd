@@ -32,12 +32,12 @@ const buttonIconStyle = {
 };
 
 const ShopListItem: React.FC<ShopListItemProps> = ({
-  shopData,
+  locationData,
   startTime,
   endTime,
 }: ShopListItemProps) => (
   <Card style={shopCardStyle}>
-    <ShopHeader shopData={shopData} onBackClick={() => console.error("eh")} />
+    <ShopHeader locationData={locationData} onBackClick={() => console.error("eh")} />
 
     <div style={shopContentStyle}>
       <Typography>

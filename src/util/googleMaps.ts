@@ -1,11 +1,11 @@
 import { google, Loader } from "google-maps";
 import envVars from "./envVars";
 
-export interface ShopData {
+export interface LocationData {
   name: string;
   id: string;
-  photoReference: string | null;
-  roadName: string | null;
+  photo: string | null;
+  road: string | null;
 }
 
 let googleClient: google;
@@ -39,26 +39,28 @@ export const geocodeByPlaceId = (placeId: string): Promise<google.maps.LatLng> =
     });
   });
 
-export const getInfoForPlace = (placeId: string): Promise<ShopData | null> =>
-  new Promise((resolve) => {
+export const getLocationDataByPlaceId = (placeId: string): Promise<LocationData | null> =>
+  new Promise((resolve) =>
     placesService.getDetails({ placeId, fields: detailsRequestField }, (place, status) => {
       if (status === googleClient.maps.places.PlacesServiceStatus.OK) {
-        const shopData = {
+        const locationData = {
           name: place.name,
           id: placeId,
-          photoReference: place.photos
+          photo: place.photos
             ? place.photos.length > 0
               ? place.photos[0].getUrl({ maxWidth: 500 })
               : null
             : null,
-          roadName:
+          road:
             place.address_components?.find((component) => component.types.includes("route"))
               ?.long_name ?? null,
         };
-        resolve(shopData);
+
+        resolve(locationData);
       } else {
         console.error(`Place details request failed with ${status}\n\n${place}`);
+
         resolve(null);
       }
-    });
-  });
+    })
+  );

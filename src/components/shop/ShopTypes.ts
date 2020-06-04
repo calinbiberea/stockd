@@ -1,8 +1,8 @@
 import React from "react";
-import { ShopData } from "../../util/googleMaps";
+import { LocationData } from "../../util/googleMaps";
 
 export interface ShopProps {
-  shopData: ShopData;
+  locationData: LocationData;
   selectedScreen: ShopSelectedScreen;
   setSelectedScreen: (value: ShopSelectedScreen) => void;
   onBackClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -11,7 +11,7 @@ export interface ShopProps {
 export type ShopSelectedScreen = "default" | "safety" | "stock" | "reviews";
 
 export interface ShopHeaderProps {
-  shopData: ShopData;
+  locationData: LocationData;
   onBackClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -29,7 +29,7 @@ export interface ShopOverviewProps {
 
 export interface ShopStockProps {
   stocks: Stocks;
-  shopData: ShopData;
+  locationData: LocationData;
 }
 
 export interface StockItemProps {
@@ -41,7 +41,7 @@ export interface StockItemProps {
 }
 
 export interface ShopListItemProps {
-  shopData: ShopData;
+  locationData: LocationData;
   startTime: string;
   endTime: string;
 }

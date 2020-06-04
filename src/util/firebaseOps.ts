@@ -1,14 +1,12 @@
 import { db } from "../firebase/firebaseApp";
-import { geocodeByPlaceId, ShopData } from "./googleMaps";
+import { geocodeByPlaceId, LocationData } from "./googleMaps";
 
 const updateStock = async (
-  shopData: ShopData,
-  stockName: string,
-  newValue: number
+  locationData: LocationData,
+  stockUpdates: Record<string, number>
 ): Promise<void> => {
-  const numberData: Record<string, number> = {};
-  const queryData: Record<string, boolean> = {};
-
+  const displayedStocks: Record<string, number> = {};
+  const queryStocks: Record<string, boolean> = {};
   const safetyScore: Record<string, boolean> = {
     1: true,
     2: true,
@@ -22,30 +20,37 @@ const updateStock = async (
     10: true,
   };
 
-  const latLng = await geocodeByPlaceId(shopData.id);
+  const latLng = await geocodeByPlaceId(locationData.id);
 
   const location = {
     lat: latLng.lat(),
     lng: latLng.lng(),
   };
 
-  queryData[stockName.toLowerCase()] = newValue > 25;
-  numberData[stockName] = newValue;
+  for (const [stockName, stockValue] of Object.entries(stockUpdates)) {
+    displayedStocks[stockName.toLowerCase()] = stockValue;
+    queryStocks[stockName.toLowerCase()] = stockValue > 25;
+  }
+
+  const displayed = {
+    stocks: displayedStocks,
+    safetyScore: 3.5,
+  };
 
   const query = {
-    queryData,
+    stocks: queryStocks,
     safetyScore,
   };
 
   const data = {
-    shopData,
+    locationData,
     location,
+    displayed,
     query,
-    numberData,
   };
 
   db.collection("shops")
-    .doc(shopData.id)
+    .doc(locationData.id)
     .set(data, { merge: true })
     .then(() => console.warn("successful"))
     .catch(() => console.error("unsuccessful"));

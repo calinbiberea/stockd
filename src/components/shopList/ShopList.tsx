@@ -4,8 +4,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import ShopListItem from "./ShopListItem";
 import Header from "../header/Header";
-import { ShopData } from "../../util/googleMaps";
-import { ShopListProps } from "./ShopListTypes.d";
+import { LocationData } from "../../util/googleMaps";
+import { ShopListProps } from "./ShopListTypes";
 
 const containerStyle = {
   width: "100vw",
@@ -36,50 +36,50 @@ const gridContainerStyle = {
   width: "100%",
 };
 
-const defaultShopData: ShopData = {
+const defaultLocationData: LocationData = {
   name: "Flex Store",
   id: "nr 1 mondial",
-  photoReference: null,
-  roadName: "Swag boulevard",
+  photo: null,
+  road: "Swag boulevard",
 };
 
-const shops: { shopData: ShopData; startTime: string; endTime: string }[] = [
+const shops: { locationData: LocationData; startTime: string; endTime: string }[] = [
   {
-    shopData: defaultShopData,
+    locationData: defaultLocationData,
     startTime: "09:00",
     endTime: "21:00",
   },
   {
-    shopData: defaultShopData,
+    locationData: defaultLocationData,
     startTime: "09:00",
     endTime: "21:00",
   },
   {
-    shopData: defaultShopData,
+    locationData: defaultLocationData,
     startTime: "09:00",
     endTime: "21:00",
   },
   {
-    shopData: defaultShopData,
+    locationData: defaultLocationData,
     startTime: "09:00",
     endTime: "21:00",
   },
   {
-    shopData: defaultShopData,
+    locationData: defaultLocationData,
     startTime: "09:00",
     endTime: "21:00",
   },
   {
-    shopData: defaultShopData,
+    locationData: defaultLocationData,
     startTime: "09:00",
     endTime: "21:00",
   },
 ];
 
 const ShopList: React.FC<ShopListProps> = ({ setRoute }: ShopListProps) => {
-  const shopListItems = shops.map(({ shopData, startTime, endTime }) => (
-    <Grid item key={shopData.name + shopData.roadName}>
-      <ShopListItem shopData={shopData} startTime={startTime} endTime={endTime} />
+  const shopListItems = shops.map(({ locationData, startTime, endTime }) => (
+    <Grid item key={locationData.name + locationData.road}>
+      <ShopListItem locationData={locationData} startTime={startTime} endTime={endTime} />
     </Grid>
   ));
 

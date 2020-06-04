@@ -59,12 +59,10 @@ const marks = [
   },
 ];
 
-const ShopStock: React.FC<ShopStockProps> = ({ stocks, shopData }: ShopStockProps) => {
+const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStockProps) => {
   const [localStocks, setLocalStocks] = useState({} as Record<string, number>);
 
-  const onSubmit = () => {
-    Object.entries(localStocks).forEach(([key, value]) => updateStock(shopData, key, value));
-  };
+  const onSubmit = () => updateStock(locationData, localStocks);
 
   const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => (
     <Grid item key={name} style={gridItemStyle}>

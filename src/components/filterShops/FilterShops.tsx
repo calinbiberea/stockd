@@ -66,7 +66,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
 
           const request = {
             products: productsString,
-            minSafetyRating: minRating,
+            minSafetyRating: 2 * minRating,
             lat,
             lng,
           };

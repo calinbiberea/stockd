@@ -41,7 +41,7 @@ const updateStock = async (
     shopData,
     location,
     query,
-    safetyScore,
+    numberData,
   };
 
   db.collection("shops")

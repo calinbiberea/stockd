@@ -67,15 +67,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
   const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => (
     <Grid item key={name} style={gridItemStyle}>
       <div style={stockItemStyle}>
-        <StockItem
-          icon={icon}
-          name={name}
-          stock={stock}
-          canUpdate={false}
-          onUpdateClick={() => {
-            /**/
-          }}
-        />
+        <StockItem icon={icon} name={name} stock={stock} />
       </div>
 
       <Slider

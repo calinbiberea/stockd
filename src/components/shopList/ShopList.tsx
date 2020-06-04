@@ -7,8 +7,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import ShopListItem from "./ShopListItem";
 import Header from "../header/Header";
 import { DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
-import { geocodeByPlaceId } from "../../util/googleMaps";
+import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
+import Overlay from "../overlay/Overlay";
 
 const containerStyle = {
   width: "100vw",
@@ -41,6 +42,7 @@ const gridContainerStyle = {
 
 const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: ShopListProps) => {
   const [shopList, setShopList] = useState<DBShopData[] | undefined>(undefined);
+  const [currentLocationData, setCurrentLocationData] = useState<LocationData | null>(null);
 
   useEffect(() => {
     const getUserLocation = async () => {
@@ -88,7 +90,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
           position: "absolute",
           left: "50vw",
           top: "50vh",
-          transform: "tranlate(-50%, -50%)",
+          transform: "translate(-50%, -50%)",
         }}
       >
         <CircularProgress />
@@ -96,9 +98,17 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
     );
   }
 
+  const closeOverlay = () => setCurrentLocationData(null);
+  const onGetDetailsClick = (locationData: LocationData) => setCurrentLocationData(locationData);
+
   const shopListItems = shopList.map((shop) => (
     <Grid item key={shop.id}>
-      <ShopListItem shopData={shop} startTime={"9:00"} endTime={"21:00"} />
+      <ShopListItem
+        shopData={shop}
+        startTime={"9:00"}
+        endTime={"21:00"}
+        onGetDetailsClick={onGetDetailsClick}
+      />
     </Grid>
   ));
 
@@ -117,6 +127,12 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
             </Typography>
           </Card>
         </div>
+
+        <Overlay
+          placeId={currentLocationData?.id || ""}
+          closeOverlay={closeOverlay}
+          locationData={currentLocationData}
+        />
 
         <Grid container direction="column" spacing={3} wrap="nowrap" style={gridContainerStyle}>
           {shopListItems}

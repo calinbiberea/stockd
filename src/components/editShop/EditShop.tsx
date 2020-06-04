@@ -66,7 +66,7 @@ const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
         </Button>
       </Card>
 
-      <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} />
+      <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} queryMap defaultToStock />
 
       <Map onPlaceClick={onPlaceClick} currentCenter={currentCenter} />
     </div>

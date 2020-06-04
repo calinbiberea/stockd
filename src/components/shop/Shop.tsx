@@ -110,7 +110,7 @@ const Shop: React.FC<ShopProps> = ({
       <ShopOverview stocks={stocks} onUpdateClicked={() => setSelectedScreen("stock")} />
     );
   } else if (selectedScreen === "stock") {
-    shopScreen = <ShopStock stocks={stocks} shopId={shopData.id} />;
+    shopScreen = <ShopStock stocks={stocks} shopData={shopData} />;
   }
 
   return (

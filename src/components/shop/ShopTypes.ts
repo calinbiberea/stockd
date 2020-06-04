@@ -29,7 +29,7 @@ export interface ShopOverviewProps {
 
 export interface ShopStockProps {
   stocks: Stocks;
-  shopId: string;
+  shopData: ShopData;
 }
 
 export interface StockItemProps {

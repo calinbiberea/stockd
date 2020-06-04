@@ -20,6 +20,7 @@ export interface SafetySliderProps {
 }
 
 export interface LocationSearchProps {
+  enabled?: boolean;
   location: google.maps.places.AutocompletePrediction | null;
   setLocation: (value: google.maps.places.AutocompletePrediction | null) => void;
 }

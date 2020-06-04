@@ -1,4 +1,5 @@
 import React from "react";
+import { DBShopData } from "../shopList/ShopListTypes";
 
 export interface ShopData {
   name: string;
@@ -47,7 +48,7 @@ export interface StockItemProps {
 }
 
 export interface ShopListItemProps {
-  shopData: ShopData;
+  shopData: DBShopData;
   startTime: string;
   endTime: string;
 }

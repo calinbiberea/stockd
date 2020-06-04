@@ -34,9 +34,6 @@ const App: React.FC = () => {
     case "editShop":
       currentScreen = <EditShop setRoute={setRoute} />;
       break;
-    case "shopList":
-      currentScreen = <ShopList setRoute={setRoute} />;
-      break;
   }
 
   return <ThemeProvider theme={theme}>{currentScreen}</ThemeProvider>;

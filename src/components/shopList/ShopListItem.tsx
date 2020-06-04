@@ -2,9 +2,10 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import ShopHeader from "../shop/ShopHeader";
-import { ShopListItemProps } from "../shop/ShopTypes";
+import { ShopData, ShopListItemProps } from "../shop/ShopTypes";
 import { Button } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import { DBShopData } from "./ShopListTypes";
 
 const shopCardStyle = {
   width: "30vw",
@@ -31,13 +32,20 @@ const buttonIconStyle = {
   marginLeft: "8px",
 };
 
+const toShopData = ({ locationData: { id, name, photo, road } }: DBShopData): ShopData => ({
+  id,
+  name,
+  photoReference: photo,
+  roadName: road,
+});
+
 const ShopListItem: React.FC<ShopListItemProps> = ({
   shopData,
   startTime,
   endTime,
 }: ShopListItemProps) => (
   <Card style={shopCardStyle}>
-    <ShopHeader shopData={shopData} onBackClick={() => console.error("eh")} />
+    <ShopHeader shopData={toShopData(shopData)} onBackClick={() => console.error("eh")} />
 
     <div style={shopContentStyle}>
       <Typography>

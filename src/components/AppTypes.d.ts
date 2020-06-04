@@ -1,1 +1,1 @@
-type Route = "landing" | "filterShops" | "findShop" | "editShop" | "shopList";
+type Route = "landing" | "filterShops" | "findShop" | "editShop";

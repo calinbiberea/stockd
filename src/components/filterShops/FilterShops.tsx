@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Button, Card, Typography } from "@material-ui/core";
+import { Button, Card, Checkbox, FormControlLabel, FormGroup, Typography } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
 import { FilterShopsProps, Product, products, SafetyRating } from "./FilterShopsTypes.d";
 import SafetySlider from "./SafetySlider";
 import ProductSelector from "./ProductSelector";
 import Header from "../header/Header";
 import LocationSearch from "./LocationSearch";
-import { findShops } from "../../firebase/firebaseApp";
-import { geocodeByPlaceId } from "../../util/googleMaps";
+import ShopList from "../shopList/ShopList";
+import { getCurrentLocation } from "../../util/geolocate";
+
+type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
 const containerStyle = {
   width: "100vw",
@@ -41,8 +43,11 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   const [selectedProducts, setSelectedProducts] = useState<{ [p in Product]: boolean }>(
     defaultSelectedProducts
   );
-  const [minRating, setMinRating] = useState<SafetyRating>(0);
-  const [location, setLocation] = useState<google.maps.places.AutocompletePrediction | null>(null);
+  const [minSafetyScore, setMinSafetyScore] = useState<SafetyRating>(0);
+  const [selectedPlace, setSelectedPlace] = useState<AutocompletePrediction | null>(null);
+  const [useCurrentLocation, setUseCurrentLocation] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState<Position | null>(null);
+  const [submitted, setSubmitted] = useState(false);
 
   const toggleProduct = (product: Product) => {
     const newSelected = Object.assign({}, selectedProducts) as { [p in Product]: boolean };
@@ -52,34 +57,44 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
     }
   };
 
-  const onLetsGoClick = () => {
-    if (location) {
-      geocodeByPlaceId(location.place_id)
-        .then((latLng) => {
-          const lat = latLng.lat();
-          const lng = latLng.lng();
-
-          const productsString = Object.entries(selectedProducts)
-            .filter(([_, selected]) => selected)
-            .map(([product, _]) => product)
-            .join(",");
-
-          const request = {
-            products: productsString,
-            minSafetyRating: 2 * minRating,
-            lat,
-            lng,
-          };
-
-          findShops(request)
-            .then((result) => console.warn(result.data))
-            .catch((error) => console.error(`FindShops failed with error: ${error}`));
-        })
-        .catch((reason) => console.error(`Geocoding failed with status ${reason}`));
-    } else {
-      console.error("Location required");
+  const toggleGeolocation = async (enabled: boolean) => {
+    setUseCurrentLocation(enabled);
+    if (enabled) {
+      setCurrentLocation(await getCurrentLocation());
     }
   };
+
+  const getLocation = () => {
+    if (useCurrentLocation) {
+      const coords = (currentLocation as Position).coords;
+      return {
+        geolocated: true as const,
+        lat: coords.latitude,
+        lng: coords.longitude,
+      };
+    } else {
+      return {
+        geolocated: false as const,
+        placeId: (selectedPlace as AutocompletePrediction).place_id,
+      };
+    }
+  };
+
+  if (submitted) {
+    const products = Object.entries(selectedProducts)
+      .filter(([_, selected]) => selected)
+      .map(([product]) => product);
+    const location = getLocation();
+    return (
+      <ShopList
+        onBackClick={() => setSubmitted(false)}
+        filters={{ products, minSafetyScore }}
+        location={location}
+      />
+    );
+  }
+
+  const canSubmit = useCurrentLocation ? currentLocation !== null : selectedPlace !== null;
 
   return (
     <div style={containerStyle}>
@@ -98,17 +113,34 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
           onReset={() => setSelectedProducts(defaultSelectedProducts)}
         />
 
-        <SafetySlider minRating={minRating} setMinRating={setMinRating} />
+        <SafetySlider minRating={minSafetyScore} setMinRating={setMinSafetyScore} />
 
-        <LocationSearch location={location} setLocation={setLocation} />
+        <FormGroup row>
+          <LocationSearch
+            enabled={!useCurrentLocation}
+            location={selectedPlace}
+            setLocation={setSelectedPlace}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                color="primary"
+                checked={useCurrentLocation}
+                onChange={(event) => toggleGeolocation(event.target.checked)}
+              />
+            }
+            label="Use current location"
+          />
+        </FormGroup>
       </div>
 
       <Button
         size="large"
         color="primary"
         variant="contained"
-        onClick={onLetsGoClick}
+        onClick={() => setSubmitted(true)}
         style={buttonStyle}
+        disabled={!canSubmit}
       >
         <Typography variant="h6">{"Let's go!"}</Typography>
 

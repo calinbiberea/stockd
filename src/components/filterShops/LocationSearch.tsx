@@ -15,6 +15,7 @@ const containerStyle = {
 };
 
 const LocationSearch: React.FC<LocationSearchProps> = ({
+  enabled = true,
   location,
   setLocation,
 }: LocationSearchProps) => {
@@ -74,6 +75,7 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
       includeInputInList
       filterSelectedOptions
       value={location}
+      disabled={!enabled}
       onChange={(event, newValue: google.maps.places.AutocompletePrediction | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setLocation(newValue);
@@ -82,7 +84,7 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
         setInputValue(newInputValue);
       }}
       renderInput={(params) => (
-        <TextField {...params} label="Location" variant="outlined" fullWidth />
+        <TextField {...params} label="Location" variant="outlined" fullWidth disabled={!enabled} />
       )}
       renderOption={(option) => {
         const matches = option.structured_formatting.main_text_matched_substrings;

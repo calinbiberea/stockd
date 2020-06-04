@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import ShopListItem from "./ShopListItem";
 import Header from "../header/Header";
-import { ShopData } from "../../util/googleMaps";
+import { ShopData } from "../shop/ShopTypes";
 import { ShopListProps } from "./ShopListTypes";
 
 const containerStyle = {

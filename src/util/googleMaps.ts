@@ -1,12 +1,6 @@
 import { google, Loader } from "google-maps";
+import { ShopData } from "../components/shop/ShopTypes";
 import envVars from "./envVars";
-
-export interface ShopData {
-  name: string;
-  id: string;
-  photoReference: string | null;
-  roadName: string | null;
-}
 
 let googleClient: google;
 let placesService: google.maps.places.PlacesService;

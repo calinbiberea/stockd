@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CircularProgress, Fade, Slide, Modal } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import type { OverlayProps } from "./OverlayTypes";
-import type { ShopData } from "../../util/googleMaps";
+import type { ShopData } from "../shop/ShopTypes";
 import { getInfoForPlace } from "../../util/googleMaps";
 import { ShopSelectedScreen } from "../shop/ShopTypes";
 import Shop from "../shop/Shop";

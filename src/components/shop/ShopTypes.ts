@@ -1,5 +1,11 @@
 import React from "react";
-import { ShopData } from "../../util/googleMaps";
+
+export interface ShopData {
+  name: string;
+  id: string;
+  photoReference: string | null;
+  roadName: string | null;
+}
 
 export interface ShopProps {
   shopData: ShopData;

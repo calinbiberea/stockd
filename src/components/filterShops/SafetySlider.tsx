@@ -77,6 +77,7 @@ const SafetySlider: React.FC<SafetySliderProps> = ({
         <div style={{ width: "100%", textAlign: "center" }}>
           <div style={{ fontSize: "large", display: "inline-block" }}>
             {starRange.map(starForIx)}
+
             <Slider
               defaultValue={0}
               valueLabelDisplay="auto"

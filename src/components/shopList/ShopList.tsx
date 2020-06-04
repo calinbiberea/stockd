@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import ShopListItem from "./ShopListItem";
 import Header from "../header/Header";
-import { LocationData } from "../../util/googleMaps";
 import { DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
-import { Box, CircularProgress } from "@material-ui/core";
 import { geocodeByPlaceId } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
 
@@ -57,19 +57,24 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
       const userLocation = await getUserLocation();
       // eslint-disable-next-line no-console
       console.log("got");
+
       const request = {
         products: filters.products.join(","),
         minSafetyRating: 2 * filters.minSafetyScore,
         lat: userLocation.lat,
         lng: userLocation.lng,
       };
+
       // eslint-disable-next-line no-console
       console.log("Sending data request...");
+
       const result = (await findShops(request)) as FindShopsResult;
+
       // eslint-disable-next-line no-console
       console.log("got.");
       // eslint-disable-next-line no-console
       console.log(result);
+
       setShopList(result.data);
     };
 

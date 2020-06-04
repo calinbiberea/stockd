@@ -1,6 +1,5 @@
 import React from "react";
 import { LocationData } from "../../util/googleMaps";
-import { DBShopData } from "../shopList/ShopListTypes";
 
 export interface ShopProps {
   locationData: LocationData;
@@ -39,10 +38,4 @@ export interface StockItemProps {
   stock: number;
   canUpdate: boolean;
   onUpdateClick: () => void;
-}
-
-export interface ShopListItemProps {
-  shopData: DBShopData;
-  startTime: string;
-  endTime: string;
 }

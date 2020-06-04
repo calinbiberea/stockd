@@ -85,6 +85,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
       .filter(([_, selected]) => selected)
       .map(([product]) => product);
     const location = getLocation();
+
     return (
       <ShopList
         onBackClick={() => setSubmitted(false)}

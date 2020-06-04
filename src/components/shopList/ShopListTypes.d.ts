@@ -1,3 +1,5 @@
+import { LocationData } from "../../util/googleMaps";
+
 export interface ShopListProps {
   onBackClick: () => void;
   filters: {
@@ -7,11 +9,10 @@ export interface ShopListProps {
   location: { geolocated: true; lat: number; lng: number } | { geolocated: false; placeId: string };
 }
 
-export interface LocationData {
-  id: string;
-  name: string;
-  photo: string;
-  road: string;
+export interface ShopListItemProps {
+  shopData: DBShopData;
+  startTime: string;
+  endTime: string;
 }
 
 export interface DBShopData {

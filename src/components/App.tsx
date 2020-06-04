@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import Landing from "./landing/Landing";
-import ShopList from "./shopList/ShopList";
 import FilterShops from "./filterShops/FilterShops";
 import colors from "../res/colors";
 import EditShop from "./editShop/EditShop";

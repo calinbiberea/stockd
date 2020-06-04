@@ -68,7 +68,7 @@ const Shop: React.FC<ShopProps> = ({
         (snapshot) => {
           const data = snapshot.data();
 
-          if (data) {
+          if (data?.displayed) {
             const newStocks: Stocks = Object.entries(data.displayed.stocks).reduce(
               (acc: Stocks, [key, value]) => {
                 const { name, icon } = getProduct(key);

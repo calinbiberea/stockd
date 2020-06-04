@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
 import Overlay from "../overlay/Overlay";
-import Map from "../map/Map";
 import Header from "../header/Header";
-import { EditShopProps } from "./EditShopTypes";
-import { Button, Card } from "@material-ui/core";
+import Map from "../map/Map";
 import LocationSearch from "../filterShops/LocationSearch";
 import { geocodeByPlaceId } from "../../util/googleMaps";
+import { EditShopProps } from "./EditShopTypes";
 
 const buttonStyle = {
   textTransform: "none" as const,
@@ -53,6 +54,7 @@ const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
 
       <Card style={subtitleContainerStyle} variant={"outlined"}>
         <LocationSearch location={location} setLocation={setLocation} />
+
         <Button
           variant="contained"
           size="large"
@@ -65,6 +67,7 @@ const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
       </Card>
 
       <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} />
+
       <Map onPlaceClick={onPlaceClick} currentCenter={currentCenter} />
     </div>
   );

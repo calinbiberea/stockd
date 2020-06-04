@@ -1,4 +1,4 @@
-export const products = ["Milk", "Bread", "Pasta", "Eggs", "Toilet Paper", "Medicine"] as const;
+export const products = ["milk", "bread", "pasta", "eggs", "toilet paper", "medicine"] as const;
 
 export type Product = typeof products[number];
 

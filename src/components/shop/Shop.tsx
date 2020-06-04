@@ -5,6 +5,7 @@ import ShopOverview from "./ShopOverview";
 import ShopStock from "./ShopStock";
 import { db } from "../../firebase/firebaseApp";
 import { Stocks } from "./ShopTypes";
+import { getProduct } from "../../util/products";
 import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
 import milkIcon from "../../res/icons/milk.svg";
@@ -20,50 +21,35 @@ const shopStyle = {
   flexDirection: "column" as const,
 };
 
-/* TODO: ugly, please fix */
-const getIconByName = (name: string): string => {
-  if (name === "Bread") {
-    return breadIcon;
-  } else if (name === "Eggs") {
-    return eggsIcon;
-  } else if (name === "Milk") {
-    return milkIcon;
-  } else if (name === "Pasta") {
-    return pastaIcon;
-  } else {
-    return breadIcon;
-  }
-};
-
 const defaultStocks: Stocks = {
   Bread: {
     icon: breadIcon,
-    stock: 0,
+    stock: -1,
   },
   Eggs: {
     icon: eggsIcon,
-    stock: 0,
+    stock: -1,
   },
   Milk: {
     icon: milkIcon,
-    stock: 0,
+    stock: -1,
   },
   Pasta: {
     icon: pastaIcon,
-    stock: 0,
+    stock: -1,
   },
   Medicine: {
     icon: medicineIcon,
-    stock: 0,
+    stock: -1,
   },
   ToiletPaper: {
     icon: toiletPaperIcon,
-    stock: 0,
+    stock: -1,
   },
 };
 
 const Shop: React.FC<ShopProps> = ({
-  shopData,
+  locationData,
   selectedScreen,
   setSelectedScreen,
   onBackClick,
@@ -72,51 +58,50 @@ const Shop: React.FC<ShopProps> = ({
 
   useEffect(() => {
     setStocks(defaultStocks);
-  }, [shopData.id]);
+  }, [locationData.id]);
 
   useEffect(() => {
     return db
       .collection("shops")
-      .doc(shopData.id)
+      .doc(locationData.id)
       .onSnapshot(
         (snapshot) => {
           const data = snapshot.data();
 
-          if (data) {
-            const newData: Stocks = Object.entries(data)
-              .filter(([key, value]) => {
-                return !key.includes("Stock") && typeof value === "number";
-              })
-              .reduce((acc: Stocks, [name, value]) => {
-                const icon = getIconByName(name);
+          if (data?.displayed) {
+            const newStocks: Stocks = Object.entries(data.displayed.stocks).reduce(
+              (acc: Stocks, [key, value]) => {
+                const { name, icon } = getProduct(key);
 
                 acc[name] = {
                   icon,
-                  stock: value,
+                  stock: value as number,
                 };
 
                 return acc;
-              }, {});
+              },
+              {}
+            );
 
-            setStocks((prevState) => ({ ...prevState, ...newData }));
+            setStocks((prevState) => ({ ...prevState, ...newStocks }));
           }
         },
         (err) => console.error(`Encountered error: ${err}`)
       );
-  }, [shopData.id]);
+  }, [locationData.id]);
 
-  let shopScreen = null;
+  let shopScreen: React.ReactNode;
   if (selectedScreen === "default") {
     shopScreen = (
       <ShopOverview stocks={stocks} onUpdateClicked={() => setSelectedScreen("stock")} />
     );
   } else if (selectedScreen === "stock") {
-    shopScreen = <ShopStock stocks={stocks} shopId={shopData.id} />;
+    shopScreen = <ShopStock stocks={stocks} locationData={locationData} />;
   }
 
   return (
     <div style={shopStyle}>
-      <ShopHeader shopData={shopData} onBackClick={onBackClick} />
+      <ShopHeader locationData={locationData} onBackClick={onBackClick} />
 
       {shopScreen}
     </div>

@@ -35,7 +35,7 @@
     "rules": {
         "arrow-spacing": "warn",
         "constructor-super": "error",
-        "indent": ["error", 2],
+        "indent": ["error", 2, {"SwitchCase":  1}],
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "no-use-before-define": ["error", { "functions": true, "classes": true }],
         "semi": "off",

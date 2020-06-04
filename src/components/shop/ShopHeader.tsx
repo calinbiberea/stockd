@@ -5,7 +5,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import colors from "../../res/colors";
 import { ShopHeaderProps } from "./ShopTypes";
 
-const containerStyle = {
+const shopHeaderStyle = {
   flex: 1,
   display: "flex",
   flexDirection: "row" as const,
@@ -23,7 +23,7 @@ const imgContainerStyle = {
 };
 
 const iconButtonStyle = {
-  position: "absolute" as const,
+  position: "relative" as const,
   marginLeft: "24px",
   color: "#FFF",
   backgroundColor: colors.blue1,
@@ -42,9 +42,12 @@ const dividerStyle = {
   height: "5%",
 };
 
-const ShopHeader: React.FC<ShopHeaderProps> = ({ shopData, onBackClick }: ShopHeaderProps) => (
-  <div style={containerStyle}>
-    <div style={{ backgroundImage: `url(${shopData.photoReference})`, ...imgContainerStyle }}>
+export const ShopHeader: React.FC<ShopHeaderProps> = ({
+  locationData,
+  onBackClick,
+}: ShopHeaderProps) => (
+  <div style={shopHeaderStyle}>
+    <div style={{ backgroundImage: `url(${locationData.photo})`, ...imgContainerStyle }}>
       <IconButton size="medium" style={iconButtonStyle} onClick={onBackClick}>
         <ArrowBackIcon />
       </IconButton>
@@ -52,13 +55,13 @@ const ShopHeader: React.FC<ShopHeaderProps> = ({ shopData, onBackClick }: ShopHe
 
     <div style={nameContainerStyle}>
       <Typography variant="h6" style={{ color: "white" }}>
-        {shopData.name}
+        {locationData.name}
       </Typography>
 
       <div style={dividerStyle} />
 
       <Typography variant="subtitle1" style={{ color: colors.blue3 }}>
-        {shopData.roadName}
+        {locationData.road}
       </Typography>
     </div>
   </div>

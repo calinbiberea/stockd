@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import StockItem from "./StockItem";
-import { FloatingActionButton } from "./floatingActionButton/FloatingActionButton";
+import { FloatingActionButton } from "../floatingActionButton/FloatingActionButton";
 import { ShopOverviewProps } from "./ShopTypes";
 
 const containerStyle = {

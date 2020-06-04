@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Card, CircularProgress, Fade, Slide, Modal } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import type { OverlayProps } from "./OverlayTypes";
-import type { ShopData } from "../../util/googleMaps";
-import { getInfoForPlace } from "../../util/googleMaps";
+import type { LocationData } from "../../util/googleMaps";
+import { getLocationDataByPlaceId } from "../../util/googleMaps";
 import { ShopSelectedScreen } from "../shop/ShopTypes";
 import Shop from "../shop/Shop";
 
@@ -32,14 +32,14 @@ const circularProgressStyle = {
 
 const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps) => {
   const classes = useStyles();
-  const [shopData, setShopData] = useState(null as ShopData | null);
+  const [locationData, setLocationData] = useState(null as LocationData | null);
   const [selectedScreen, setSelectedScreen] = useState("default" as ShopSelectedScreen);
   const isOpen = placeId !== "";
-  const isLoaded = shopData?.id === placeId;
+  const isLoaded = locationData?.id === placeId;
 
   useEffect(() => {
     if (isOpen && !isLoaded) {
-      getInfoForPlace(placeId).then((data) => setShopData(data));
+      getLocationDataByPlaceId(placeId).then((data) => setLocationData(data));
     }
   }, [placeId, isLoaded, isOpen]);
 
@@ -62,9 +62,9 @@ const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps
 
         <Slide direction="up" in={isLoaded}>
           <Card>
-            {shopData !== null ? (
+            {locationData !== null ? (
               <Shop
-                shopData={shopData}
+                locationData={locationData}
                 selectedScreen={selectedScreen}
                 setSelectedScreen={setSelectedScreen}
                 onBackClick={onBackClick}

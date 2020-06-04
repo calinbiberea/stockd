@@ -5,12 +5,18 @@ import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { missingEnvVars } from "./util/envVars";
 import MissingEnvVar from "./components/errorScreens/MissingEnvVar";
-import { loadGoogleMapsScript } from "./util/googleMaps";
 import { setupFirebase } from "./firebase/firebaseApp";
+import {
+  loadGoogleMapsScript,
+  setupGoogleAutocompleteService,
+  setupGoogleGeocoder,
+} from "./util/googleMaps";
 
 const runApp = async () => {
   setupFirebase();
   await loadGoogleMapsScript();
+  setupGoogleAutocompleteService();
+  setupGoogleGeocoder();
 
   ReactDOM.render(
     <React.StrictMode>

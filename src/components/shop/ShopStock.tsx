@@ -59,12 +59,10 @@ const marks = [
   },
 ];
 
-const ShopStock: React.FC<ShopStockProps> = ({ stocks, shopId }: ShopStockProps) => {
+const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStockProps) => {
   const [localStocks, setLocalStocks] = useState({} as Record<string, number>);
 
-  const onSubmit = () => {
-    Object.entries(localStocks).forEach(([key, value]) => updateStock(shopId, key, value));
-  };
+  const onSubmit = () => updateStock(locationData, localStocks);
 
   const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => (
     <Grid item key={name} style={gridItemStyle}>
@@ -85,9 +83,8 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, shopId }: ShopStockProps)
         step={null}
         marks={marks}
         style={sliderStyle}
-        value={localStocks[name] | 0} /* TODO: find fix for default value */
+        value={localStocks[name] | 0}
         onChange={(event, value) => {
-          /* TODO: ugly, fix, please */
           if (typeof value === "number") {
             setLocalStocks((prevState) => ({ ...prevState, [name]: value }));
           } else {

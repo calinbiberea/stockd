@@ -26,6 +26,7 @@ const runApp = async () => {
   );
 };
 
+// noinspection JSIgnoredPromiseFromCall
 runApp();
 
 // If you want your app to work offline and load faster, you can change

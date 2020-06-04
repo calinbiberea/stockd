@@ -54,32 +54,18 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
     };
 
     const getData = async () => {
-      // eslint-disable-next-line no-console
-      console.log("Getting location...");
       const userLocation = await getUserLocation();
-      // eslint-disable-next-line no-console
-      console.log("got");
-
       const request = {
         products: filters.products.join(","),
         minSafetyRating: 2 * filters.minSafetyScore,
         lat: userLocation.lat,
         lng: userLocation.lng,
       };
-
-      // eslint-disable-next-line no-console
-      console.log("Sending data request...");
-
       const result = (await findShops(request)) as FindShopsResult;
-
-      // eslint-disable-next-line no-console
-      console.log("got.");
-      // eslint-disable-next-line no-console
-      console.log(result);
-
       setShopList(result.data);
     };
 
+    // noinspection JSIgnoredPromiseFromCall
     getData();
   }, [filters, location]);
 

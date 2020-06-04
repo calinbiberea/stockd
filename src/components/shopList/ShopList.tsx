@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import ShopListItem from "./ShopListItem";
 import Header from "../header/Header";
-import { ShopData } from "../shop/ShopTypes";
+import { LocationData } from "../../util/googleMaps";
 import { DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
 import { Box, CircularProgress } from "@material-ui/core";
 import { geocodeByPlaceId } from "../../util/googleMaps";

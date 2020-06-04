@@ -43,11 +43,11 @@ const dividerStyle = {
 };
 
 export const ShopHeader: React.FC<ShopHeaderProps> = ({
-  shopData,
+  locationData,
   onBackClick,
 }: ShopHeaderProps) => (
   <div style={shopHeaderStyle}>
-    <div style={{ backgroundImage: `url(${shopData.photoReference})`, ...imgContainerStyle }}>
+    <div style={{ backgroundImage: `url(${locationData.photo})`, ...imgContainerStyle }}>
       <IconButton size="medium" style={iconButtonStyle} onClick={onBackClick}>
         <ArrowBackIcon />
       </IconButton>
@@ -55,13 +55,13 @@ export const ShopHeader: React.FC<ShopHeaderProps> = ({
 
     <div style={nameContainerStyle}>
       <Typography variant="h6" style={{ color: "white" }}>
-        {shopData.name}
+        {locationData.name}
       </Typography>
 
       <div style={dividerStyle} />
 
       <Typography variant="subtitle1" style={{ color: colors.blue3 }}>
-        {shopData.roadName}
+        {locationData.road}
       </Typography>
     </div>
   </div>

@@ -1,6 +1,12 @@
 import { google, Loader } from "google-maps";
-import { ShopData } from "../components/shop/ShopTypes";
 import envVars from "./envVars";
+
+export interface LocationData {
+  name: string;
+  id: string;
+  photo: string | null;
+  road: string | null;
+}
 
 let googleClient: google;
 let placesService: google.maps.places.PlacesService;
@@ -26,29 +32,31 @@ export const setupGoogleGeocoder = (): void => {
   geocoder = new googleClient.maps.Geocoder();
 };
 
-export const getInfoForPlace = (placeId: string): Promise<ShopData | null> =>
-  new Promise((resolve) => {
+export const getLocationDataByPlaceId = (placeId: string): Promise<LocationData | null> =>
+  new Promise((resolve) =>
     placesService.getDetails({ placeId, fields: detailsRequestField }, (place, status) => {
       if (status === googleClient.maps.places.PlacesServiceStatus.OK) {
-        const shopData = {
+        const locationData = {
           name: place.name,
           id: placeId,
-          photoReference: place.photos
+          photo: place.photos
             ? place.photos.length > 0
               ? place.photos[0].getUrl({ maxWidth: 500 })
               : null
             : null,
-          roadName:
+          road:
             place.address_components?.find((component) => component.types.includes("route"))
               ?.long_name ?? null,
         };
-        resolve(shopData);
+
+        resolve(locationData);
       } else {
         console.error(`Place details request failed with ${status}\n\n${place}`);
+
         resolve(null);
       }
-    });
-  });
+    })
+  );
 
 export const getPlacePredictions = (
   request: { input: string },

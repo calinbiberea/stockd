@@ -1,7 +1,5 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import colors from "../../res/colors";
 import { ShopHeaderProps } from "./ShopTypes";
 
@@ -22,13 +20,6 @@ const imgContainerStyle = {
   backgroundPosition: "center",
 };
 
-const iconButtonStyle = {
-  position: "relative" as const,
-  marginLeft: "24px",
-  color: "#FFF",
-  backgroundColor: colors.blue1,
-};
-
 const nameContainerStyle = {
   flex: 1,
   width: "50%",
@@ -42,16 +33,9 @@ const dividerStyle = {
   height: "5%",
 };
 
-export const ShopHeader: React.FC<ShopHeaderProps> = ({
-  locationData,
-  onBackClick,
-}: ShopHeaderProps) => (
+export const ShopHeader: React.FC<ShopHeaderProps> = ({ locationData }: ShopHeaderProps) => (
   <div style={shopHeaderStyle}>
-    <div style={{ backgroundImage: `url(${locationData.photo})`, ...imgContainerStyle }}>
-      <IconButton size="medium" style={iconButtonStyle} onClick={onBackClick}>
-        <ArrowBackIcon />
-      </IconButton>
-    </div>
+    <div style={{ backgroundImage: `url(${locationData.photo})`, ...imgContainerStyle }} />
 
     <div style={nameContainerStyle}>
       <Typography variant="h6" style={{ color: "white" }}>

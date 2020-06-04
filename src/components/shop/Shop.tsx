@@ -48,7 +48,7 @@ const defaultStocks: Stocks = {
   },
 };
 
-const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, onBackClick }: ShopProps) => {
+const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) => {
   const [stocks, setStocks] = useState(defaultStocks);
 
   useEffect(() => {
@@ -95,7 +95,7 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, onBackClick }
 
   return (
     <div style={shopStyle}>
-      <ShopHeader locationData={locationData} onBackClick={onBackClick} />
+      <ShopHeader locationData={locationData} />
 
       {shopScreen}
     </div>

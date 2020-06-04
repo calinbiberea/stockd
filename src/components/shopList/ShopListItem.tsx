@@ -38,7 +38,7 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
   onGetDetailsClick,
 }: ShopListItemProps) => (
   <Card style={shopCardStyle}>
-    <ShopHeader locationData={shopData.locationData} onBackClick={() => console.error("eh")} />
+    <ShopHeader locationData={shopData.locationData} />
 
     <div style={shopContentStyle}>
       <Typography>
@@ -51,7 +51,7 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
       size="large"
       color="secondary"
       style={buttonStyle}
-      onClick={() => onGetDetailsClick(shopData.id)}
+      onClick={() => onGetDetailsClick(shopData.locationData)}
     >
       Click here for details
       <MoreHorizIcon style={buttonIconStyle} />

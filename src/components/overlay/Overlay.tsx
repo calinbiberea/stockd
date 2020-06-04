@@ -30,26 +30,30 @@ const circularProgressStyle = {
   color: "#FFF",
 };
 
-const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps) => {
+const Overlay: React.FC<OverlayProps> = ({
+  placeId,
+  closeOverlay,
+  queryMap,
+  defaultToStock,
+  locationData = null,
+}: OverlayProps) => {
   const classes = useStyles();
-  const [locationData, setLocationData] = useState(null as LocationData | null);
-  const [selectedScreen, setSelectedScreen] = useState("default" as ShopSelectedScreen);
+  const [localLocationData, setLocalLocationData] = useState<LocationData | null>(null);
+  const [selectedScreen, setSelectedScreen] = useState<ShopSelectedScreen>(
+    defaultToStock ? "stock" : "default"
+  );
   const isOpen = placeId !== "";
-  const isLoaded = locationData?.id === placeId;
+  const isLoaded = localLocationData?.id === placeId;
 
   useEffect(() => {
-    if (isOpen && !isLoaded) {
-      getLocationDataByPlaceId(placeId).then((data) => setLocationData(data));
-    }
-  }, [placeId, isLoaded, isOpen]);
+    setLocalLocationData(locationData);
+  }, [locationData]);
 
-  const onBackClick = () => {
-    if (selectedScreen === "default") {
-      closeOverlay();
-    } else {
-      setSelectedScreen("default");
+  useEffect(() => {
+    if (queryMap && isOpen && !isLoaded) {
+      getLocationDataByPlaceId(placeId).then((data) => setLocalLocationData(data));
     }
-  };
+  }, [placeId, isLoaded, isOpen, queryMap]);
 
   return (
     <Modal open={isOpen} style={modalStyle} onClose={closeOverlay}>
@@ -62,12 +66,11 @@ const Overlay: React.FC<OverlayProps> = ({ placeId, closeOverlay }: OverlayProps
 
         <Slide direction="up" in={isLoaded}>
           <Card>
-            {locationData !== null ? (
+            {localLocationData !== null ? (
               <Shop
-                locationData={locationData}
+                locationData={localLocationData}
                 selectedScreen={selectedScreen}
                 setSelectedScreen={setSelectedScreen}
-                onBackClick={onBackClick}
               />
             ) : null}
           </Card>

@@ -6,6 +6,7 @@ import colors from "../../res/colors";
 import few from "../../res/stock/few.png";
 import some from "../../res/stock/some.png";
 import full from "../../res/stock/full.png";
+import unknown from "../../res/stock/unknown.png";
 
 const itemContainerStyle = {
   height: "64px",
@@ -27,7 +28,9 @@ const iconStyle = {
 };
 
 const getIconByNumber = (stock: number): string => {
-  if (stock === 0) {
+  if (stock === -1) {
+    return unknown;
+  } else if (stock === 0) {
     return few;
   } else if (stock === 50) {
     return some;

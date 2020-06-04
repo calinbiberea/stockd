@@ -85,9 +85,8 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, shopId }: ShopStockProps)
         step={null}
         marks={marks}
         style={sliderStyle}
-        value={localStocks[name] | 0} /* TODO: find fix for default value */
+        value={localStocks[name] | 0}
         onChange={(event, value) => {
-          /* TODO: ugly, fix, please */
           if (typeof value === "number") {
             setLocalStocks((prevState) => ({ ...prevState, [name]: value }));
           } else {

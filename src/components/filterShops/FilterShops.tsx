@@ -72,7 +72,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
           };
 
           findShops(request)
-            .then((result) => console.warn(result.data[0].location))
+            .then((result) => console.warn(result))
             .catch((error) => console.error(`FindShops failed with error: ${error}`));
         })
         .catch((reason) => console.error(`Geocoding failed with status ${reason}`));

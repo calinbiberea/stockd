@@ -20,7 +20,6 @@ const shopStyle = {
   flexDirection: "column" as const,
 };
 
-/* TODO: ugly, please fix */
 const getIconByName = (name: string): string => {
   if (name === "Bread") {
     return breadIcon;

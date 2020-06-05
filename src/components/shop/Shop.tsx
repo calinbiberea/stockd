@@ -88,7 +88,7 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
   let shopScreen: React.ReactNode;
 
   if (selectedScreen === "default") {
-    shopScreen = <ShopOverview stocks={stocks} />;
+    shopScreen = <ShopOverview stocks={stocks} locationData={locationData} />;
   } else if (selectedScreen === "stock") {
     shopScreen = <ShopStock stocks={stocks} locationData={locationData} />;
   }

@@ -21,6 +21,7 @@ export interface Stocks {
 
 export interface ShopOverviewProps {
   stocks: Stocks;
+  locationData: LocationData;
 }
 
 export interface ShopStockProps {

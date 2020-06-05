@@ -22,6 +22,7 @@
     "firebase": "^7.14.6",
     "google-maps": "^4.2.3",
     "lodash": "^4.17.15",
+    "notistack": "^0.9.16",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",

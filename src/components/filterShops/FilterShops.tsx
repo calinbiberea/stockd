@@ -106,7 +106,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
 
   return (
     <div style={containerStyle}>
-      <Header title="Stockd" onBackClick={() => setRoute("landing")} />
+      <Header onBackClick={() => setRoute("landing")} />
 
       <Card style={subtitleContainerStyle} variant={"outlined"}>
         <Typography variant="h4" color="primary">

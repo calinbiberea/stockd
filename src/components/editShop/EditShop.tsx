@@ -50,7 +50,7 @@ const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
 
   return (
     <div>
-      <Header title="Stockd" onBackClick={() => setRoute("landing")} />
+      <Header onBackClick={() => setRoute("landing")} />
 
       <Card style={subtitleContainerStyle} variant={"outlined"}>
         <LocationSearch location={location} setLocation={setLocation} />

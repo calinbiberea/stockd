@@ -5,11 +5,19 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Typography from "@material-ui/core/Typography";
 import { HeaderProps } from "./HeaderTypes";
+import Logo from "../../res/logo.png";
+import { Card } from "@material-ui/core";
 
 const iconButtonStyle = {
   color: "#FFF",
   marginRight: "16px",
 };
+
+const logo = (
+  <Card style={{ padding: "6px", display: "inline-block" }}>
+    <img alt="stock" src={Logo} style={{ maxHeight: "28px" }} />
+  </Card>
+);
 
 const Header: React.FC<HeaderProps> = ({ title, onBackClick }: HeaderProps) => (
   <div>
@@ -19,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ title, onBackClick }: HeaderProps) => (
           <ArrowBackIcon />
         </IconButton>
 
-        <Typography variant="h6">{title}</Typography>
+        {title !== undefined ? <Typography variant="h6">{title}</Typography> : logo}
       </Toolbar>
     </AppBar>
 

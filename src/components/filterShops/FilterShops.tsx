@@ -8,6 +8,7 @@ import Header from "../header/Header";
 import LocationSearch from "./LocationSearch";
 import ShopList from "../shopList/ShopList";
 import { getCurrentLocation } from "../../util/geolocate";
+import { useSnackbar } from "notistack";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -48,6 +49,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<Position | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const toggleProduct = (product: Product) => {
     const newSelected = Object.assign({}, selectedProducts) as { [p in Product]: boolean };
@@ -58,10 +60,15 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   };
 
   const toggleGeolocation = async (enabled: boolean) => {
-    setUseCurrentLocation(enabled);
+    let newUseCurrentLocation = enabled;
     if (enabled) {
-      setCurrentLocation(await getCurrentLocation());
+      const maybeCurrentLocation = await getCurrentLocation(enqueueSnackbar);
+      if (maybeCurrentLocation === null) {
+        newUseCurrentLocation = false;
+      }
+      setCurrentLocation(maybeCurrentLocation);
     }
+    setUseCurrentLocation(newUseCurrentLocation);
   };
 
   const getLocation = () => {
@@ -99,7 +106,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
 
   return (
     <div style={containerStyle}>
-      <Header title="Stockd" onBackClick={() => setRoute("landing")} />
+      <Header onBackClick={() => setRoute("landing")} />
 
       <Card style={subtitleContainerStyle} variant={"outlined"}>
         <Typography variant="h4" color="primary">

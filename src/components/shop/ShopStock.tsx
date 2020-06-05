@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import StockItem from "./StockItem";
 import updateStock from "../../util/firebaseOps";
 import { ShopStockProps } from "./ShopTypes";
+import { useSnackbar } from "notistack";
 
 const containerStyle = {
   flex: 4,
@@ -39,53 +40,61 @@ const sliderStyle = {
   width: "200px",
 };
 
-const buttonStyle = {
-  width: "20%",
+const buttonContainerStyle = {
   marginBottom: "8px",
+  display: "inline-block",
 };
 
-const marks = [
+const getMarks = (value: number) => [
   {
     value: 0,
-    label: "low",
+    label: value === 0 ? <b>few</b> : <>few</>,
   },
   {
     value: 50,
-    label: "average",
+    label: value === 50 ? <b>some</b> : <>some</>,
   },
   {
     value: 100,
-    label: "high",
+    label: value === 100 ? <b>lots</b> : <>lots</>,
   },
 ];
 
+const getSubmitSuffix = (numUpdates: number) =>
+  numUpdates === 0 ? undefined : `${numUpdates} update${numUpdates === 1 ? "" : "s"}`;
+
 const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStockProps) => {
-  const [localStocks, setLocalStocks] = useState({} as Record<string, number>);
+  const [localStocks, setLocalStocks] = useState<Record<string, number>>({});
+  const numUpdates = Object.keys(localStocks).length;
+  const { enqueueSnackbar } = useSnackbar();
 
-  const onSubmit = () => updateStock(locationData, localStocks);
+  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => {
+    const currentValue = localStocks[name];
+    const updated = currentValue !== undefined;
+    return (
+      <Grid item key={name} style={gridItemStyle}>
+        <div style={stockItemStyle}>
+          <StockItem icon={icon} name={name} stock={stock} />
+        </div>
 
-  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => (
-    <Grid item key={name} style={gridItemStyle}>
-      <div style={stockItemStyle}>
-        <StockItem icon={icon} name={name} stock={stock} />
-      </div>
-
-      <Slider
-        aria-labelledby="discrete-slider-restrict"
-        step={null}
-        marks={marks}
-        style={sliderStyle}
-        value={localStocks[name] | 0}
-        onChange={(event, value) => {
-          if (typeof value === "number") {
-            setLocalStocks((prevState) => ({ ...prevState, [name]: value }));
-          } else {
-            console.error("Undefined value type in Slider onChange");
-          }
-        }}
-      />
-    </Grid>
-  ));
+        <Slider
+          color={updated ? "primary" : "secondary"}
+          aria-labelledby="discrete-slider-restrict"
+          step={null}
+          marks={getMarks(currentValue)}
+          style={sliderStyle}
+          value={updated ? currentValue : 50}
+          onChange={(event, value) => {
+            if (typeof value === "number") {
+              setLocalStocks((prevState) => ({ ...prevState, [name]: value }));
+            } else {
+              console.error("Undefined value type in Slider onChange");
+            }
+          }}
+        />
+      </Grid>
+    );
+  });
 
   return (
     <div style={containerStyle}>
@@ -93,9 +102,30 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
         {stocksAndSliders}
       </Grid>
 
-      <Button variant="contained" color="primary" style={buttonStyle} onClick={onSubmit}>
-        Submit
-      </Button>
+      <div style={buttonContainerStyle}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            // noinspection JSIgnoredPromiseFromCall
+            updateStock(locationData, localStocks, enqueueSnackbar);
+            setLocalStocks({});
+          }}
+          disabled={numUpdates === 0}
+        >
+          Submit {getSubmitSuffix(numUpdates)}
+        </Button>
+        &nbsp;&nbsp;
+        <Button
+          size="small"
+          variant="contained"
+          color="secondary"
+          onClick={() => setLocalStocks({})}
+          disabled={numUpdates === 0}
+        >
+          Clear
+        </Button>
+      </div>
     </div>
   );
 };

@@ -1,9 +1,11 @@
 import { db } from "../firebase/firebaseApp";
 import { geocodeByPlaceId, LocationData } from "./googleMaps";
+import { NotifyFunc } from "./types";
 
 const updateStock = async (
   locationData: LocationData,
-  stockUpdates: Record<string, number>
+  stockUpdates: Record<string, number>,
+  notify?: NotifyFunc
 ): Promise<void> => {
   const displayedStocks: Record<string, number> = {};
   const queryStocks: Record<string, boolean> = {};
@@ -52,8 +54,20 @@ const updateStock = async (
   db.collection("shops")
     .doc(locationData.id)
     .set(data, { merge: true })
-    .then(() => console.warn("successful"))
-    .catch(() => console.error("unsuccessful"));
+    .then(() => {
+      // eslint-disable-next-line no-console
+      console.info("successful");
+      if (notify !== undefined) {
+        notify("Your submission has been received", { variant: "success" });
+      }
+    })
+    .catch((e) => {
+      // eslint-disable-next-line no-console
+      console.error(`unsuccessful: ${e}`);
+      if (notify !== undefined) {
+        notify("Submission failed", { variant: "error" });
+      }
+    });
 };
 
 export default updateStock;

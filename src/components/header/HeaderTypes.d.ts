@@ -1,4 +1,4 @@
 export interface HeaderProps {
-  title: string;
+  title?: string;
   onBackClick: () => void;
 }

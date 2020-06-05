@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { SnackbarProvider } from "notistack";
 import Landing from "./landing/Landing";
 import FilterShops from "./filterShops/FilterShops";
 import colors from "../res/colors";
@@ -35,7 +36,11 @@ const App: React.FC = () => {
       break;
   }
 
-  return <ThemeProvider theme={theme}>{currentScreen}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={theme}>
+      <SnackbarProvider>{currentScreen}</SnackbarProvider>
+    </ThemeProvider>
+  );
 };
 
 export default App;

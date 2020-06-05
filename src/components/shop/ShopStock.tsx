@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import StockItem from "./StockItem";
 import updateStock from "../../util/firebaseOps";
 import { ShopStockProps } from "./ShopTypes";
+import { useSnackbar } from "notistack";
 
 const containerStyle = {
   flex: 4,
@@ -65,6 +66,7 @@ const getSubmitSuffix = (numUpdates: number) =>
 const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStockProps) => {
   const [localStocks, setLocalStocks] = useState<Record<string, number>>({});
   const numUpdates = Object.keys(localStocks).length;
+  const { enqueueSnackbar } = useSnackbar();
 
   const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => {
     const currentValue = localStocks[name];
@@ -104,7 +106,11 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
         <Button
           variant="contained"
           color="primary"
-          onClick={() => updateStock(locationData, localStocks)}
+          onClick={() => {
+            // noinspection JSIgnoredPromiseFromCall
+            updateStock(locationData, localStocks, enqueueSnackbar);
+            setLocalStocks({});
+          }}
           disabled={numUpdates === 0}
         >
           Submit {getSubmitSuffix(numUpdates)}

@@ -10,6 +10,7 @@ import { DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
 import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
 import Overlay from "../overlay/Overlay";
+import { useSnackbar } from "notistack";
 
 const containerStyle = {
   width: "100vw",
@@ -43,6 +44,7 @@ const gridContainerStyle = {
 const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: ShopListProps) => {
   const [shopList, setShopList] = useState<DBShopData[] | undefined>(undefined);
   const [currentLocationData, setCurrentLocationData] = useState<LocationData | null>(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const getUserLocation = async () => {
@@ -68,6 +70,13 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
     // noinspection JSIgnoredPromiseFromCall
     getData();
   }, [filters, location]);
+
+  useEffect(() => {
+    if (shopList !== undefined && shopList.length === 0) {
+      enqueueSnackbar("We couldn't find any shops matching those filters.", { variant: "error" });
+      onBackClick();
+    }
+  }, [enqueueSnackbar, onBackClick, shopList]);
 
   if (shopList === undefined) {
     return (
@@ -109,7 +118,9 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
             variant={"outlined"}
           >
             <Typography variant="h5" color="primary">
-              Here are the shops that we found:
+              {shopListItems.length !== 0
+                ? "Here are the shops that we found:"
+                : "We couldn't find any shops matching those filters."}
             </Typography>
           </Card>
         </div>

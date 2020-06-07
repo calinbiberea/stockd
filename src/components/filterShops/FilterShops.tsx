@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { Button, Card, Checkbox, FormControlLabel, FormGroup, Typography } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
-import { FilterShopsProps, Product, products, SafetyRating } from "./FilterShopsTypes.d";
-import SafetySlider from "./SafetySlider";
-import ProductSelector from "./ProductSelector";
+import { FilterShopsProps } from "./FilterShopsTypes.d";
+import SelectorPanel from "./SelectorPanel";
 import Header from "../header/Header";
 import LocationSearch from "./LocationSearch";
 import ShopList from "../shopList/ShopList";
+import {
+  products,
+  safetyFeatures,
+  Product,
+  SafetyFeature,
+  ProductId, SafetyFeatureId,
+} from "../../util/productsAndSafetyFeatures";
 import { getCurrentLocation } from "../../util/geolocate";
 import { useSnackbar } from "notistack";
 
@@ -36,26 +42,46 @@ const buttonStyle = {
   textTransform: "none" as const,
 };
 
-const defaultSelectedProducts = Object.fromEntries(products.map((product) => [product, false])) as {
-  [p in Product]: boolean;
+const defaultSelectedProducts = Object.fromEntries(
+  Object.keys(products).map((productId) => [productId, false])
+) as {
+  [p in ProductId]: boolean;
+};
+
+const defaultSelectedSafetyFeatures = Object.fromEntries(
+  Object.keys(safetyFeatures).map((safetyFeatureId) => [safetyFeatureId, false])
+) as {
+  [f in SafetyFeatureId]: boolean;
 };
 
 const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps) => {
-  const [selectedProducts, setSelectedProducts] = useState<{ [p in Product]: boolean }>(
+  const [selectedProducts, setSelectedProducts] = useState<{ [p in ProductId]: boolean }>(
     defaultSelectedProducts
   );
-  const [minSafetyScore, setMinSafetyScore] = useState<SafetyRating>(0);
+  const [selectedSafetyFeatures, setSelectedSafetyFeatures] = useState<
+    { [f in SafetyFeatureId]: boolean }
+  >(defaultSelectedSafetyFeatures);
   const [selectedPlace, setSelectedPlace] = useState<AutocompletePrediction | null>(null);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<Position | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const toggleProduct = (product: Product) => {
-    const newSelected = Object.assign({}, selectedProducts) as { [p in Product]: boolean };
+  const toggleProduct = (product: ProductId) => {
+    const newSelected = Object.assign({}, selectedProducts) as { [p in ProductId]: boolean };
     if (newSelected[product] !== undefined) {
       newSelected[product] = !newSelected[product];
       setSelectedProducts(newSelected);
+    }
+  };
+
+  const toggleSafetyFeature = (feature: SafetyFeatureId) => {
+    const newSelected = Object.assign({}, selectedSafetyFeatures) as {
+      [f in SafetyFeatureId]: boolean;
+    };
+    if (newSelected[feature] !== undefined) {
+      newSelected[feature] = !newSelected[feature];
+      setSelectedSafetyFeatures(newSelected);
     }
   };
 
@@ -91,12 +117,15 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
     const products = Object.entries(selectedProducts)
       .filter(([_, selected]) => selected)
       .map(([product]) => product);
+    const safetyFeatures = Object.entries(selectedSafetyFeatures)
+      .filter(([_, selected]) => selected)
+      .map(([feature]) => feature);
     const location = getLocation();
 
     return (
       <ShopList
         onBackClick={() => setSubmitted(false)}
-        filters={{ products, minSafetyScore }}
+        filters={{ products, safetyFeatures }}
         location={location}
       />
     );
@@ -115,13 +144,23 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
       </Card>
 
       <div style={contentContainerStyle}>
-        <ProductSelector
+        <SelectorPanel
+          title="ProductsAndSafetyFeatures"
           selected={selectedProducts}
-          onSelect={toggleProduct}
+          items={products}
+          onSelect={(p) => toggleProduct(p as ProductId)}
           onReset={() => setSelectedProducts(defaultSelectedProducts)}
         />
 
-        <SafetySlider minRating={minSafetyScore} setMinRating={setMinSafetyScore} />
+        <SelectorPanel
+          title="Safety Features"
+          selected={selectedSafetyFeatures}
+          items={safetyFeatures}
+          onSelect={(f) => toggleSafetyFeature(f as SafetyFeatureId)}
+          onReset={() => setSelectedSafetyFeatures(defaultSelectedSafetyFeatures)}
+        />
+
+        {/*<SafetyFilters minRating={minSafetyScore} setMinRating={setMinSafetyScore} />*/}
 
         <FormGroup row>
           <LocationSearch

@@ -59,7 +59,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
       const userLocation = await getUserLocation();
       const request = {
         products: filters.products.join(","),
-        minSafetyRating: 2 * filters.minSafetyScore,
+        safetyFeatures: filters.safetyFeatures.join(","),
         lat: userLocation.lat,
         lng: userLocation.lng,
       };

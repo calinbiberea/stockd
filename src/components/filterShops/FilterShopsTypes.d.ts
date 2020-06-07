@@ -1,14 +1,14 @@
-export const products = ["milk", "bread", "pasta", "eggs", "toilet paper", "medicine"] as const;
-
-export type Product = typeof products[number];
+import { Product } from "../../util/productsAndSafetyFeatures";
 
 export interface FilterShopsProps {
   setRoute: (Route) => void;
 }
 
-export interface ProductSelectorProps {
-  selected: { [p in Product]: boolean };
-  onSelect: (value: Product) => void;
+export interface SelectorPanelProps {
+  title: string
+  selected: { [p: string]: boolean };
+  items: { [p: string]: Product };
+  onSelect: (value: String) => void;
   onReset: () => void;
 }
 

@@ -4,7 +4,7 @@ export interface ShopListProps {
   onBackClick: () => void;
   filters: {
     products: string[];
-    minSafetyScore: number;
+    safetyFeatures: string[];
   };
   location: { geolocated: true; lat: number; lng: number } | { geolocated: false; placeId: string };
 }

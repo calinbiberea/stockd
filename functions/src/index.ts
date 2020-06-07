@@ -37,6 +37,8 @@ export const findShops = functions.https.onCall(async (data) => {
   const lng = parseFloat(data.lng as string);
   const limit = parseInt((data.limit || "50") as string);
   const skip = parseInt((data.skip || "0") as string);
+  const radiusArg = parseFloat((data.radius || "50") as string);
+  const radius = radiusArg > 50 ? 50 : radiusArg;
 
   const distanceFromShop = (shop: FirebaseFirestore.QueryDocumentSnapshot): number => {
     const shopLat = shop.data().location.lat as number;
@@ -58,11 +60,11 @@ export const findShops = functions.https.onCall(async (data) => {
   }
 
   const initialResults = (await query.get()).docs;
-  const mappedResults = initialResults.map((snap) => ({
+  const resultsWithDistance = initialResults.map((snap) => ({
     ...snap.data(),
     id: snap.id,
     distance: distanceFromShop(snap),
   }));
-  const sortedResults = mappedResults.sort((a, b) => a.distance - b.distance);
-  return sortedResults.slice(skip, skip + limit);
+  const resultsWithinRadius = resultsWithDistance.filter((result) => result.distance <= radius);
+  return resultsWithinRadius.slice(skip, skip + limit);
 });

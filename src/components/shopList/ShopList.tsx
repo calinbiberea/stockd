@@ -63,20 +63,25 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
         lat: userLocation.lat,
         lng: userLocation.lng,
       };
-      const result = (await findShops(request)) as FindShopsResult;
-      setShopList(result.data);
+      const response = ((await findShops(request)) as unknown) as FindShopsResult;
+      if (!response.success) {
+        enqueueSnackbar("Failed to retrieve results", { variant: "error" });
+        onBackClick();
+        return;
+      }
+      if (response.results.length === 0) {
+        enqueueSnackbar("We couldn't find any shops matching those filters.", {
+          variant: "warning",
+        });
+        onBackClick();
+        return;
+      }
+      setShopList(response.results);
     };
 
     // noinspection JSIgnoredPromiseFromCall
     getData();
-  }, [filters, location]);
-
-  useEffect(() => {
-    if (shopList !== undefined && shopList.length === 0) {
-      enqueueSnackbar("We couldn't find any shops matching those filters.", { variant: "error" });
-      onBackClick();
-    }
-  }, [enqueueSnackbar, onBackClick, shopList]);
+  }, [enqueueSnackbar, filters, location, onBackClick]);
 
   if (shopList === undefined) {
     return (

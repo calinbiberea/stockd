@@ -29,42 +29,77 @@ const getDistanceFromLatLonInKm = (
 
 // </editor-fold>
 
+interface FindShopsResult {
+  id: string;
+  distance: number;
+  [p: string]: unknown;
+}
+
+type FindShopsResults = { success: false } | { success: true; results: FindShopsResult[] };
+
+const filterNotNull = <T>(arr: (T | null)[]): T[] =>
+  (arr.filter((item) => item !== null) as unknown) as T[];
+
 // noinspection JSUnusedGlobalSymbols
-export const findShops = functions.https.onCall(async (data) => {
-  const products = data.products === "" ? [] : (data.products as string).split(",");
-  const minSafetyRating = parseInt((data.minSafetyRating || "0") as string);
-  const lat = parseFloat(data.lat as string);
-  const lng = parseFloat(data.lng as string);
-  const limit = parseInt((data.limit || "50") as string);
-  const skip = parseInt((data.skip || "0") as string);
-  const radiusArg = parseFloat((data.radius || "50") as string);
-  const radius = radiusArg > 50 ? 50 : radiusArg;
+export const findShops = functions.https.onCall(
+  async (data): Promise<FindShopsResults> => {
+    const products = data.products === "" ? [] : (data.products as string).split(",");
+    const minSafetyRating = parseInt((data.minSafetyRating || "0") as string);
+    const lat = parseFloat(data.lat as string);
+    const lng = parseFloat(data.lng as string);
+    const limit = parseInt((data.limit || "50") as string);
+    const skip = parseInt((data.skip || "0") as string);
+    const radiusArg = parseFloat((data.radius || "50") as string);
 
-  const distanceFromShop = (shop: FirebaseFirestore.QueryDocumentSnapshot): number => {
-    const shopLat = shop.data().location.lat as number;
-    const shopLong = shop.data().location.lng as number;
+    for (const i of [minSafetyRating, lat, lng, limit, skip, radiusArg]) {
+      if (isNaN(i)) {
+        return { success: false };
+      }
+    }
 
-    return getDistanceFromLatLonInKm(lat, lng, shopLat, shopLong);
-  };
+    const radius = radiusArg > 50 ? 50 : radiusArg;
 
-  let query:
-    | FirebaseFirestore.CollectionReference
-    | FirebaseFirestore.Query = admin.firestore().collection("shops");
+    const distanceFromShop = (shop: FirebaseFirestore.QueryDocumentSnapshot): number | null => {
+      const shopLat = shop.data()?.location?.lat;
+      const shopLong = shop.data()?.location?.lng;
 
-  if (minSafetyRating > 0) {
-    query = query.where(`query.safetyScore.${minSafetyRating}`, "==", true);
+      if (typeof shopLat !== "number" || typeof shopLong !== "number") {
+        return null;
+      }
+
+      return getDistanceFromLatLonInKm(lat, lng, shopLat, shopLong);
+    };
+
+    let query:
+      | FirebaseFirestore.CollectionReference
+      | FirebaseFirestore.Query = admin.firestore().collection("shops");
+
+    if (minSafetyRating > 0) {
+      query = query.where(`query.safetyScore.${minSafetyRating}`, "==", true);
+    }
+
+    for (const product of products) {
+      query = query.where(`query.stocks.${product}`, "==", true);
+    }
+
+    const initialResults = (await query.get()).docs;
+    const resultsWithDistance = filterNotNull(
+      initialResults.map((snap) => {
+        const distance = distanceFromShop(snap);
+
+        if (distance === null) {
+          return null;
+        }
+
+        return {
+          ...snap.data(),
+          id: snap.id,
+          distance,
+        };
+      })
+    );
+    const resultsWithinRadius = resultsWithDistance.filter((result) => result.distance <= radius);
+    const selectedResults = resultsWithinRadius.slice(skip, skip + limit);
+    return { success: true, results: selectedResults };
   }
-
-  for (const product of products) {
-    query = query.where(`query.stocks.${product}`, "==", true);
-  }
-
-  const initialResults = (await query.get()).docs;
-  const resultsWithDistance = initialResults.map((snap) => ({
-    ...snap.data(),
-    id: snap.id,
-    distance: distanceFromShop(snap),
-  }));
-  const resultsWithinRadius = resultsWithDistance.filter((result) => result.distance <= radius);
-  return resultsWithinRadius.slice(skip, skip + limit);
-});
+);

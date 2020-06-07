@@ -22,7 +22,9 @@ export interface DBShopData {
   locationData: LocationData;
 }
 
-export interface FindShopsResult {
-  success: true;
-  data: DBShopData[];
-}
+export type FindShopsResult =
+  | {
+      success: true;
+      results: DBShopData[];
+    }
+  | { success: false };

@@ -44,14 +44,15 @@ const filterNotNull = <T>(arr: (T | null)[]): T[] =>
 export const findShops = functions.https.onCall(
   async (data): Promise<FindShopsResults> => {
     const products = data.products === "" ? [] : (data.products as string).split(",");
-    const minSafetyRating = parseInt((data.minSafetyRating || "0") as string);
+    const safetyFeatures =
+      data.safetyFeatures === "" ? [] : (data.safetyFeatures as string).split(",");
     const lat = parseFloat(data.lat as string);
     const lng = parseFloat(data.lng as string);
     const limit = parseInt((data.limit || "50") as string);
     const skip = parseInt((data.skip || "0") as string);
     const radiusArg = parseFloat((data.radius || "50") as string);
 
-    for (const i of [minSafetyRating, lat, lng, limit, skip, radiusArg]) {
+    for (const i of [lat, lng, limit, skip, radiusArg]) {
       if (isNaN(i)) {
         return { success: false };
       }
@@ -74,12 +75,12 @@ export const findShops = functions.https.onCall(
       | FirebaseFirestore.CollectionReference
       | FirebaseFirestore.Query = admin.firestore().collection("shops");
 
-    if (minSafetyRating > 0) {
-      query = query.where(`query.safetyScore.${minSafetyRating}`, "==", true);
-    }
-
     for (const product of products) {
       query = query.where(`query.stocks.${product}`, "==", true);
+    }
+
+    for (const feature of safetyFeatures) {
+      query = query.where(`query.safetyFeatures.${feature}`, "==", true);
     }
 
     const initialResults = (await query.get()).docs;

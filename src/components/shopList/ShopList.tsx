@@ -63,7 +63,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
         lat: userLocation.lat,
         lng: userLocation.lng,
       };
-      const response = ((await findShops(request)) as unknown) as FindShopsResult;
+      const response = ((await findShops(request)).data as unknown) as FindShopsResult;
       if (!response.success) {
         enqueueSnackbar("Failed to retrieve results", { variant: "error" });
         onBackClick();

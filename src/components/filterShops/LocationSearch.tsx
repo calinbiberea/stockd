@@ -1,18 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
-import TextField from "@material-ui/core/TextField";
+import { TextField, Grid, Typography, makeStyles, createStyles } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
 import { LocationSearchProps } from "./FilterShopsTypes";
 import { getPlacePredictions } from "../../util/googleMaps";
 
-const containerStyle = {
-  width: 300,
-  margin: "16px",
-};
+type AutocompletePrediction = google.maps.places.AutocompletePrediction;
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    container: {
+      width: "300px",
+      margin: "16px",
+    },
+  })
+);
 
 const LocationSearch: React.FC<LocationSearchProps> = ({
   enabled = true,
@@ -20,15 +24,14 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
   setLocation,
 }: LocationSearchProps) => {
   const [inputValue, setInputValue] = useState("");
-  const [options, setOptions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+  const [options, setOptions] = useState<AutocompletePrediction[]>([]);
+
+  const classes = useStyles();
 
   const fetch = useMemo(
     () =>
       throttle(
-        (
-          request: { input: string },
-          callback: (results?: google.maps.places.AutocompletePrediction[]) => void
-        ) => {
+        (request: { input: string }, callback: (results?: AutocompletePrediction[]) => void) => {
           getPlacePredictions(request, callback);
         },
         200
@@ -44,9 +47,9 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
       return undefined;
     }
 
-    fetch({ input: inputValue }, (results?: google.maps.places.AutocompletePrediction[]) => {
+    fetch({ input: inputValue }, (results?: AutocompletePrediction[]) => {
       if (active) {
-        let newOptions = [] as google.maps.places.AutocompletePrediction[];
+        let newOptions = [] as AutocompletePrediction[];
 
         if (location) {
           newOptions = [location];
@@ -67,7 +70,7 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
 
   return (
     <Autocomplete
-      style={containerStyle}
+      className={classes.container}
       getOptionLabel={(option) => (typeof option === "string" ? option : option.description)}
       filterOptions={(x) => x}
       options={options}
@@ -76,7 +79,7 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
       filterSelectedOptions
       value={location}
       disabled={!enabled}
-      onChange={(event, newValue: google.maps.places.AutocompletePrediction | null) => {
+      onChange={(event, newValue: AutocompletePrediction | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setLocation(newValue);
       }}

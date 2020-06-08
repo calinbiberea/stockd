@@ -5,10 +5,10 @@ export interface FilterShopsProps {
 }
 
 export interface SelectorPanelProps {
-  title: string
+  title: string;
   selected: { [p: string]: boolean };
   items: { [p: string]: Product };
-  onSelect: (value: String) => void;
+  onSelect: (value: string) => void;
   onReset: () => void;
 }
 

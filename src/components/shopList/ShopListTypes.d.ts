@@ -3,6 +3,8 @@ import { LocationData } from "../../util/googleMaps";
 export interface ShopListProps {
   onBackClick: () => void;
   filters: {
+    nameFilter: boolean;
+    shopName: string;
     products: string[];
     safetyFeatures: string[];
     maxDistance: number;

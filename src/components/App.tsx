@@ -5,6 +5,7 @@ import Landing from "./landing/Landing";
 import FilterShops from "./filterShops/FilterShops";
 import colors from "../res/colors";
 import EditShop from "./editShop/EditShop";
+import FindShop from "./findShop/FindShop";
 
 const theme = createMuiTheme({
   palette: {
@@ -29,7 +30,7 @@ const App: React.FC = () => {
       currentScreen = <FilterShops setRoute={setRoute} />;
       break;
     case "findShop":
-      currentScreen = null; // TODO: add a screen for finding by name
+      currentScreen = <FindShop setRoute={setRoute} />;
       break;
     case "editShop":
       currentScreen = <EditShop setRoute={setRoute} />;

@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
-import { FilterShopsProps } from "./FilterShopsTypes.d";
+import { FilterShopsProps } from "./FilterShopsTypes";
 import SelectorPanel from "./SelectorPanel";
 import Header from "../header/Header";
 import LocationSearch from "./LocationSearch";
@@ -144,11 +144,13 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
       .filter(([_, selected]) => selected)
       .map(([feature]) => feature);
     const location = getLocation();
+    const nameFilter = false;
+    const shopName = "";
 
     return (
       <ShopList
         onBackClick={() => setSubmitted(false)}
-        filters={{ products, safetyFeatures, maxDistance }}
+        filters={{ nameFilter, shopName, products, safetyFeatures, maxDistance }}
         location={location}
       />
     );
@@ -180,8 +182,6 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
           onSelect={(f) => toggleSafetyFeature(f as SafetyFeatureId)}
           onReset={() => setSelectedSafetyFeatures(defaultSelectedSafetyFeatures)}
         />
-
-        {/*<SafetyFilters minRating={minSafetyScore} setMinRating={setMinSafetyScore} />*/}
 
         <FormGroup row>
           <FormControl className={classes.distanceSelect}>

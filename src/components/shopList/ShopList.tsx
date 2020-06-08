@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -11,39 +10,76 @@ import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
 import Overlay from "../overlay/Overlay";
 import { useSnackbar } from "notistack";
+import {
+  createStyles,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
-const containerStyle = {
-  width: "100vw",
-  height: "100vh",
-};
+type SortBy = "distance" | "safetyRating";
 
-const contentContainerStyle = {
-  width: "100%",
-  height: "90%",
-  display: "flex",
-  flexDirection: "column" as const,
-  alignItems: "center",
-  overflow: "auto",
-};
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    container: {
+      width: "100vw",
+      height: "100vh",
+    },
+    headerWrapper: {
+      display: "inline-block",
+    },
+    header: {
+      margin: "20px",
+      padding: "10px",
+      display: "flex",
+      flexDirection: "row",
+    },
+    sortBySelect: {
+      minWidth: 150,
+    },
+    sortByDivider: {
+      margin: `0px ${theme.spacing(2)}px`,
+    },
+    contentContainer: {
+      width: "100%",
+      height: "90%",
+      display: "flex",
+      flexDirection: "column" as const,
+      alignItems: "center",
+      overflow: "auto",
+    },
+    sectionContainer: {
+      display: "inline-block",
+      width: "100%",
+      textAlign: "center" as const,
+    },
+    gridContainerStyle: {
+      alignItems: "center",
+      overflow: "auto",
+      padding: "12px",
+      height: "100%",
+      margin: 0,
+      width: "100%",
+    },
+  })
+);
 
-const sectionContainerStyle = {
-  display: "inline-block",
-  width: "100%",
-  textAlign: "center" as const,
-};
+const compareByDistance = (a: DBShopData, b: DBShopData) => a.distance - b.distance;
 
-const gridContainerStyle = {
-  alignItems: "center",
-  overflow: "auto",
-  padding: "12px",
-  height: "100%",
-  margin: 0,
-  width: "100%",
+const compareBySafetyRating = (a: DBShopData, b: DBShopData) => {
+  const ratingA = ((a.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
+  const ratingB = ((b.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
+  return ratingA - ratingB;
 };
 
 const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: ShopListProps) => {
   const [shopList, setShopList] = useState<DBShopData[] | undefined>(undefined);
   const [currentLocationData, setCurrentLocationData] = useState<LocationData | null>(null);
+  const [sortBy, setSortBy] = useState<SortBy>("distance");
+  const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -59,24 +95,30 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
       const userLocation = await getUserLocation();
       const request = {
         products: filters.products.join(","),
-        minSafetyRating: 2 * filters.minSafetyScore,
+        safetyFeatures: filters.safetyFeatures.join(","),
         lat: userLocation.lat,
         lng: userLocation.lng,
+        radius: filters.maxDistance,
       };
-      const result = (await findShops(request)) as FindShopsResult;
-      setShopList(result.data);
+      const response = ((await findShops(request)).data as unknown) as FindShopsResult;
+      if (!response.success) {
+        enqueueSnackbar("Failed to retrieve results", { variant: "error" });
+        onBackClick();
+        return;
+      }
+      if (response.results.length === 0) {
+        enqueueSnackbar("We couldn't find any shops matching those filters.", {
+          variant: "warning",
+        });
+        onBackClick();
+        return;
+      }
+      setShopList(response.results);
     };
 
     // noinspection JSIgnoredPromiseFromCall
     getData();
-  }, [filters, location]);
-
-  useEffect(() => {
-    if (shopList !== undefined && shopList.length === 0) {
-      enqueueSnackbar("We couldn't find any shops matching those filters.", { variant: "error" });
-      onBackClick();
-    }
-  }, [enqueueSnackbar, onBackClick, shopList]);
+  }, [enqueueSnackbar, filters, location, onBackClick]);
 
   if (shopList === undefined) {
     return (
@@ -96,33 +138,53 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
   const closeOverlay = () => setCurrentLocationData(null);
   const onGetDetailsClick = (locationData: LocationData) => setCurrentLocationData(locationData);
 
-  const shopListItems = shopList.map((shop) => (
-    <Grid item key={shop.id}>
-      <ShopListItem
-        shopData={shop}
-        startTime={"9:00"}
-        endTime={"21:00"}
-        onGetDetailsClick={onGetDetailsClick}
-      />
-    </Grid>
-  ));
+  let compareFunc: (a: DBShopData, b: DBShopData) => number;
+  switch (sortBy) {
+    case "distance":
+      compareFunc = compareByDistance;
+      break;
+    case "safetyRating":
+      compareFunc = compareBySafetyRating;
+      break;
+  }
+
+  const shopListItems = shopList
+    .slice()
+    .sort(compareFunc)
+    .map((shop) => (
+      <Grid item key={shop.id}>
+        <ShopListItem
+          shopData={shop}
+          startTime={"9:00"}
+          endTime={"21:00"}
+          onGetDetailsClick={onGetDetailsClick}
+        />
+      </Grid>
+    ));
 
   return (
-    <div style={containerStyle}>
-      <Header title="Shop List" onBackClick={onBackClick} />
+    <div className={classes.container}>
+      <Header onBackClick={onBackClick} />
 
-      <div style={contentContainerStyle}>
-        <div style={sectionContainerStyle}>
-          <Card
-            style={{ margin: "20px", display: "inline-block", padding: "10px" }}
-            variant={"outlined"}
-          >
-            <Typography variant="h5" color="primary">
-              {shopListItems.length !== 0
-                ? "Here are the shops that we found:"
-                : "We couldn't find any shops matching those filters."}
-            </Typography>
-          </Card>
+      <div className={classes.contentContainer}>
+        <div className={classes.sectionContainer}>
+          <div className={classes.headerWrapper}>
+            <div className={classes.header}>
+              <FormControl className={classes.sortBySelect} color="primary">
+                <InputLabel>Sort by</InputLabel>
+                <Select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
+                  <MenuItem value={"distance"}>Distance</MenuItem>
+                  <MenuItem value={"safetyRating"}>Safety Rating</MenuItem>
+                </Select>
+              </FormControl>
+              <Divider className={classes.sortByDivider} orientation="vertical" flexItem />
+              <Typography variant="h5" color="primary" style={{ margin: "auto 0" }}>
+                {shopListItems.length !== 0
+                  ? "Here are the shops that we found:"
+                  : "We couldn't find any shops matching those filters."}
+              </Typography>
+            </div>
+          </div>
         </div>
 
         <Overlay
@@ -131,7 +193,13 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
           locationData={currentLocationData}
         />
 
-        <Grid container direction="column" spacing={3} wrap="nowrap" style={gridContainerStyle}>
+        <Grid
+          container
+          direction="column"
+          spacing={3}
+          wrap="nowrap"
+          className={classes.gridContainerStyle}
+        >
           {shopListItems}
         </Grid>
       </div>

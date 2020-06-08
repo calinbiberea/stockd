@@ -9,17 +9,10 @@ const updateStock = async (
 ): Promise<void> => {
   const displayedStocks: Record<string, number> = {};
   const queryStocks: Record<string, boolean> = {};
-  const safetyScore: Record<string, boolean> = {
-    1: true,
-    2: true,
-    3: true,
-    4: true,
-    5: true,
-    6: true,
-    7: true,
-    8: true,
-    9: true,
-    10: true,
+  const safetyFeatures: Record<string, boolean> = {
+    masks: true,
+    gloves: true,
+    socialdistancing: true,
   };
 
   const latLng = await geocodeByPlaceId(locationData.id);
@@ -41,7 +34,7 @@ const updateStock = async (
 
   const query = {
     stocks: queryStocks,
-    safetyScore,
+    safetyFeatures,
   };
 
   const data = {

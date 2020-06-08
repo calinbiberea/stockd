@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import Slider from "@material-ui/core/Slider";
 import Grid from "@material-ui/core/Grid";
 import StockItem from "./StockItem";
-import updateStock from "../../util/firebaseOps";
+import updateStock from "../../firebase/firebaseOps";
 import { ShopStockProps } from "./ShopTypes";
 import { useSnackbar } from "notistack";
 

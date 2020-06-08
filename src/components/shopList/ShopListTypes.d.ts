@@ -5,6 +5,7 @@ export interface ShopListProps {
   filters: {
     products: string[];
     safetyFeatures: string[];
+    maxDistance: number;
   };
   location: { geolocated: true; lat: number; lng: number } | { geolocated: false; placeId: string };
 }

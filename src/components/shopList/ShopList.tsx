@@ -62,6 +62,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
         safetyFeatures: filters.safetyFeatures.join(","),
         lat: userLocation.lat,
         lng: userLocation.lng,
+        radius: filters.maxDistance,
       };
       const response = ((await findShops(request)).data as unknown) as FindShopsResult;
       if (!response.success) {

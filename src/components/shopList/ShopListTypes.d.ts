@@ -21,6 +21,7 @@ export interface DBShopData {
   id: string;
   distance: number;
   locationData: LocationData;
+  [k: string]: unknown;
 }
 
 export type FindShopsResult =

@@ -54,7 +54,8 @@ const Header: React.FC<HeaderProps> = ({
           </IconButton>
 
           {title !== undefined ? <Typography variant="h6">{title}</Typography> : logo}
-          {children !== undefined ? <div style={{ marginLeft: "20px" }}>{children}</div> : null}
+
+          {children !== undefined ? children : null}
         </Toolbar>
       </AppBar>
 

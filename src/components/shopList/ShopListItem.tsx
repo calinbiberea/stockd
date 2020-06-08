@@ -41,6 +41,7 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
     <ShopHeader locationData={shopData.locationData} />
 
     <div style={shopContentStyle}>
+      <Typography>Distance: {shopData.distance.toFixed(2)}km</Typography>
       <Typography>
         Opening times: {startTime} - {endTime}
       </Typography>

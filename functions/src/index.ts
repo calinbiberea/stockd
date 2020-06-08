@@ -29,40 +29,78 @@ const getDistanceFromLatLonInKm = (
 
 // </editor-fold>
 
+interface FindShopsResult {
+  id: string;
+  distance: number;
+  [p: string]: unknown;
+}
+
+type FindShopsResults = { success: false } | { success: true; results: FindShopsResult[] };
+
+const defaultNum = <T extends number>(v: T, defaultV: T) => (isNaN(v) ? defaultV : v);
+
+const filterNotNull = <T>(arr: (T | null)[]): T[] =>
+  (arr.filter((item) => item !== null) as unknown) as T[];
+
 // noinspection JSUnusedGlobalSymbols
-export const findShops = functions.https.onCall(async (data) => {
-  const products = data.products === "" ? [] : (data.products as string).split(",");
-  const minSafetyRating = parseInt((data.minSafetyRating || "0") as string);
-  const lat = parseFloat(data.lat as string);
-  const lng = parseFloat(data.lng as string);
-  const limit = parseInt((data.limit || "50") as string);
-  const skip = parseInt((data.skip || "0") as string);
+export const findShops = functions.https.onCall(
+  async (data): Promise<FindShopsResults> => {
+    const products = data.products === "" ? [] : (data.products as string).split(",");
+    const safetyFeatures =
+      data.safetyFeatures === "" ? [] : (data.safetyFeatures as string).split(",");
+    const lat = parseFloat(data.lat);
+    const lng = parseFloat(data.lng);
+    const limit = Math.min(defaultNum(parseInt(data.limit), 50), 50);
+    const skip = defaultNum(parseInt(data.skip), 0);
+    const radius = Math.min(defaultNum(parseFloat(data.radius), 50), 50);
 
-  const distanceFromShop = (shop: FirebaseFirestore.QueryDocumentSnapshot): number => {
-    const shopLat = shop.data().location.lat as number;
-    const shopLong = shop.data().location.lng as number;
+    for (const i of [lat, lng]) {
+      if (isNaN(i)) {
+        return { success: false };
+      }
+    }
 
-    return getDistanceFromLatLonInKm(lat, lng, shopLat, shopLong);
-  };
+    const distanceFromShop = (shop: FirebaseFirestore.QueryDocumentSnapshot): number | null => {
+      const shopLat = shop.data()?.location?.lat;
+      const shopLong = shop.data()?.location?.lng;
 
-  let query:
-    | FirebaseFirestore.CollectionReference
-    | FirebaseFirestore.Query = admin.firestore().collection("shops");
+      if (typeof shopLat !== "number" || typeof shopLong !== "number") {
+        return null;
+      }
 
-  if (minSafetyRating > 0) {
-    query = query.where(`query.safetyScore.${minSafetyRating}`, "==", true);
+      return getDistanceFromLatLonInKm(lat, lng, shopLat, shopLong);
+    };
+
+    let query:
+      | FirebaseFirestore.CollectionReference
+      | FirebaseFirestore.Query = admin.firestore().collection("shops");
+
+    for (const product of products) {
+      query = query.where(`query.stocks.${product}`, "==", true);
+    }
+
+    for (const feature of safetyFeatures) {
+      query = query.where(`query.safetyFeatures.${feature}`, "==", true);
+    }
+
+    const initialResults = (await query.get()).docs;
+    const resultsWithDistance = filterNotNull(
+      initialResults.map((snap) => {
+        const distance = distanceFromShop(snap);
+
+        if (distance === null) {
+          return null;
+        }
+
+        return {
+          ...snap.data(),
+          id: snap.id,
+          distance,
+        };
+      })
+    );
+    const resultsWithinRadius = resultsWithDistance.filter((result) => result.distance <= radius);
+    const selectedResults = resultsWithinRadius.slice(skip, skip + limit);
+    return { success: true, results: selectedResults };
   }
-
-  for (const product of products) {
-    query = query.where(`query.stocks.${product}`, "==", true);
-  }
-
-  const initialResults = (await query.get()).docs;
-  const mappedResults = initialResults.map((snap) => ({
-    ...snap.data(),
-    id: snap.id,
-    distance: distanceFromShop(snap),
-  }));
-  const sortedResults = mappedResults.sort((a, b) => a.distance - b.distance);
-  return sortedResults.slice(skip, skip + limit);
-});
+);

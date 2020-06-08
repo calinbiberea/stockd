@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -19,7 +19,11 @@ const logo = (
   </Card>
 );
 
-const Header: React.FC<HeaderProps> = ({ title, onBackClick }: HeaderProps) => (
+const Header: React.FC<HeaderProps> = ({
+  title,
+  onBackClick,
+  children,
+}: PropsWithChildren<HeaderProps>) => (
   <div>
     <AppBar>
       <Toolbar>
@@ -28,6 +32,7 @@ const Header: React.FC<HeaderProps> = ({ title, onBackClick }: HeaderProps) => (
         </IconButton>
 
         {title !== undefined ? <Typography variant="h6">{title}</Typography> : logo}
+        {children !== undefined ? <div style={{ marginLeft: "20px" }}>{children}</div> : undefined}
       </Toolbar>
     </AppBar>
 

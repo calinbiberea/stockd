@@ -5,7 +5,7 @@ import ShopOverview from "./ShopOverview";
 import ShopStock from "./ShopStock";
 import { db } from "../../firebase/firebaseApp";
 import { Stocks } from "./ShopTypes";
-import { getProduct } from "../../util/products";
+import { getProduct } from "../../util/productsAndSafetyFeatures";
 import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
 import milkIcon from "../../res/icons/milk.svg";

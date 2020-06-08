@@ -8,33 +8,35 @@ import {
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { Product, ProductSelectorProps } from "./FilterShopsTypes";
+import { SelectorPanelProps } from "./FilterShopsTypes";
 
-const ProductSelector: React.FC<ProductSelectorProps> = ({
+const SelectorPanel: React.FC<SelectorPanelProps> = ({
+  title,
   selected,
+  items,
   onSelect,
   onReset,
-}: ProductSelectorProps) => {
+}: SelectorPanelProps) => {
   const selectedCount = Object.values(selected).filter((selected) => selected).length;
-  const gridItems = Object.entries(selected).map(([product, selected]) => (
-    <Grid item key={product}>
+  const gridItems = Object.entries(items).map(([id, item]) => (
+    <Grid item key={id}>
       <Button
         size="large"
         variant="contained"
-        color={selected ? "primary" : "default"}
-        style={selected ? {} : { backgroundColor: "#FFF" }}
-        onClick={() => onSelect(product as Product)}
+        color={selected[id] ? "primary" : "default"}
+        style={selected[id] ? {} : { backgroundColor: "#FFF" }}
+        onClick={() => onSelect(id)}
       >
-        {product}
+        {item.name}
       </Button>
     </Grid>
   ));
 
   return (
-    <ExpansionPanel defaultExpanded variant={"outlined"}>
+    <ExpansionPanel defaultExpanded variant={"outlined"} style={{ minWidth: "75vw" }}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon color="primary" />}>
         <Typography color="primary">
-          Products <i>({selectedCount} selected)</i>
+          {title} <i>({selectedCount} selected)</i>
           <Button
             variant="contained"
             color="secondary"
@@ -61,4 +63,4 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
   );
 };
 
-export default ProductSelector;
+export default SelectorPanel;

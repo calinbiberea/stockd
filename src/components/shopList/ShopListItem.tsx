@@ -5,6 +5,8 @@ import Button from "@material-ui/core/Button";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ShopHeader from "../shop/ShopHeader";
 import { ShopListItemProps } from "./ShopListTypes";
+import Rating from "@material-ui/lab/Rating";
+import StarIcon from "@material-ui/icons/Star";
 
 const shopCardStyle = {
   width: "30vw",
@@ -41,6 +43,14 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
     <ShopHeader locationData={shopData.locationData} />
 
     <div style={shopContentStyle}>
+      <Typography>Distance: {shopData.distance.toFixed(2)}km</Typography>
+      <Typography>Safety score:</Typography>
+      <Rating
+        defaultValue={((shopData.displayed as Record<string, unknown>)?.safetyScore || 0) as number}
+        precision={0.5}
+        emptyIcon={<StarIcon fontSize="inherit" />}
+        readOnly
+      />
       <Typography>
         Opening times: {startTime} - {endTime}
       </Typography>

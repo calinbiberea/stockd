@@ -1,8 +1,9 @@
 import React from "react";
-import colors from "../../res/colors";
+import { Divider, makeStyles, createStyles } from "@material-ui/core";
 import LandingTile from "./LandingTile";
-import type { LandingProps, LandingTileProps } from "./LandingTypes";
 import LandingHeader from "./LandingHeader";
+import type { LandingProps } from "./LandingTypes";
+import colors from "../../res/colors";
 
 const itemExamples = [
   "milk",
@@ -26,70 +27,61 @@ const shopExamples = [
   "the supermarket",
 ];
 
-const containerStyle = {
-  width: "100vw",
-  height: "100vh",
-  display: "flex",
-  flexDirection: "column" as const,
-  backgroundColor: "white",
-};
-
-const flexElemStyle = {
-  flex: "1",
-};
-
-const dividerStyle = {
-  position: "relative" as const,
-  top: "0",
-  left: "10%",
-  width: "80%",
-  height: "2px",
-  backgroundColor: colors.blue1,
-  borderRadius: "1px",
-};
-
-const tileContainerStyle = {
-  display: "flex",
-  flexDirection: "column" as const,
-  flex: 9,
-  margin: "0 10vw",
-};
-
-const FlexedLandingTile: React.FC<LandingTileProps> = (props: LandingTileProps) => (
-  <div style={flexElemStyle}>
-    <div style={dividerStyle} />
-
-    <LandingTile {...props} />
-  </div>
+const useStyles = makeStyles(() =>
+  createStyles({
+    container: {
+      height: "100vh",
+      margin: "0 10vw",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    divider: {
+      width: "80%",
+      height: "2px",
+      backgroundColor: colors.blue1,
+      borderRadius: "1px",
+      margin: "10px 0",
+    },
+  })
 );
 
-const Landing: React.FC<LandingProps> = ({ setRoute }: LandingProps) => (
-  <div style={containerStyle}>
-    <LandingHeader />
+const Landing: React.FC<LandingProps> = ({ setRoute }: LandingProps) => {
+  const classes = useStyles();
 
-    <div style={tileContainerStyle}>
-      <FlexedLandingTile
+  return (
+    <div className={classes.container}>
+      <LandingHeader />
+
+      <Divider className={classes.divider} />
+
+      <LandingTile
         headerText="I'm looking for..."
         items={itemExamples}
         buttonText="Where should I go?"
         onClick={() => setRoute("filterShops")}
       />
 
-      <FlexedLandingTile
+      <Divider className={classes.divider} />
+
+      <LandingTile
         headerText="I'm going to shop at..."
         items={shopExamples}
         buttonText="What will I find there?"
         onClick={() => setRoute("findShop")}
       />
 
-      <FlexedLandingTile
+      <Divider className={classes.divider} />
+
+      <LandingTile
         headerText="I'm currently at..."
         items={shopExamples}
-        buttonText="I'd like to contribute some data!"
+        buttonText="I'd like to contribute!"
         onClick={() => setRoute("editShop")}
       />
     </div>
-  </div>
-);
+  );
+};
 
 export default Landing;

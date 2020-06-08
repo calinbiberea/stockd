@@ -6,9 +6,22 @@ import {
   ExpansionPanelSummary,
   Grid,
   Typography,
+  makeStyles,
+  createStyles,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { SelectorPanelProps } from "./FilterShopsTypes";
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    container: {
+      minWidth: "75vw",
+    },
+    button: {
+      marginLeft: "16px",
+    },
+  })
+);
 
 const SelectorPanel: React.FC<SelectorPanelProps> = ({
   title,
@@ -17,6 +30,8 @@ const SelectorPanel: React.FC<SelectorPanelProps> = ({
   onSelect,
   onReset,
 }: SelectorPanelProps) => {
+  const classes = useStyles();
+
   const selectedCount = Object.values(selected).filter((selected) => selected).length;
   const gridItems = Object.entries(items).map(([id, item]) => (
     <Grid item key={id}>
@@ -33,25 +48,26 @@ const SelectorPanel: React.FC<SelectorPanelProps> = ({
   ));
 
   return (
-    <ExpansionPanel defaultExpanded variant={"outlined"} style={{ minWidth: "75vw" }}>
+    <ExpansionPanel defaultExpanded variant="outlined" className={classes.container}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon color="primary" />}>
         <Typography color="primary">
           {title} <i>({selectedCount} selected)</i>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            disabled={selectedCount === 0}
-            style={{ marginLeft: "15px" }}
-            onFocus={(e) => e.stopPropagation}
-            onClick={(e) => {
-              onReset();
-              e.stopPropagation();
-            }}
-          >
-            Clear
-          </Button>
         </Typography>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          disabled={selectedCount === 0}
+          className={classes.button}
+          onFocus={(e) => e.stopPropagation}
+          onClick={(e) => {
+            onReset();
+            e.stopPropagation();
+          }}
+        >
+          Clear
+        </Button>
       </ExpansionPanelSummary>
 
       <ExpansionPanelDetails>

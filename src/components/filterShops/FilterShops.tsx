@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Button,
   Checkbox,
-  createStyles,
   Divider,
   FormControl,
   FormControlLabel,
@@ -11,6 +10,8 @@ import {
   MenuItem,
   Select,
   Typography,
+  makeStyles,
+  createStyles,
 } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
 import { FilterShopsProps } from "./FilterShopsTypes.d";
@@ -26,7 +27,6 @@ import {
 } from "../../util/productsAndSafetyFeatures";
 import { getCurrentLocation } from "../../util/geolocate";
 import { useSnackbar } from "notistack";
-import { makeStyles } from "@material-ui/core/styles";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -36,62 +36,75 @@ const useStyles = makeStyles((theme) =>
       width: "100vw",
       height: "100vh",
       display: "flex",
-      flexDirection: "column" as const,
+      flexDirection: "column",
       alignItems: "center",
-      overflowY: "scroll",
+      overflowY: "auto",
     },
     title: {
-      margin: "20px",
+      padding: "20px",
     },
     contentContainer: {
       margin: "20px",
       display: "flex",
-      flexDirection: "column" as const,
+      flexDirection: "column",
       alignItems: "center",
+    },
+    locationContainer: {
+      marginTop: "8px",
+      [theme.breakpoints.up("sm")]: {
+        flexDirection: "row",
+      },
+      [theme.breakpoints.down("xs")]: {
+        flexDirection: "column",
+        alignItems: "center",
+      },
     },
     distanceSelect: {
       margin: theme.spacing(1),
       minWidth: 120,
     },
-    submitDivider: {
+    locationDivider: {
       margin: `0px ${theme.spacing(2)}px`,
+      [theme.breakpoints.down("xs")]: {
+        visibility: "hidden",
+      },
     },
     button: {
-      margin: "auto 20px",
-      flex: "0",
+      margin: "auto 20px 16px",
+      flex: 0,
+    },
+    buttonIcon: {
+      marginLeft: "16px",
     },
   })
 );
 
 const defaultSelectedProducts = Object.fromEntries(
   Object.keys(products).map((productId) => [productId, false])
-) as {
-  [p in ProductId]: boolean;
-};
+) as { [p in ProductId]: boolean };
 
 const defaultSelectedSafetyFeatures = Object.fromEntries(
   Object.keys(safetyFeatures).map((safetyFeatureId) => [safetyFeatureId, false])
-) as {
-  [f in SafetyFeatureId]: boolean;
-};
+) as { [f in SafetyFeatureId]: boolean };
 
 const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps) => {
-  const [selectedProducts, setSelectedProducts] = useState<{ [p in ProductId]: boolean }>(
-    defaultSelectedProducts
+  const [selectedProducts, setSelectedProducts] = useState(defaultSelectedProducts);
+  const [selectedSafetyFeatures, setSelectedSafetyFeatures] = useState(
+    defaultSelectedSafetyFeatures
   );
-  const [selectedSafetyFeatures, setSelectedSafetyFeatures] = useState<
-    { [f in SafetyFeatureId]: boolean }
-  >(defaultSelectedSafetyFeatures);
   const [maxDistance, setMaxDistance] = useState(50);
   const [selectedPlace, setSelectedPlace] = useState<AutocompletePrediction | null>(null);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<Position | null>(null);
   const [submitted, setSubmitted] = useState(false);
+
   const classes = useStyles();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const toggleProduct = (product: ProductId) => {
-    const newSelected = Object.assign({}, selectedProducts) as { [p in ProductId]: boolean };
+    const newSelected = Object.assign({}, selectedProducts);
+
     if (newSelected[product] !== undefined) {
       newSelected[product] = !newSelected[product];
       setSelectedProducts(newSelected);
@@ -99,9 +112,8 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   };
 
   const toggleSafetyFeature = (feature: SafetyFeatureId) => {
-    const newSelected = Object.assign({}, selectedSafetyFeatures) as {
-      [f in SafetyFeatureId]: boolean;
-    };
+    const newSelected = Object.assign({}, selectedSafetyFeatures);
+
     if (newSelected[feature] !== undefined) {
       newSelected[feature] = !newSelected[feature];
       setSelectedSafetyFeatures(newSelected);
@@ -112,17 +124,21 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
     let newUseCurrentLocation = enabled;
     if (enabled) {
       const maybeCurrentLocation = await getCurrentLocation(enqueueSnackbar);
+
       if (maybeCurrentLocation === null) {
         newUseCurrentLocation = false;
       }
+
       setCurrentLocation(maybeCurrentLocation);
     }
+
     setUseCurrentLocation(newUseCurrentLocation);
   };
 
   const getLocation = () => {
     if (useCurrentLocation) {
       const coords = (currentLocation as Position).coords;
+
       return {
         geolocated: true as const,
         lat: coords.latitude,
@@ -140,9 +156,11 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
     const products = Object.entries(selectedProducts)
       .filter(([_, selected]) => selected)
       .map(([product]) => product);
+
     const safetyFeatures = Object.entries(selectedSafetyFeatures)
       .filter(([_, selected]) => selected)
       .map(([feature]) => feature);
+
     const location = getLocation();
 
     return (
@@ -160,7 +178,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
     <div className={classes.container}>
       <Header onBackClick={() => setRoute("landing")} />
 
-      <Typography className={classes.title} variant="h4" color="primary">
+      <Typography variant="h4" color="primary" className={classes.title}>
         What are you looking for?
       </Typography>
 
@@ -181,27 +199,32 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
           onReset={() => setSelectedSafetyFeatures(defaultSelectedSafetyFeatures)}
         />
 
-        {/*<SafetyFilters minRating={minSafetyScore} setMinRating={setMinSafetyScore} />*/}
-
-        <FormGroup row>
+        <FormGroup className={classes.locationContainer}>
           <FormControl className={classes.distanceSelect}>
             <InputLabel>Max. distance</InputLabel>
+
             <Select
               value={maxDistance}
               onChange={(e) => setMaxDistance(parseInt(e.target.value as string))}
             >
               <MenuItem value={10}>10km</MenuItem>
+
               <MenuItem value={25}>25km</MenuItem>
+
               <MenuItem value={50}>50km</MenuItem>
             </Select>
           </FormControl>
-          <Divider className={classes.submitDivider} orientation="vertical" flexItem />
+
+          <Divider className={classes.locationDivider} orientation="vertical" flexItem />
+
           <LocationSearch
             enabled={!useCurrentLocation}
             location={selectedPlace}
             setLocation={setSelectedPlace}
           />
+
           <FormControlLabel
+            label="Use current location"
             control={
               <Checkbox
                 color="primary"
@@ -209,7 +232,6 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
                 onChange={(event) => toggleGeolocation(event.target.checked)}
               />
             }
-            label="Use current location"
           />
         </FormGroup>
       </div>
@@ -219,12 +241,12 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
         color="primary"
         variant="contained"
         onClick={() => setSubmitted(true)}
-        className={classes.button}
         disabled={!canSubmit}
+        className={classes.button}
       >
         <Typography variant="h6">{"Let's go!"}</Typography>
 
-        <ArrowIcon style={{ marginLeft: "16px" }} />
+        <ArrowIcon className={classes.buttonIcon} />
       </Button>
     </div>
   );

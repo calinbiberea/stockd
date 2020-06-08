@@ -1,5 +1,5 @@
 import React from "react";
-import Typography from "@material-ui/core/Typography";
+import { Typography } from "@material-ui/core";
 import type MissingEnvProps from "./MissingEnvVarProps";
 
 const MissingEnvVar: React.FC<MissingEnvProps> = ({ vars }: MissingEnvProps) => (

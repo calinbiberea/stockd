@@ -8,7 +8,7 @@ export interface SelectorPanelProps {
   title: string
   selected: { [p: string]: boolean };
   items: { [p: string]: Product };
-  onSelect: (value: String) => void;
+  onSelect: (value: string) => void;
   onReset: () => void;
 }
 
@@ -19,8 +19,10 @@ export interface SafetySliderProps {
   setMinRating: (value: SafetyRating) => void;
 }
 
+type AutocompletePrediction = google.maps.places.AutocompletePrediction;
+
 export interface LocationSearchProps {
   enabled?: boolean;
-  location: google.maps.places.AutocompletePrediction | null;
-  setLocation: (value: google.maps.places.AutocompletePrediction | null) => void;
+  location: AutocompletePrediction | null;
+  setLocation: (value: AutocompletePrediction | null) => void;
 }

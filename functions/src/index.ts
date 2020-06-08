@@ -37,6 +37,8 @@ interface FindShopsResult {
 
 type FindShopsResults = { success: false } | { success: true; results: FindShopsResult[] };
 
+const defaultNum = <T extends number>(v: T, defaultV: T) => (isNaN(v) ? defaultV : v);
+
 const filterNotNull = <T>(arr: (T | null)[]): T[] =>
   (arr.filter((item) => item !== null) as unknown) as T[];
 
@@ -46,19 +48,17 @@ export const findShops = functions.https.onCall(
     const products = data.products === "" ? [] : (data.products as string).split(",");
     const safetyFeatures =
       data.safetyFeatures === "" ? [] : (data.safetyFeatures as string).split(",");
-    const lat = parseFloat(data.lat as string);
-    const lng = parseFloat(data.lng as string);
-    const limit = parseInt((data.limit || "50") as string);
-    const skip = parseInt((data.skip || "0") as string);
-    const radiusArg = parseFloat((data.radius || "50") as string);
+    const lat = parseFloat(data.lat);
+    const lng = parseFloat(data.lng);
+    const limit = Math.min(defaultNum(parseInt(data.limit), 50), 50);
+    const skip = defaultNum(parseInt(data.skip), 0);
+    const radius = Math.min(defaultNum(parseFloat(data.radius), 50), 50);
 
-    for (const i of [lat, lng, limit, skip, radiusArg]) {
+    for (const i of [lat, lng]) {
       if (isNaN(i)) {
         return { success: false };
       }
     }
-
-    const radius = radiusArg > 50 ? 50 : radiusArg;
 
     const distanceFromShop = (shop: FirebaseFirestore.QueryDocumentSnapshot): number | null => {
       const shopLat = shop.data()?.location?.lat;

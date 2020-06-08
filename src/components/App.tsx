@@ -3,8 +3,8 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
 import Landing from "./landing/Landing";
 import FilterShops from "./filterShops/FilterShops";
-import colors from "../res/colors";
 import EditShop from "./editShop/EditShop";
+import colors from "../res/colors";
 
 const theme = createMuiTheme({
   palette: {

@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Slide, Typography } from "@material-ui/core";
 import type { LandingScrollTextProps } from "./LandingTypes";
-import { Slide } from "@material-ui/core";
 
-const randomIx = (arr: unknown[]) => Math.floor(Math.random() * arr.length);
+const randomIx = (arr: string[]) => Math.floor(Math.random() * arr.length);
 const randomInterval = (from: number, to: number) => Math.random() * (to - from) + to;
 
-const containerStyle = {
-  width: "100%",
-  height: "100%",
-};
-
 const itemStyle = (ix: number) => ({
-  position: "relative" as const,
   transform: `translateY(-${(ix + 1) * 100 + 25}%)`,
-  overflowX: "hidden" as const,
+  color: "rgba(0, 0, 0, 0.4)",
 });
 
 const LandingScrollText: React.FC<LandingScrollTextProps> = ({ items }: LandingScrollTextProps) => {
@@ -25,6 +19,7 @@ const LandingScrollText: React.FC<LandingScrollTextProps> = ({ items }: LandingS
       do {
         newSelected = randomIx(items);
       } while (newSelected === selected);
+
       setSelected(newSelected);
     };
 
@@ -32,15 +27,14 @@ const LandingScrollText: React.FC<LandingScrollTextProps> = ({ items }: LandingS
   }, [selected, items]);
 
   return (
-    <div style={containerStyle}>
+    <div>
       {items.map((item, ix) => (
         <div key={item} style={itemStyle(ix)}>
           <Slide in={selected === ix} direction={selected === ix ? "left" : "right"} timeout={1000}>
-            <div>{item}</div>
+            <Typography variant="body1">{item}</Typography>
           </Slide>
         </div>
       ))}
-      {/*{selected}*/}
     </div>
   );
 };

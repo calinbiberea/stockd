@@ -1,32 +1,35 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
+import { Button, Grid, makeStyles, createStyles } from "@material-ui/core";
 import StockItem from "./StockItem";
 import { ShopOverviewProps } from "./ShopTypes";
 
-const containerStyle = {
-  flex: 4,
-  display: "flex",
-  flexDirection: "column" as const,
-  justifyContent: "space-around",
-  alignItems: "center",
-  padding: "12px",
-  overflow: "auto",
-};
-
-const gridContainerStyle = {
-  flex: 1,
-  flexDirection: "row" as const,
-  overflow: "auto",
-};
-
-const gridItemStyle = {
-  width: "50%",
-};
+const useStyles = makeStyles(() =>
+  createStyles({
+    container: {
+      flex: 4,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-around",
+      alignItems: "center",
+      padding: "12px",
+      overflow: "auto",
+    },
+    gridContainer: {
+      flex: 1,
+      flexDirection: "row",
+      overflow: "auto",
+    },
+    gridItem: {
+      width: "50%",
+    },
+  })
+);
 
 const ShopOverview: React.FC<ShopOverviewProps> = ({ stocks, locationData }: ShopOverviewProps) => {
+  const classes = useStyles();
+
   const stockItems = Object.entries(stocks).map(([name, { icon, stock }]) => (
-    <Grid item key={name} style={gridItemStyle}>
+    <Grid item key={name} className={classes.gridItem}>
       <StockItem icon={icon} name={name} stock={stock} />
     </Grid>
   ));
@@ -41,8 +44,8 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({ stocks, locationData }: Sho
   };
 
   return (
-    <div style={containerStyle}>
-      <Grid container style={gridContainerStyle}>
+    <div className={classes.container}>
+      <Grid container className={classes.gridContainer}>
         {stockItems}
       </Grid>
 

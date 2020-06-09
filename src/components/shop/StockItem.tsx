@@ -6,10 +6,15 @@ import few from "../../res/stock/few.png";
 import some from "../../res/stock/some.png";
 import full from "../../res/stock/full.png";
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     container: {
-      height: "64px",
+      [theme.breakpoints.up("sm")]: {
+        height: "64px",
+      },
+      [theme.breakpoints.down("xs")]: {
+        height: "48px",
+      },
       padding: "8px",
       margin: "8px",
       display: "flex",
@@ -19,7 +24,7 @@ const useStyles = makeStyles(() =>
       textAlign: "center",
     },
     icon: {
-      maxHeight: "64px",
+      maxHeight: "100%",
     },
   })
 );

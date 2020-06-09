@@ -28,22 +28,22 @@ const useStyles = makeStyles((theme) =>
     },
     gridItem: {
       display: "flex",
-      [theme.breakpoints.down("sm")]: {
-        flexDirection: "column",
-        alignItems: "center",
-      },
       [theme.breakpoints.up("md")]: {
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
       },
+      [theme.breakpoints.down("sm")]: {
+        flexDirection: "column",
+        alignItems: "center",
+      },
     },
     stockItem: {
-      [theme.breakpoints.down("sm")]: {
-        width: "90%",
-      },
       [theme.breakpoints.up("md")]: {
         width: "50%",
+      },
+      [theme.breakpoints.down("sm")]: {
+        width: "90%",
       },
     },
     gridDivider: {
@@ -52,11 +52,11 @@ const useStyles = makeStyles((theme) =>
       margin: "4px 0",
     },
     slider: {
-      [theme.breakpoints.down("sm")]: {
-        width: "80%",
-      },
       [theme.breakpoints.up("md")]: {
         width: "30%",
+      },
+      [theme.breakpoints.down("sm")]: {
+        width: "80%",
       },
     },
     buttonContainer: {

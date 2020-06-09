@@ -3,23 +3,18 @@ import {
   Box,
   CircularProgress,
   Grid,
-  FormControl,
-  InputLabel,
-  MenuItem,
   Typography,
-  Select,
   makeStyles,
   createStyles,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import ShopListItem from "./ShopListItem";
+import SortByMenu from "./SortByMenu";
 import Header from "../header/Header";
 import Overlay from "../overlay/Overlay";
-import { DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
+import { SortBy, DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
 import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
-
-type SortBy = "distance" | "safetyRating";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -28,9 +23,7 @@ const useStyles = makeStyles(() =>
       height: "100vh",
     },
     sortContainer: {
-      minWidth: "150px",
       marginLeft: "auto",
-      backgroundColor: "#FFF",
     },
     contentContainer: {
       width: "100%",
@@ -158,15 +151,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
   return (
     <div className={classes.container}>
       <Header onBackClick={onBackClick}>
-        <FormControl variant="filled" className={classes.sortContainer}>
-          <InputLabel>Sort by</InputLabel>
-
-          <Select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
-            <MenuItem value={"distance"}>Distance</MenuItem>
-
-            <MenuItem value={"safetyRating"}>Safety Rating</MenuItem>
-          </Select>
-        </FormControl>
+        <SortByMenu setSortBy={setSortBy} className={classes.sortContainer} />
       </Header>
 
       <div className={classes.contentContainer}>

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Card, makeStyles, createStyles } from "@material-ui/core";
-import { ShopProps } from "./ShopTypes";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
 import ShopStock from "./ShopStock";
+import { Stocks, ShopProps } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
-import { Stocks } from "./ShopTypes";
 import { getProduct } from "../../util/productsAndSafetyFeatures";
 import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
@@ -27,6 +26,14 @@ const useStyles = makeStyles((theme) =>
         width: "80vw",
         height: "50vh",
       },
+    },
+    headerContainer: {
+      flex: 1,
+    },
+    screenContainer: {
+      flex: 4,
+      marginBottom: "8px",
+      overflow: "auto",
     },
   })
 );
@@ -106,9 +113,11 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
 
   return (
     <Card className={classes.container}>
-      <ShopHeader locationData={locationData} />
+      <div className={classes.headerContainer}>
+        <ShopHeader locationData={locationData} />
+      </div>
 
-      {shopScreen}
+      <div className={classes.screenContainer}>{shopScreen}</div>
     </Card>
   );
 };

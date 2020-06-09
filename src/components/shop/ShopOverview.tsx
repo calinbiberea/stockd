@@ -6,21 +6,14 @@ import { ShopOverviewProps } from "./ShopTypes";
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
-      flex: 4,
+      height: "100%",
       display: "flex",
       flexDirection: "column",
-      justifyContent: "space-around",
+      justifyContent: "space-between",
       alignItems: "center",
-      padding: "12px",
-      overflow: "auto",
     },
     gridContainer: {
-      flex: 1,
-      flexDirection: "row",
       overflow: "auto",
-    },
-    gridItem: {
-      width: "50%",
     },
   })
 );
@@ -29,16 +22,17 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({ stocks, locationData }: Sho
   const classes = useStyles();
 
   const stockItems = Object.entries(stocks).map(([name, { icon, stock }]) => (
-    <Grid item key={name} className={classes.gridItem}>
+    <Grid item xs={12} md={6} xl={4} key={name}>
       <StockItem icon={icon} name={name} stock={stock} />
     </Grid>
   ));
 
   const onButtonClick = () => {
-    const getMapsUrl = (placeName: string, placeId: string) =>
-      `https://www.google.com/maps/search/?api=1&query=${encodeURI(
-        placeName
-      )}&query_place_id=${placeId}`;
+    const getMapsUrl = (placeName: string, placeId: string) => {
+      const encodedName = encodeURI(placeName);
+
+      return `https://www.google.com/maps/search/?api=1&query=${encodedName}&query_place_id=${placeId}`;
+    };
 
     window.open(getMapsUrl(locationData.name, locationData.id));
   };

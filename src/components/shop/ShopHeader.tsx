@@ -5,10 +5,10 @@ import { ShopHeaderProps } from "./ShopTypes";
 const useStyles = makeStyles((theme) =>
   createStyles({
     container: {
-      flex: 1,
+      height: "100%",
+      backgroundColor: theme.palette.primary.main,
       display: "flex",
       flexDirection: "row",
-      backgroundColor: theme.palette.primary.main,
     },
     imgContainer: {
       width: "50%",

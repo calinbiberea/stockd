@@ -1,72 +1,87 @@
 import React from "react";
-import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import Button from "@material-ui/core/Button";
+import { Button, Card, Typography, makeStyles, createStyles } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import StarIcon from "@material-ui/icons/Star";
+import Rating from "@material-ui/lab/Rating";
 import ShopHeader from "../shop/ShopHeader";
 import { ShopListItemProps } from "./ShopListTypes";
-import Rating from "@material-ui/lab/Rating";
-import StarIcon from "@material-ui/icons/Star";
 
-const shopCardStyle = {
-  width: "30vw",
-  height: "20vh",
-  display: "flex",
-  flexDirection: "column" as const,
-};
-
-const shopContentStyle = {
-  flex: 4,
-  width: "100%",
-  display: "flex",
-  flexDirection: "column" as const,
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-const buttonStyle = {
-  textTransform: "none" as const,
-  fontSize: "14px",
-};
-
-const buttonIconStyle = {
-  marginLeft: "8px",
-};
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    shopCard: {
+      display: "flex",
+      flexDirection: "column",
+      [theme.breakpoints.up("sm")]: {
+        width: "30vw",
+        height: "25vh",
+      },
+      [theme.breakpoints.down("xs")]: {
+        width: "80vw",
+        height: "25vh",
+      },
+    },
+    shopContent: {
+      width: "100%",
+      flex: 4,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    button: {
+      margin: "0 auto",
+      textTransform: "none",
+      fontSize: "14px",
+    },
+    buttonIcon: {
+      marginLeft: "8px",
+    },
+  })
+);
 
 const ShopListItem: React.FC<ShopListItemProps> = ({
   shopData,
   startTime,
   endTime,
   onGetDetailsClick,
-}: ShopListItemProps) => (
-  <Card style={shopCardStyle}>
-    <ShopHeader locationData={shopData.locationData} />
+}: ShopListItemProps) => {
+  const classes = useStyles();
 
-    <div style={shopContentStyle}>
-      <Typography>Distance: {shopData.distance.toFixed(2)}km</Typography>
-      <Typography>Safety score:</Typography>
-      <Rating
-        defaultValue={((shopData.displayed as Record<string, unknown>)?.safetyScore || 0) as number}
-        precision={0.5}
-        emptyIcon={<StarIcon fontSize="inherit" />}
-        readOnly
-      />
-      <Typography>
-        Opening times: {startTime} - {endTime}
-      </Typography>
-    </div>
+  return (
+    <Card className={classes.shopCard}>
+      <ShopHeader locationData={shopData.locationData} />
 
-    <Button
-      variant="contained"
-      size="large"
-      color="secondary"
-      style={buttonStyle}
-      onClick={() => onGetDetailsClick(shopData.locationData)}
-    >
-      Click here for details
-      <MoreHorizIcon style={buttonIconStyle} />
-    </Button>
-  </Card>
-);
+      <div className={classes.shopContent}>
+        <Typography>Distance: {shopData.distance.toFixed(2)}km</Typography>
+
+        <Typography>Safety score:</Typography>
+
+        <Rating
+          defaultValue={
+            ((shopData.displayed as Record<string, unknown>)?.safetyScore || 0) as number
+          }
+          precision={0.5}
+          emptyIcon={<StarIcon fontSize="inherit" />}
+          readOnly
+        />
+
+        <Typography>
+          Opening times: {startTime} - {endTime}
+        </Typography>
+      </div>
+
+      <Button
+        variant="contained"
+        size="large"
+        color="secondary"
+        className={classes.button}
+        onClick={() => onGetDetailsClick(shopData.locationData)}
+      >
+        Click here for details
+        <MoreHorizIcon className={classes.buttonIcon} />
+      </Button>
+    </Card>
+  );
+};
 
 export default ShopListItem;

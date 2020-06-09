@@ -6,7 +6,7 @@ export interface ShopProps {
   setSelectedScreen: (value: ShopSelectedScreen) => void;
 }
 
-export type ShopSelectedScreen = "default" | "safety" | "stock" | "reviews";
+export type ShopSelectedScreen = "overview" | "safety" | "stock";
 
 export interface ShopHeaderProps {
   locationData: LocationData;

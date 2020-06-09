@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CircularProgress, Fade, Slide, Modal } from "@material-ui/core";
+import { CircularProgress, Fade, Slide, Modal, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import type { OverlayProps } from "./OverlayTypes";
 import type { LocationData } from "../../util/googleMaps";
@@ -7,28 +7,27 @@ import { getLocationDataByPlaceId } from "../../util/googleMaps";
 import { ShopSelectedScreen } from "../shop/ShopTypes";
 import Shop from "../shop/Shop";
 
-const useStyles = makeStyles({
-  centered: {
-    position: "absolute",
-    left: "50vw",
-    top: "50vh",
-    transform: "translate(-50%, -50%)",
-  },
-});
-
-const modalStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-const modalChildStyle = {
-  outline: 0,
-};
-
-const circularProgressStyle = {
-  color: "#FFF",
-};
+const useStyles = makeStyles(() =>
+  createStyles({
+    modal: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    modalContainer: {
+      outline: 0,
+    },
+    circularProgressContainer: {
+      position: "absolute",
+      left: "50vw",
+      top: "50vh",
+      transform: "translate(-50%, -50%)",
+    },
+    circularProgress: {
+      color: "#FFF",
+    },
+  })
+);
 
 const Overlay: React.FC<OverlayProps> = ({
   placeId,
@@ -37,13 +36,15 @@ const Overlay: React.FC<OverlayProps> = ({
   defaultToStock,
   locationData = null,
 }: OverlayProps) => {
-  const classes = useStyles();
   const [localLocationData, setLocalLocationData] = useState<LocationData | null>(null);
   const [selectedScreen, setSelectedScreen] = useState<ShopSelectedScreen>(
-    defaultToStock ? "stock" : "default"
+    defaultToStock ? "stock" : "overview"
   );
+
   const isOpen = placeId !== "";
   const isLoaded = localLocationData?.id === placeId;
+
+  const classes = useStyles();
 
   useEffect(() => {
     setLocalLocationData(locationData);
@@ -56,16 +57,16 @@ const Overlay: React.FC<OverlayProps> = ({
   }, [placeId, isLoaded, isOpen, queryMap]);
 
   return (
-    <Modal open={isOpen} style={modalStyle} onClose={closeOverlay}>
-      <div style={modalChildStyle}>
+    <Modal open={isOpen} onClose={closeOverlay} className={classes.modal}>
+      <div className={classes.modalContainer}>
         <Fade in={!isLoaded}>
-          <div className={classes.centered}>
-            <CircularProgress style={circularProgressStyle} />
+          <div className={classes.circularProgressContainer}>
+            <CircularProgress className={classes.circularProgress} />
           </div>
         </Fade>
 
         <Slide direction="up" in={isLoaded}>
-          <Card>
+          <div>
             {localLocationData !== null ? (
               <Shop
                 locationData={localLocationData}
@@ -73,7 +74,7 @@ const Overlay: React.FC<OverlayProps> = ({
                 setSelectedScreen={setSelectedScreen}
               />
             ) : null}
-          </Card>
+          </div>
         </Slide>
       </div>
     </Modal>

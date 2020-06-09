@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Card, makeStyles, createStyles } from "@material-ui/core";
 import { ShopProps } from "./ShopTypes";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
@@ -13,13 +14,22 @@ import pastaIcon from "../../res/icons/pasta.svg";
 import medicineIcon from "../../res/icons/medicine.svg";
 import toiletPaperIcon from "../../res/icons/toiletPaper.svg";
 
-const shopStyle = {
-  width: "60vw",
-  height: "45vh",
-  minWidth: "500px",
-  display: "flex",
-  flexDirection: "column" as const,
-};
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      [theme.breakpoints.up("sm")]: {
+        width: "60vw",
+        height: "45vh",
+      },
+      [theme.breakpoints.down("xs")]: {
+        width: "80vw",
+        height: "50vh",
+      },
+    },
+  })
+);
 
 const defaultStocks: Stocks = {
   Bread: {
@@ -42,7 +52,7 @@ const defaultStocks: Stocks = {
     icon: medicineIcon,
     stock: -1,
   },
-  ToiletPaper: {
+  "Toilet Paper": {
     icon: toiletPaperIcon,
     stock: -1,
   },
@@ -50,6 +60,8 @@ const defaultStocks: Stocks = {
 
 const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) => {
   const [stocks, setStocks] = useState(defaultStocks);
+
+  const classes = useStyles();
 
   useEffect(() => {
     setStocks(defaultStocks);
@@ -86,19 +98,18 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
   }, [locationData.id]);
 
   let shopScreen: React.ReactNode;
-
-  if (selectedScreen === "default") {
+  if (selectedScreen === "overview") {
     shopScreen = <ShopOverview stocks={stocks} locationData={locationData} />;
   } else if (selectedScreen === "stock") {
     shopScreen = <ShopStock stocks={stocks} locationData={locationData} />;
   }
 
   return (
-    <div style={shopStyle}>
+    <Card className={classes.container}>
       <ShopHeader locationData={locationData} />
 
       {shopScreen}
-    </div>
+    </Card>
   );
 };
 

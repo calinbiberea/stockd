@@ -1,49 +1,46 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import Slider from "@material-ui/core/Slider";
-import Grid from "@material-ui/core/Grid";
+import { Button, Slider, Grid, makeStyles, createStyles } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 import StockItem from "./StockItem";
 import updateStock from "../../util/firebaseOps";
 import { ShopStockProps } from "./ShopTypes";
-import { useSnackbar } from "notistack";
 
-const containerStyle = {
-  flex: 4,
-  display: "flex",
-  flexDirection: "column" as const,
-  alignItems: "center",
-  overflow: "auto",
-};
-
-const gridContainerStyle = {
-  width: "100%",
-  display: "flex",
-  flex: 1,
-  flexDirection: "column" as const,
-  overflow: "auto",
-};
-
-const gridItemStyle = {
-  width: "100%",
-  display: "flex",
-  flex: 1,
-  flexDirection: "row" as const,
-  alignItems: "center",
-  justifyContent: "space-around",
-};
-
-const stockItemStyle = {
-  width: "50%",
-};
-
-const sliderStyle = {
-  width: "200px",
-};
-
-const buttonContainerStyle = {
-  marginBottom: "8px",
-  display: "inline-block",
-};
+const useStyles = makeStyles(() =>
+  createStyles({
+    container: {
+      flex: 4,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      overflow: "auto",
+    },
+    gridContainer: {
+      width: "100%",
+      display: "flex",
+      flex: 1,
+      flexDirection: "column",
+      overflow: "auto",
+    },
+    gridItem: {
+      width: "100%",
+      display: "flex",
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-around",
+    },
+    stockItem: {
+      width: "50%",
+    },
+    slider: {
+      width: "200px",
+    },
+    buttonContainer: {
+      marginBottom: "8px",
+      display: "inline-block",
+    },
+  })
+);
 
 const getMarks = (value: number) => [
   {
@@ -65,15 +62,19 @@ const getSubmitSuffix = (numUpdates: number) =>
 
 const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStockProps) => {
   const [localStocks, setLocalStocks] = useState<Record<string, number>>({});
+
+  const classes = useStyles();
+
   const numUpdates = Object.keys(localStocks).length;
+
   const { enqueueSnackbar } = useSnackbar();
 
   const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => {
     const currentValue = localStocks[name];
     const updated = currentValue !== undefined;
     return (
-      <Grid item key={name} style={gridItemStyle}>
-        <div style={stockItemStyle}>
+      <Grid item key={name} className={classes.gridItem}>
+        <div className={classes.stockItem}>
           <StockItem icon={icon} name={name} stock={stock} />
         </div>
 
@@ -82,7 +83,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
           aria-labelledby="discrete-slider-restrict"
           step={null}
           marks={getMarks(currentValue)}
-          style={sliderStyle}
+          className={classes.slider}
           value={updated ? currentValue : 50}
           onChange={(event, value) => {
             if (typeof value === "number") {
@@ -97,12 +98,12 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
   });
 
   return (
-    <div style={containerStyle}>
-      <Grid container wrap="nowrap" style={gridContainerStyle}>
+    <div className={classes.container}>
+      <Grid container wrap="nowrap" className={classes.gridContainer}>
         {stocksAndSliders}
       </Grid>
 
-      <div style={buttonContainerStyle}>
+      <div className={classes.buttonContainer}>
         <Button
           variant="contained"
           color="primary"

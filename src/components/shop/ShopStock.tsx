@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Slider,
@@ -11,8 +11,9 @@ import {
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import StockItem from "./StockItem";
-import updateStock from "../../firebase/firebaseOps";
-import { ShopStockProps } from "./ShopTypes";
+import { EditShopResult, ShopStockProps } from "./ShopTypes";
+import { updateStock } from "../../firebase/firebaseApp";
+import { LoginContext } from "../App";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -94,6 +95,8 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
 
   const classes = useStyles();
 
+  const context = useContext(LoginContext);
+
   const numUpdates = Object.keys(localStocks).length;
   const numStocks = Object.keys(stocks).length;
 
@@ -129,6 +132,27 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
     );
   });
 
+  const updateData = async () => {
+    const data = {
+      shopId: locationData.id,
+      scores: localStocks,
+    };
+
+    const response = ((await updateStock(data)).data as unknown) as EditShopResult;
+
+    if (!response.success) {
+      enqueueSnackbar("Failed to update. Reason: " + response.reason, { variant: "error" });
+      return;
+    }
+
+    if (response.success) {
+      enqueueSnackbar("Successfully updated the shop information.", {
+        variant: "success",
+      });
+      return;
+    }
+  };
+
   return (
     <div className={classes.container}>
       <Grid container className={classes.gridContainer}>
@@ -136,18 +160,20 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
       </Grid>
 
       <div className={classes.buttonContainer}>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={numUpdates === 0}
-          onClick={() => {
-            // noinspection JSIgnoredPromiseFromCall
-            updateStock(locationData, localStocks, enqueueSnackbar);
-            setLocalStocks({});
-          }}
-        >
-          Submit {getSubmitSuffix(numUpdates)}
-        </Button>
+        <LoginContext.Provider value={context}>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={numUpdates === 0}
+            onClick={() => {
+              // noinspection JSIgnoredPromiseFromCall
+              updateData();
+              setLocalStocks({});
+            }}
+          >
+            Submit {getSubmitSuffix(numUpdates)}
+          </Button>
+        </LoginContext.Provider>
 
         <div className={classes.buttonDivider} />
 

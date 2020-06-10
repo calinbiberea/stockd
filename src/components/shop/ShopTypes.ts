@@ -1,4 +1,5 @@
 import { LocationData } from "../../util/googleMaps";
+import { FindShopsResult } from "../../../functions/src/findShops/util";
 
 export interface ShopProps {
   locationData: LocationData;
@@ -7,6 +8,8 @@ export interface ShopProps {
 }
 
 export type ShopSelectedScreen = "overview" | "safety" | "stock";
+
+export type EditShopResult = { success: false; reason: string } | { success: true };
 
 export interface ShopHeaderProps {
   locationData: LocationData;

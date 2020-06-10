@@ -1,6 +1,6 @@
-import { db } from "../firebase/firebaseApp";
-import { geocodeByPlaceId, LocationData } from "./googleMaps";
-import { NotifyFunc } from "./types";
+import { db } from "./firebaseApp";
+import { geocodeByPlaceId, LocationData } from "../util/googleMaps";
+import { NotifyFunc } from "../util/types";
 
 const updateStock = async (
   locationData: LocationData,

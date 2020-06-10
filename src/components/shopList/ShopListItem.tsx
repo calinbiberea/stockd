@@ -8,11 +8,11 @@ import { ShopListItemProps } from "./ShopListTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    shopCard: {
+    container: {
       display: "flex",
       flexDirection: "column",
       [theme.breakpoints.up("sm")]: {
-        width: "30vw",
+        width: "40vw",
         height: "25vh",
       },
       [theme.breakpoints.down("xs")]: {
@@ -20,16 +20,27 @@ const useStyles = makeStyles((theme) =>
         height: "25vh",
       },
     },
-    shopContent: {
-      width: "100%",
+    headerContainer: {
+      flex: 1,
+    },
+    contentContainer: {
       flex: 4,
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
     },
+    safetyRatingContainer: {
+      display: "flex",
+      [theme.breakpoints.up("sm")]: {
+        flexDirection: "row",
+      },
+      [theme.breakpoints.down("xs")]: {
+        flexDirection: "column",
+      },
+    },
     button: {
-      margin: "0 auto",
+      margin: "0 auto 8px",
       textTransform: "none",
       fontSize: "14px",
     },
@@ -48,22 +59,26 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
   const classes = useStyles();
 
   return (
-    <Card className={classes.shopCard}>
-      <ShopHeader locationData={shopData.locationData} />
+    <Card className={classes.container}>
+      <div className={classes.headerContainer}>
+        <ShopHeader locationData={shopData.locationData} />
+      </div>
 
-      <div className={classes.shopContent}>
+      <div className={classes.contentContainer}>
         <Typography>Distance: {shopData.distance.toFixed(2)}km</Typography>
 
-        <Typography>Safety score:</Typography>
+        <div className={classes.safetyRatingContainer}>
+          <Typography>Safety score:</Typography>
 
-        <Rating
-          defaultValue={
-            ((shopData.displayed as Record<string, unknown>)?.safetyScore || 0) as number
-          }
-          precision={0.5}
-          emptyIcon={<StarIcon fontSize="inherit" />}
-          readOnly
-        />
+          <Rating
+            defaultValue={
+              ((shopData.displayed as Record<string, unknown>)?.safetyScore || 0) as number
+            }
+            precision={0.5}
+            emptyIcon={<StarIcon fontSize="inherit" />}
+            readOnly
+          />
+        </div>
 
         <Typography>
           Opening times: {startTime} - {endTime}

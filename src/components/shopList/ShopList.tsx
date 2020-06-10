@@ -6,6 +6,10 @@ import {
   Typography,
   makeStyles,
   createStyles,
+  Card,
+  Divider,
+  ButtonGroup,
+  Button,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import ShopListItem from "./ShopListItem";
@@ -16,13 +20,30 @@ import { SortBy, DBShopData, FindShopsResult, ShopListProps } from "./ShopListTy
 import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     container: {
       width: "100vw",
       height: "100vh",
     },
-    sortContainer: {
+    controlsContainer: {
+      display: "flex",
+      flexDirection: "row",
+      padding: "0 10px",
+      alignItems: "center",
+      marginLeft: "auto",
+    },
+    controlsDivider: {
+      margin: `0 ${theme.spacing(2)}px`,
+    },
+    sortByContainer: {
+      minWidth: "96px",
+      textAlign: "center",
+    },
+    sortByWrapper: {
+      display: "inline-block",
+    },
+    sortBy: {
       marginLeft: "auto",
     },
     contentContainer: {
@@ -66,6 +87,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
   const [shopList, setShopList] = useState<DBShopData[] | undefined>(undefined);
   const [currentLocationData, setCurrentLocationData] = useState<LocationData | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>("distance");
+  const [view, setView] = useState<"list" | "map">("list");
 
   const classes = useStyles();
 
@@ -164,11 +186,38 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
       </Grid>
     ));
 
+  const header = (
+    <Header onBackClick={onBackClick}>
+      <Card className={classes.controlsContainer}>
+        <Typography component="div">
+          <ButtonGroup variant="contained" color="primary" size="small">
+            <Button disabled={view === "list"} onClick={() => setView("list")}>
+              List View
+            </Button>
+            <Button disabled={view === "map"} onClick={() => setView("map")}>
+              Map View
+            </Button>
+          </ButtonGroup>
+        </Typography>
+        <Divider
+          variant="fullWidth"
+          orientation="vertical"
+          flexItem
+          className={classes.controlsDivider}
+          style={{ margin: "0 10px" }}
+        />
+        <div className={classes.sortByContainer}>
+          <div className={classes.sortByWrapper}>
+            <SortByMenu setSortBy={setSortBy} className={classes.sortBy} />
+          </div>
+        </div>
+      </Card>
+    </Header>
+  );
+
   return (
     <div className={classes.container}>
-      <Header onBackClick={onBackClick}>
-        <SortByMenu setSortBy={setSortBy} className={classes.sortContainer} />
-      </Header>
+      {header}
 
       <div className={classes.contentContainer}>
         <Typography variant="h5" color="primary" className={classes.title}>

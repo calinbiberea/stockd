@@ -74,7 +74,8 @@ const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy, className }: SortByM
   ));
 
   return (
-    <div className={clsx(classes.container, className)}>
+    // <div className={clsx(classes.container, className)}>
+    <>
       <List component="nav" aria-label="Sort by" className={classes.list}>
         <ListItem
           button
@@ -102,7 +103,8 @@ const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy, className }: SortByM
       >
         {menuItems}
       </Menu>
-    </div>
+    </>
+    // </div>
   );
 };
 

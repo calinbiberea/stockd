@@ -8,28 +8,64 @@ const useStyles = makeStyles((theme) =>
       height: "100%",
       backgroundColor: theme.palette.primary.main,
       display: "flex",
-      flexDirection: "row",
+
+      [theme.breakpoints.down("xs")]: {
+        flexDirection: "column-reverse"
+      },
+      [theme.breakpoints.up("sm")]: {
+        flexDirection: "row"
+      },
     },
     imgContainer: {
-      width: "50%",
+      [theme.breakpoints.down("xs")]: {
+        width: "100%",
+        height: "50%" ,
+      },
+      [theme.breakpoints.up("sm")]: {
+        width: "50%",
+        height: "100%" ,
+      },
+      display: "flex",
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center",
     },
     nameRoadContainer: {
-      width: "50%",
-      display: "flex",
+      [theme.breakpoints.down("xs")]: {
+        width: "100%",
+        height: "50%" ,
+        flexDirection: "row",
+      },
+      [theme.breakpoints.up("sm")]: {
+        width: "50%",
+        height: "100%" ,
+        flexDirection: "column",
+      },
       flexDirection: "column",
+      display: "flex",
       justifyContent: "center",
       alignItems: "center",
     },
     name: {
       color: "#FFF",
+      [theme.breakpoints.down("xs")]: {
+        paddingLeft: "5%",
+        padding: "3%",
+        width: "60%",
+        fontSize: "4vw",
+        display: "flex",
+      },
     },
     divider: {
       height: "5%",
     },
     road: {
+      [theme.breakpoints.down("xs")]: {
+        padding: "3%",
+        width: "40%",
+        fontSize: "3vw",
+        display: "flex",
+      },
       color: theme.palette.secondary.main,
     },
   })
@@ -46,13 +82,13 @@ export const ShopHeader: React.FC<ShopHeaderProps> = ({ locationData }: ShopHead
       />
 
       <div className={classes.nameRoadContainer}>
-        <Typography variant="h6" className={classes.name}>
+        <Typography noWrap variant="h6" className={classes.name}>
           {locationData.name}
         </Typography>
 
         <div className={classes.divider} />
 
-        <Typography variant="subtitle1" className={classes.road}>
+        <Typography noWrap variant="subtitle1" className={classes.road}>
           {locationData.road}
         </Typography>
       </div>

@@ -10,6 +10,7 @@ import {
   Divider,
   ButtonGroup,
   Button,
+  Fade,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import ShopListItem from "./ShopListItem";
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) =>
     contentContainer: {
       width: "100%",
       height: "93%",
+      position: "absolute",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -245,49 +247,41 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
     </Header>
   );
 
-  let content;
-  switch (view) {
-    case "list":
-      content = (
-        <>
-          <Typography variant="h5" color="primary" className={classes.title}>
-            {shopListItems.length !== 0
-              ? "Here are the shops that we found"
-              : "We couldn't find any shops matching those filters."}
-          </Typography>
+  const list = (
+    <div className={classes.contentContainer}>
+      <Typography variant="h5" color="primary" className={classes.title}>
+        {shopListItems.length !== 0
+          ? "Here are the shops that we found"
+          : "We couldn't find any shops matching those filters."}
+      </Typography>
 
-          <Grid container direction="column" wrap="nowrap" className={classes.gridContainer}>
-            {shopListItems}
-          </Grid>
-        </>
-      );
-      break;
-    case "map":
-      content = (
-        <div style={{ width: "100%", height: "100%" }}>
-          <Map currentCenter={userPos}>
-            <OverlayView position={userPos} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
-              {CurrentPosition}
-            </OverlayView>
-            {markers}
-          </Map>
-        </div>
-      );
-      break;
-  }
+      <Grid container direction="column" wrap="nowrap" className={classes.gridContainer}>
+        {shopListItems}
+      </Grid>
+    </div>
+  );
+
+  const map = (
+    <div style={{ width: "100%", height: "100%", position: "absolute" }}>
+      <Map currentCenter={userPos}>
+        <OverlayView position={userPos} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
+          {CurrentPosition}
+        </OverlayView>
+        {markers}
+      </Map>
+    </div>
+  );
 
   return (
     <div className={classes.container}>
       {header}
-
-      <div className={classes.contentContainer}>
-        <Overlay
-          placeId={currentLocationData?.id || ""}
-          closeOverlay={closeOverlay}
-          locationData={currentLocationData}
-        />
-        {content}
-      </div>
+      <Overlay
+        placeId={currentLocationData?.id || ""}
+        closeOverlay={closeOverlay}
+        locationData={currentLocationData}
+      />
+      <Fade in={view === "list"}>{list}</Fade>
+      <Fade in={view === "map"}>{map}</Fade>
     </div>
   );
 };

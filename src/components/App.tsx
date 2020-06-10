@@ -17,8 +17,16 @@ const theme = createMuiTheme({
   },
 });
 
+export const LoginContext = React.createContext({
+  uid: null as string | null,
+  setUid: (uid: string) => {
+    /* void */
+  },
+});
+
 const App: React.FC = () => {
   const [route, setRoute] = useState<Route>("landing");
+  const [uid, setUid] = useState<string | null>(null);
 
   let currentScreen: React.ReactNode;
   switch (route) {
@@ -38,7 +46,11 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider>{currentScreen}</SnackbarProvider>
+      <SnackbarProvider>
+        <LoginContext.Provider value={{ uid, setUid }}>
+          {currentScreen}
+        </LoginContext.Provider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };

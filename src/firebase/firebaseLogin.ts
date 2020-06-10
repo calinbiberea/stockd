@@ -2,10 +2,9 @@ import firebase from "firebase";
 import { authProviders } from "./firebaseApp";
 import { NotifyFunc } from "../util/types";
 
-export const logIn = async (
-  provider: keyof typeof authProviders,
-  notify?: NotifyFunc
-): Promise<string | null> => {
+export type Provider = keyof typeof authProviders;
+
+export const logIn = async (provider: Provider, notify?: NotifyFunc): Promise<string | null> => {
   let uid: string | null;
   try {
     const result = await firebase.auth().signInWithPopup(authProviders[provider]);

@@ -44,7 +44,7 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({ stocks, locationData }: Sho
       </Grid>
 
       <Button variant="contained" color="primary" onClick={onButtonClick}>
-        Take me there
+        Take me there!
       </Button>
     </div>
   );

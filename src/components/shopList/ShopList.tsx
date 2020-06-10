@@ -106,7 +106,23 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
         return;
       }
 
-      setShopList(response.results);
+      if (!filters.nameFilter) {
+        setShopList(response.results);
+      } else {
+        const lowerCaseShopName = filters.shopName.toLowerCase();
+        const filterByName = (result: DBShopData, lowerCaseShopName: string) => {
+          const splits = result.locationData.name.split(" ");
+          let match = false;
+
+          splits.forEach((split) => {
+            match = match || split.toLowerCase().lastIndexOf(lowerCaseShopName, 0) === 0;
+          });
+
+          return match;
+        };
+
+        setShopList(response.results.filter((result) => filterByName(result, lowerCaseShopName)));
+      }
     };
 
     // noinspection JSIgnoredPromiseFromCall

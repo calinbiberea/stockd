@@ -3,6 +3,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
 import Landing from "./landing/Landing";
 import FilterShops from "./filterShops/FilterShops";
+import FindShop from "./findShop/FindShop";
 import EditShop from "./editShop/EditShop";
 import colors from "../res/colors";
 
@@ -37,7 +38,7 @@ const App: React.FC = () => {
       currentScreen = <FilterShops setRoute={setRoute} />;
       break;
     case "findShop":
-      currentScreen = null; // TODO: add a screen for finding by name
+      currentScreen = <FindShop setRoute={setRoute} />;
       break;
     case "editShop":
       currentScreen = <EditShop setRoute={setRoute} />;
@@ -47,9 +48,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider>
-        <LoginContext.Provider value={{ uid, setUid }}>
-          {currentScreen}
-        </LoginContext.Provider>
+        <LoginContext.Provider value={{ uid, setUid }}>{currentScreen}</LoginContext.Provider>
       </SnackbarProvider>
     </ThemeProvider>
   );

@@ -30,6 +30,7 @@ export interface DBShopData {
   id: string;
   distance: number;
   locationData: LocationData;
+  location: { lat: number; lng: number };
   [k: string]: unknown;
 }
 

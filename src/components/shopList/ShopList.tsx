@@ -20,8 +20,9 @@ import { SortBy, DBShopData, FindShopsResult, ShopListProps } from "./ShopListTy
 import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
 import Map from "../map/Map";
-import { OverlayView } from "@react-google-maps/api";
+import { Marker, OverlayView } from "@react-google-maps/api";
 import colors from "../../res/colors";
+import ShopPinIcon from "../../res/shopPin.png";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -206,6 +207,15 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
       </Grid>
     ));
 
+  const markers = shopList.map((shop) => (
+    <Marker
+      key={shop.id}
+      position={shop.location}
+      onClick={() => onGetDetailsClick(shop.locationData)}
+      icon={ShopPinIcon}
+    />
+  ));
+
   const header = (
     <Header onBackClick={onBackClick}>
       <Card className={classes.controlsContainer}>
@@ -246,12 +256,6 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
               : "We couldn't find any shops matching those filters."}
           </Typography>
 
-          <Overlay
-            placeId={currentLocationData?.id || ""}
-            closeOverlay={closeOverlay}
-            locationData={currentLocationData}
-          />
-
           <Grid container direction="column" wrap="nowrap" className={classes.gridContainer}>
             {shopListItems}
           </Grid>
@@ -265,6 +269,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
             <OverlayView position={userPos} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
               {CurrentPosition}
             </OverlayView>
+            {markers}
           </Map>
         </div>
       );
@@ -275,7 +280,14 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
     <div className={classes.container}>
       {header}
 
-      <div className={classes.contentContainer}>{content}</div>
+      <div className={classes.contentContainer}>
+        <Overlay
+          placeId={currentLocationData?.id || ""}
+          closeOverlay={closeOverlay}
+          locationData={currentLocationData}
+        />
+        {content}
+      </div>
     </div>
   );
 };

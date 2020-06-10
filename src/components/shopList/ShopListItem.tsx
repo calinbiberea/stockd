@@ -61,7 +61,7 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
   return (
     <Card className={classes.container}>
       <div className={classes.headerContainer}>
-        <ShopHeader locationData={shopData.locationData} />
+        <ShopHeader locationData={shopData.locationData} noBackButton={true} onBackClick={() => {}}/>
       </div>
 
       <div className={classes.contentContainer}>

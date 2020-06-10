@@ -1,9 +1,14 @@
-import React from "react";
+import React, { Props } from "react";
 import { Typography, makeStyles, createStyles } from "@material-ui/core";
 import { ShopHeaderProps } from "./ShopTypes";
+import IconButton from "@material-ui/core/IconButton";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    backButton: {
+      color: "#FFF",
+    },
     container: {
       height: "100%",
       backgroundColor: theme.palette.primary.main,
@@ -41,7 +46,6 @@ const useStyles = makeStyles((theme) =>
         height: "100%" ,
         flexDirection: "column",
       },
-      flexDirection: "column",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -71,11 +75,19 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export const ShopHeader: React.FC<ShopHeaderProps> = ({ locationData }: ShopHeaderProps) => {
+export const ShopHeader: React.FC<ShopHeaderProps> = ({ locationData, noBackButton, onBackClick }: ShopHeaderProps) => {
   const classes = useStyles();
-
   return (
     <div className={classes.container}>
+      {noBackButton ? null :
+        <IconButton
+          edge="start"
+          aria-label="back"
+          onClick={onBackClick}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+      }
       <div
         style={{ backgroundImage: `url(${locationData.photo})` }}
         className={classes.imgContainer}

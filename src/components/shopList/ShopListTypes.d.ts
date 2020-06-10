@@ -1,5 +1,7 @@
 import { LocationData } from "../../util/googleMaps";
 
+export type SortBy = "distance" | "safetyRating";
+
 export interface ShopListProps {
   onBackClick: () => void;
   filters: {
@@ -15,6 +17,11 @@ export interface ShopListItemProps {
   startTime: string;
   endTime: string;
   onGetDetailsClick: (locationData: LocationData) => void;
+}
+
+export interface SortByMenuProps {
+  setSortBy: (value: SortBy) => void;
+  className?: string;
 }
 
 export interface DBShopData {

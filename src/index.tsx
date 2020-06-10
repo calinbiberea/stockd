@@ -11,6 +11,7 @@ import {
   setupGoogleAutocompleteService,
   setupGoogleGeocoder,
 } from "./util/googleMaps";
+import "fontsource-roboto";
 
 const runApp = async () => {
   setupFirebase();

@@ -1,43 +1,67 @@
 import React, { PropsWithChildren } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
+import {
+  AppBar,
+  Toolbar,
+  Card,
+  IconButton,
+  Typography,
+  makeStyles,
+  createStyles,
+} from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import Typography from "@material-ui/core/Typography";
-import { HeaderProps } from "./HeaderTypes";
 import Logo from "../../res/logo.png";
-import { Card } from "@material-ui/core";
+import { HeaderProps } from "./HeaderTypes";
 
-const iconButtonStyle = {
-  color: "#FFF",
-  marginRight: "16px",
-};
-
-const logo = (
-  <Card style={{ padding: "6px", display: "inline-block" }}>
-    <img alt="stock" src={Logo} style={{ maxHeight: "28px" }} />
-  </Card>
+const useStyles = makeStyles(() =>
+  createStyles({
+    iconButton: {
+      color: "#FFF",
+      marginRight: "16px",
+    },
+    logoContainer: {
+      padding: "6px",
+    },
+    logo: {
+      maxHeight: "28px",
+    },
+  })
 );
 
 const Header: React.FC<HeaderProps> = ({
   title,
   onBackClick,
   children,
-}: PropsWithChildren<HeaderProps>) => (
-  <div>
-    <AppBar>
-      <Toolbar>
-        <IconButton edge="start" aria-label="back" style={iconButtonStyle} onClick={onBackClick}>
-          <ArrowBackIcon />
-        </IconButton>
+}: PropsWithChildren<HeaderProps>) => {
+  const classes = useStyles();
 
-        {title !== undefined ? <Typography variant="h6">{title}</Typography> : logo}
-        {children !== undefined ? <div style={{ marginLeft: "20px" }}>{children}</div> : undefined}
-      </Toolbar>
-    </AppBar>
+  const logo = (
+    <Card className={classes.logoContainer}>
+      <img src={Logo} alt="stockd logo" className={classes.logo} />
+    </Card>
+  );
 
-    <Toolbar />
-  </div>
-);
+  return (
+    <div>
+      <AppBar>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            aria-label="back"
+            onClick={onBackClick}
+            className={classes.iconButton}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+
+          {title !== undefined ? <Typography variant="h6">{title}</Typography> : logo}
+
+          {children !== undefined ? children : null}
+        </Toolbar>
+      </AppBar>
+
+      <Toolbar />
+    </div>
+  );
+};
 
 export default Header;

@@ -1,49 +1,73 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import Slider from "@material-ui/core/Slider";
-import Grid from "@material-ui/core/Grid";
+import {
+  Button,
+  Slider,
+  Grid,
+  Divider,
+  useMediaQuery,
+  Theme,
+  makeStyles,
+  createStyles,
+} from "@material-ui/core";
+import { useSnackbar } from "notistack";
 import StockItem from "./StockItem";
 import updateStock from "../../firebase/firebaseOps";
 import { ShopStockProps } from "./ShopTypes";
-import { useSnackbar } from "notistack";
 
-const containerStyle = {
-  flex: 4,
-  display: "flex",
-  flexDirection: "column" as const,
-  alignItems: "center",
-  overflow: "auto",
-};
-
-const gridContainerStyle = {
-  width: "100%",
-  display: "flex",
-  flex: 1,
-  flexDirection: "column" as const,
-  overflow: "auto",
-};
-
-const gridItemStyle = {
-  width: "100%",
-  display: "flex",
-  flex: 1,
-  flexDirection: "row" as const,
-  alignItems: "center",
-  justifyContent: "space-around",
-};
-
-const stockItemStyle = {
-  width: "50%",
-};
-
-const sliderStyle = {
-  width: "200px",
-};
-
-const buttonContainerStyle = {
-  marginBottom: "8px",
-  display: "inline-block",
-};
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    container: {
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    gridContainer: {
+      overflow: "auto",
+    },
+    gridItem: {
+      display: "flex",
+      [theme.breakpoints.up("md")]: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+      },
+      [theme.breakpoints.down("sm")]: {
+        flexDirection: "column",
+        alignItems: "center",
+      },
+    },
+    stockItem: {
+      [theme.breakpoints.up("md")]: {
+        width: "50%",
+      },
+      [theme.breakpoints.down("sm")]: {
+        width: "90%",
+      },
+    },
+    gridDivider: {
+      width: "80%",
+      height: "2px",
+      margin: "4px 0",
+    },
+    slider: {
+      [theme.breakpoints.up("md")]: {
+        width: "30%",
+      },
+      [theme.breakpoints.down("sm")]: {
+        width: "80%",
+      },
+    },
+    buttonContainer: {
+      display: "flex",
+      flexDirection: "row",
+    },
+    buttonDivider: {
+      width: "16px",
+    },
+  })
+);
 
 const getMarks = (value: number) => [
   {
@@ -65,63 +89,73 @@ const getSubmitSuffix = (numUpdates: number) =>
 
 const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStockProps) => {
   const [localStocks, setLocalStocks] = useState<Record<string, number>>({});
+
+  const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
+
+  const classes = useStyles();
+
   const numUpdates = Object.keys(localStocks).length;
+  const numStocks = Object.keys(stocks).length;
+
   const { enqueueSnackbar } = useSnackbar();
 
-  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }]) => {
+  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }], ix) => {
     const currentValue = localStocks[name];
     const updated = currentValue !== undefined;
+    const last = ix === numStocks - 1;
+
     return (
-      <Grid item key={name} style={gridItemStyle}>
-        <div style={stockItemStyle}>
+      <Grid item xs={12} key={name} className={classes.gridItem}>
+        <div className={classes.stockItem}>
           <StockItem icon={icon} name={name} stock={stock} />
         </div>
 
         <Slider
-          color={updated ? "primary" : "secondary"}
           aria-labelledby="discrete-slider-restrict"
           step={null}
           marks={getMarks(currentValue)}
-          style={sliderStyle}
+          color={updated ? "primary" : "secondary"}
+          className={classes.slider}
           value={updated ? currentValue : 50}
           onChange={(event, value) => {
-            if (typeof value === "number") {
-              setLocalStocks((prevState) => ({ ...prevState, [name]: value }));
-            } else {
-              console.error("Undefined value type in Slider onChange");
-            }
+            setLocalStocks((prevState) => ({ ...prevState, [name]: value as number }));
           }}
         />
+
+        {smallScreen && !last ? (
+          <Divider variant="middle" orientation="horizontal" className={classes.gridDivider} />
+        ) : undefined}
       </Grid>
     );
   });
 
   return (
-    <div style={containerStyle}>
-      <Grid container wrap="nowrap" style={gridContainerStyle}>
+    <div className={classes.container}>
+      <Grid container className={classes.gridContainer}>
         {stocksAndSliders}
       </Grid>
 
-      <div style={buttonContainerStyle}>
+      <div className={classes.buttonContainer}>
         <Button
           variant="contained"
           color="primary"
+          disabled={numUpdates === 0}
           onClick={() => {
             // noinspection JSIgnoredPromiseFromCall
             updateStock(locationData, localStocks, enqueueSnackbar);
             setLocalStocks({});
           }}
-          disabled={numUpdates === 0}
         >
           Submit {getSubmitSuffix(numUpdates)}
         </Button>
-        &nbsp;&nbsp;
+
+        <div className={classes.buttonDivider} />
+
         <Button
-          size="small"
           variant="contained"
           color="secondary"
-          onClick={() => setLocalStocks({})}
           disabled={numUpdates === 0}
+          onClick={() => setLocalStocks({})}
         >
           Clear
         </Button>

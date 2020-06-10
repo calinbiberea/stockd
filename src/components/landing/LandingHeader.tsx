@@ -1,41 +1,42 @@
-import { Card, Typography } from "@material-ui/core";
-import Logo from "../../res/logo.png";
 import React from "react";
+import { Card, Typography, makeStyles, createStyles } from "@material-ui/core";
+import Logo from "../../res/logo.png";
 
-const containerStyle = {
-  width: "100%",
-  position: "relative" as const,
-  padding: "20px 0",
-};
-
-const cardStyle = {
-  position: "relative" as const,
-  display: "inline-block",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  textAlign: "center" as const,
-  padding: "10px",
-};
-
-const welcomeStyle = {
-  fontSize: "1.5vh",
-};
-
-const logoStyle = {
-  maxHeight: "4vh",
-};
-
-const LandingHeader: React.FC = () => (
-  <div style={containerStyle}>
-    <Card style={cardStyle}>
-      <Typography variant="h6" color="primary" style={welcomeStyle}>
-        Welcome to
-      </Typography>
-
-      <img style={logoStyle} src={Logo} alt="stockd logo" />
-    </Card>
-  </div>
+const useStyles = makeStyles(() =>
+  createStyles({
+    container: {
+      width: "100%",
+      padding: "20px 0",
+      display: "flex",
+      justifyContent: "center",
+      textAlign: "center",
+    },
+    card: {
+      padding: "10px",
+    },
+    welcome: {
+      fontSize: "1.5vh",
+    },
+    logo: {
+      maxHeight: "4vh",
+    },
+  })
 );
+
+const LandingHeader: React.FC = () => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.container}>
+      <Card className={classes.card}>
+        <Typography variant="h6" color="primary" className={classes.welcome}>
+          Welcome to
+        </Typography>
+
+        <img src={Logo} alt="stockd logo" className={classes.logo} />
+      </Card>
+    </div>
+  );
+};
 
 export default LandingHeader;

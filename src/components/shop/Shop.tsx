@@ -1,25 +1,42 @@
 import React, { useState, useEffect } from "react";
-import { ShopProps } from "./ShopTypes";
+import { Card, makeStyles, createStyles } from "@material-ui/core";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
 import ShopStock from "./ShopStock";
+import { Stocks, ShopProps } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
-import { Stocks } from "./ShopTypes";
 import { getProduct } from "../../util/productsAndSafetyFeatures";
 import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
 import milkIcon from "../../res/icons/milk.svg";
 import pastaIcon from "../../res/icons/pasta.svg";
-import medicineIcon from "../../res/icons/medicineIcon.svg";
-import toiletPaperIcon from "../../res/icons/toiletPaperIcon.svg";
+import medicineIcon from "../../res/icons/medicine.svg";
+import toiletPaperIcon from "../../res/icons/toiletPaper.svg";
 
-const shopStyle = {
-  width: "60vw",
-  height: "45vh",
-  minWidth: "500px",
-  display: "flex",
-  flexDirection: "column" as const,
-};
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      [theme.breakpoints.up("sm")]: {
+        width: "60vw",
+        height: "45vh",
+      },
+      [theme.breakpoints.down("xs")]: {
+        width: "80vw",
+        height: "50vh",
+      },
+    },
+    headerContainer: {
+      flex: 1,
+    },
+    screenContainer: {
+      flex: 4,
+      marginBottom: "8px",
+      overflow: "auto",
+    },
+  })
+);
 
 const defaultStocks: Stocks = {
   Bread: {
@@ -42,7 +59,7 @@ const defaultStocks: Stocks = {
     icon: medicineIcon,
     stock: -1,
   },
-  ToiletPaper: {
+  "Toilet Paper": {
     icon: toiletPaperIcon,
     stock: -1,
   },
@@ -50,6 +67,8 @@ const defaultStocks: Stocks = {
 
 const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) => {
   const [stocks, setStocks] = useState(defaultStocks);
+
+  const classes = useStyles();
 
   useEffect(() => {
     setStocks(defaultStocks);
@@ -86,19 +105,20 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
   }, [locationData.id]);
 
   let shopScreen: React.ReactNode;
-
-  if (selectedScreen === "default") {
+  if (selectedScreen === "overview") {
     shopScreen = <ShopOverview stocks={stocks} locationData={locationData} />;
   } else if (selectedScreen === "stock") {
     shopScreen = <ShopStock stocks={stocks} locationData={locationData} />;
   }
 
   return (
-    <div style={shopStyle}>
-      <ShopHeader locationData={locationData} />
+    <Card className={classes.container}>
+      <div className={classes.headerContainer}>
+        <ShopHeader locationData={locationData} />
+      </div>
 
-      {shopScreen}
-    </div>
+      <div className={classes.screenContainer}>{shopScreen}</div>
+    </Card>
   );
 };
 

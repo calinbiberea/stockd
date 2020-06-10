@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { collectAverages, formatDate, scanForDifferences, StocksEntry, Submissions } from "./util";
+import { collectAverages, formatDate, scanForDifferences, StocksEntry } from "./util";
 
 type DocumentSnapshot<T> = admin.firestore.DocumentSnapshot<T>;
 type Change<T> = functions.Change<T>;
@@ -18,12 +18,12 @@ export const onStockUpdate = functions.firestore
     const before = change.before.data() as StocksEntry;
     if (
       before?.submissions !== undefined &&
-      scanForDifferences(before.submissions as Submissions, after.submissions as Submissions)
+      scanForDifferences(before.submissions, after.submissions)
     ) {
       return;
     }
 
-    const submissions = after.submissions as Submissions;
+    const submissions = after.submissions;
     const averages = collectAverages(submissions, after.prevScores);
 
     const batch = admin.firestore().batch();

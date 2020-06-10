@@ -1,6 +1,7 @@
 export default interface MapProps {
   currentCenter: Location;
-  onPlaceClick: (placeId: string) => void;
+  onPlaceClick?: (placeId: string) => void;
+  showGoogleMarkers?: boolean;
 }
 
 export type Location = {

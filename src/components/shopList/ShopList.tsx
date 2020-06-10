@@ -19,6 +19,9 @@ import Overlay from "../overlay/Overlay";
 import { SortBy, DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
 import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
+import Map from "../map/Map";
+import { OverlayView } from "@react-google-maps/api";
+import colors from "../../res/colors";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -74,6 +77,21 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
+const CurrentPosition = (
+  <div
+    style={{
+      zIndex: 2001,
+      width: "16px",
+      height: "16px",
+      backgroundColor: colors.blue1,
+      borderRadius: "100%",
+      border: "2px solid white",
+      boxSizing: "border-box",
+      boxShadow: `0px 0px 24px 16px ${colors.blue3}`,
+    }}
+  />
+);
+
 const compareByDistance = (a: DBShopData, b: DBShopData) => a.distance - b.distance;
 
 const compareBySafetyRating = (a: DBShopData, b: DBShopData) => {
@@ -88,6 +106,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
   const [currentLocationData, setCurrentLocationData] = useState<LocationData | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>("distance");
   const [view, setView] = useState<"list" | "map">("list");
+  const [userPos, setUserPos] = useState({ lat: 0, lng: 0 });
 
   const classes = useStyles();
 
@@ -105,6 +124,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
 
     const getData = async () => {
       const userLocation = await getUserLocation();
+      setUserPos({ ...userLocation });
       const request = {
         products: filters.products.join(","),
         safetyFeatures: filters.safetyFeatures.join(","),
@@ -215,27 +235,47 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
     </Header>
   );
 
+  let content;
+  switch (view) {
+    case "list":
+      content = (
+        <>
+          <Typography variant="h5" color="primary" className={classes.title}>
+            {shopListItems.length !== 0
+              ? "Here are the shops that we found"
+              : "We couldn't find any shops matching those filters."}
+          </Typography>
+
+          <Overlay
+            placeId={currentLocationData?.id || ""}
+            closeOverlay={closeOverlay}
+            locationData={currentLocationData}
+          />
+
+          <Grid container direction="column" wrap="nowrap" className={classes.gridContainer}>
+            {shopListItems}
+          </Grid>
+        </>
+      );
+      break;
+    case "map":
+      content = (
+        <div style={{ width: "100%", height: "100%" }}>
+          <Map currentCenter={userPos}>
+            <OverlayView position={userPos} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
+              {CurrentPosition}
+            </OverlayView>
+          </Map>
+        </div>
+      );
+      break;
+  }
+
   return (
     <div className={classes.container}>
       {header}
 
-      <div className={classes.contentContainer}>
-        <Typography variant="h5" color="primary" className={classes.title}>
-          {shopListItems.length !== 0
-            ? "Here are the shops that we found"
-            : "We couldn't find any shops matching those filters."}
-        </Typography>
-
-        <Overlay
-          placeId={currentLocationData?.id || ""}
-          closeOverlay={closeOverlay}
-          locationData={currentLocationData}
-        />
-
-        <Grid container direction="column" wrap="nowrap" className={classes.gridContainer}>
-          {shopListItems}
-        </Grid>
-      </div>
+      <div className={classes.contentContainer}>{content}</div>
     </div>
   );
 };

@@ -20,7 +20,7 @@ export const pushStockUpdate = functions.https.onCall(async (data, context) => {
   if (Object.keys(scores).length === 0) {
     return { success: true };
   }
-  for (const i of Object.values(scores) as number[]) {
+  for (const i of Object.values(scores)) {
     if (!allowedScores.includes(i)) {
       return failReason("Invalid args");
     }

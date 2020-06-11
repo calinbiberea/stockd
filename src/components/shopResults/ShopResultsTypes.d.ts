@@ -5,6 +5,7 @@ export type SortBy = "distance" | "safetyScore";
 export interface ShopResultsProps {
   onBackClick: () => void;
   filters: {
+    editShop: boolean;
     nameFilter: boolean;
     shopName: string;
     products: string[];

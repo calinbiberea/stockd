@@ -52,6 +52,13 @@ const ShopResults: React.FC<ShopResultsProps> = ({
     const getData = async () => {
       const userLocation = await getUserLocation();
       setUserPos({ ...userLocation });
+
+      if (filters.editShop) {
+        // eslint-disable-next-line no-console
+        console.log("Calling places to retrieve shop information.");
+        return;
+      }
+
       const request = {
         products: filters.products.join(","),
         safetyFeatures: filters.safetyFeatures.join(","),

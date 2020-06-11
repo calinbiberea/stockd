@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const FindShop: React.FC<FindShopProps> = ({ setRoute }: FindShopProps) => {
+const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps) => {
   const [shopName, setShopName] = useState("");
   const [maxDistance, setMaxDistance] = useState(50);
   const [selectedPlace, setSelectedPlace] = useState<AutocompletePrediction | null>(null);
@@ -126,7 +126,7 @@ const FindShop: React.FC<FindShopProps> = ({ setRoute }: FindShopProps) => {
     return (
       <ShopResults
         onBackClick={() => setSubmitted(false)}
-        filters={{ nameFilter, shopName, products, safetyFeatures, maxDistance }}
+        filters={{ editShop, nameFilter, shopName, products, safetyFeatures, maxDistance }}
         location={location}
       />
     );

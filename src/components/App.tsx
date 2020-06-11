@@ -26,7 +26,7 @@ export const LoginContext = React.createContext({
   },
 });
 
-export const HomeContext = React.createContext( {
+export const HomeContext = React.createContext({
   setRoute: (route: Route) => {
     /* void */
   },
@@ -45,7 +45,7 @@ const App: React.FC = () => {
       currentScreen = <FilterShops setRoute={setRoute} />;
       break;
     case "findShop":
-      currentScreen = <FindShop setRoute={setRoute} />;
+      currentScreen = <FindShop editShop={false} setRoute={setRoute} />;
       break;
     case "editShop":
       currentScreen = <EditShop setRoute={setRoute} />;
@@ -55,7 +55,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider action={(key) => <CloseSnackbarButton id={key} />}>
-        <HomeContext.Provider value={{setRoute}}>
+        <HomeContext.Provider value={{ setRoute }}>
           <LoginContext.Provider value={{ uid, setUid }}>{currentScreen}</LoginContext.Provider>
         </HomeContext.Provider>
       </SnackbarProvider>

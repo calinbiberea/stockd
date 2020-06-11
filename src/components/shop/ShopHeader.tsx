@@ -3,15 +3,31 @@ import { Typography, makeStyles, createStyles } from "@material-ui/core";
 import { ShopHeaderProps } from "./ShopTypes";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import colors from "../../res/colors";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     backButton: {
+      position: "absolute",
       color: "#FFF",
+      backgroundColor: colors.blue1,
+      [theme.breakpoints.down("xs")]: {
+        marginTop: "50px",
+      },
+      [theme.breakpoints.up("sm")]: {
+        marginTop: "20px",
+      },
     },
     container: {
+      width: "100%",
       height: "100%",
+      display: "flex",
+      flexDirection: "row",
       backgroundColor: theme.palette.primary.main,
+    },
+    imgAndText: {
+      width: "100%",
+      height: "100%",
       display: "flex",
 
       [theme.breakpoints.down("xs")]: {
@@ -53,7 +69,6 @@ const useStyles = makeStyles((theme) =>
     name: {
       color: "#FFF",
       [theme.breakpoints.down("xs")]: {
-        paddingLeft: "5%",
         padding: "3%",
         width: "60%",
         fontSize: "4vw",
@@ -82,29 +97,33 @@ export const ShopHeader: React.FC<ShopHeaderProps> = ({ locationData, noBackButt
       {noBackButton ? null :
         <IconButton
           edge="start"
+          size="small"
           aria-label="back"
           onClick={onBackClick}
+          className={classes.backButton}
         >
           <ArrowBackIcon />
         </IconButton>
       }
-      <div
-        style={{ backgroundImage: `url(${locationData.photo})` }}
-        className={classes.imgContainer}
-      />
+      <div className={classes.imgAndText}>
+        <div
+          style={{ backgroundImage: `url(${locationData.photo})` }}
+          className={classes.imgContainer}
+        />
 
-      <div className={classes.nameRoadContainer}>
-        <Typography noWrap variant="h6" className={classes.name}>
-          {locationData.name}
-        </Typography>
+        <div className={classes.nameRoadContainer}>
+          <Typography noWrap variant="h6" className={classes.name}>
+            {locationData.name}
+          </Typography>
 
-        <div className={classes.divider} />
+          <div className={classes.divider} />
 
-        <Typography noWrap variant="subtitle1" className={classes.road}>
-          {locationData.road}
-        </Typography>
+          <Typography noWrap variant="subtitle1" className={classes.road}>
+            {locationData.road}
+          </Typography>
+        </div>
       </div>
-    </div>
+     </div>
   );
 };
 

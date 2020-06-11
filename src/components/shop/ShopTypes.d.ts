@@ -20,10 +20,7 @@ export interface Stocks {
 }
 
 export interface SafetyFeatures {
-  [name: string]: {
-    icon: string;
-    required: boolean | undefined;
-  };
+  [name: string]: boolean | undefined;
 }
 
 export interface ShopOverviewProps {
@@ -49,10 +46,16 @@ export interface ShopStockProps {
 
 export interface SafetyScoreProps {
   safetyScore: number;
+  size?: "small" | "medium" | "large";
 }
 
 export interface StockItemProps {
   icon: string;
   name: string;
   value: number | undefined;
+}
+
+export interface SafetyItemProps {
+  name: string;
+  value: boolean | undefined;
 }

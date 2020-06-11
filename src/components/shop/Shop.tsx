@@ -42,7 +42,7 @@ const defaultStocks: Stocks = Object.fromEntries(
 );
 
 const defaultSafetyFeatures: SafetyFeatures = Object.fromEntries(
-  Object.values(safetyFeatures).map(({ icon, name }) => [name, { icon, required: undefined }])
+  Object.values(safetyFeatures).map((name) => [name, undefined])
 );
 
 const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) => {
@@ -64,7 +64,7 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
         (snapshot) => {
           const data = snapshot.data();
 
-          if (data?.displayed) {
+          if (data?.displayed?.stocks) {
             const newStocks: Stocks = Object.entries(data.displayed.stocks).reduce(
               (acc: Stocks, [key, value]) => {
                 const { name, icon } = getProduct(key);
@@ -79,24 +79,26 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
               {}
             );
 
+            setStocks((prevState) => ({ ...prevState, ...newStocks }));
+          }
+
+          if (data?.displayed.safetyScore) {
             const newSafetyScore: number = data.displayed.safetyScore;
 
-            const newSafetyFeatures: SafetyFeatures = Object.entries(data.displayed.stocks).reduce(
-              (acc: SafetyFeatures, [key, value]) => {
-                const { name, icon } = getSafetyFeature(key);
-
-                acc[name] = {
-                  icon,
-                  required: value as boolean,
-                };
-
-                return acc;
-              },
-              {}
-            );
-
-            setStocks((prevState) => ({ ...prevState, ...newStocks }));
             setSafetyScore(newSafetyScore);
+          }
+
+          if (data?.displayed?.safetyFeatures) {
+            const newSafetyFeatures: SafetyFeatures = Object.entries(
+              data.displayed.safetyFeatures
+            ).reduce((acc: SafetyFeatures, [key, value]) => {
+              const name = getSafetyFeature(key);
+
+              acc[name] = value as boolean | undefined;
+
+              return acc;
+            }, {});
+
             setSafetyFeatures((prevState) => ({ ...prevState, ...newSafetyFeatures }));
           }
         },

@@ -4,13 +4,19 @@ import milkIcon from "../res/icons/stocks/milk.svg";
 import pastaIcon from "../res/icons/stocks/pasta.svg";
 import medicineIcon from "../res/icons/stocks/medicine.svg";
 import toiletPaperIcon from "../res/icons/stocks/toiletPaper.svg";
-import unknownIcon from "../res/icons/stockValues/unknown.png";
-import fewIcon from "../res/icons/stockValues/few.png";
-import someIcon from "../res/icons/stockValues/some.png";
-import fullIcon from "../res/icons/stockValues/full.png";
-import distancingIcon from "../res/icons/safety/distancing.png";
-import glovesIcon from "../res/icons/safety/gloves.png";
-import maskIcon from "../res/icons/safety/mask.png";
+import unknownStockIcon from "../res/icons/stockValues/unknown.png";
+import fewStockIcon from "../res/icons/stockValues/few.png";
+import someStockIcon from "../res/icons/stockValues/some.png";
+import fullStockIcon from "../res/icons/stockValues/full.png";
+import distancingUnknownIcon from "../res/icons/safety/distancingU.png";
+import distancingNoIcon from "../res/icons/safety/distancingN.png";
+import distancingYesIcon from "../res/icons/safety/distancingY.png";
+import glovesUnknownIcon from "../res/icons/safety/glovesU.png";
+import glovesNoIcon from "../res/icons/safety/glovesN.png";
+import glovesYesIcon from "../res/icons/safety/glovesY.png";
+import masksUnknownIcon from "../res/icons/safety/masksU.png";
+import masksNoIcon from "../res/icons/safety/masksN.png";
+import masksYesIcon from "../res/icons/safety/masksY.png";
 
 // <editor-fold desc="Products">
 
@@ -53,16 +59,16 @@ export const getProduct = (key: string): Product =>
 
 export const getIconByStockValue = (value: number | undefined): string => {
   if (value === undefined) {
-    return unknownIcon;
+    return unknownStockIcon;
   } else if (value === 0) {
-    return fewIcon;
+    return fewStockIcon;
   } else if (value === 50) {
-    return someIcon;
+    return someStockIcon;
   } else if (value === 100) {
-    return fullIcon;
+    return fullStockIcon;
   } else {
     console.error(`Unknown value ${value} in getIconByStockValue.`);
-    return unknownIcon;
+    return unknownStockIcon;
   }
 };
 
@@ -70,29 +76,59 @@ export const getIconByStockValue = (value: number | undefined): string => {
 
 // <editor-fold desc="Safety Features">
 
-interface SafetyFeature {
-  name: string;
-  icon: string;
-}
-
 export const safetyFeatures = {
-  masks: {
-    name: "Masks",
-    icon: maskIcon,
-  },
-  gloves: {
-    name: "Gloves",
-    icon: glovesIcon,
-  },
-  socialdistancing: {
-    name: "Social Distancing",
-    icon: distancingIcon,
-  },
+  masks: "Masks",
+  gloves: "Gloves",
+  socialdistancing: "Social Distancing",
 } as const;
 
 export type SafetyFeatureId = keyof typeof safetyFeatures;
 
-export const getSafetyFeature = (key: string): SafetyFeature =>
-  safetyFeatures[key as SafetyFeatureId] || { name: key, icon: distancingIcon };
+export const getSafetyFeature = (key: string): string =>
+  safetyFeatures[key as SafetyFeatureId] || key;
+
+export const getIconBySafetyNameAndValue = (name: string, value: boolean | undefined): string => {
+  switch (name) {
+    case "Masks":
+      switch (value) {
+        case undefined:
+          return masksUnknownIcon;
+        case false:
+          return masksNoIcon;
+        case true:
+          return masksYesIcon;
+        default:
+          console.error(`Unknown value ${value} in getIconBySafetyNameAndValue.`);
+          return masksUnknownIcon;
+      }
+    case "Gloves":
+      switch (value) {
+        case undefined:
+          return glovesUnknownIcon;
+        case false:
+          return glovesNoIcon;
+        case true:
+          return glovesYesIcon;
+        default:
+          console.error(`Unknown value ${value} in getIconBySafetyNameAndValue.`);
+          return glovesUnknownIcon;
+      }
+    case "Social Distancing":
+      switch (value) {
+        case undefined:
+          return distancingUnknownIcon;
+        case false:
+          return distancingNoIcon;
+        case true:
+          return distancingYesIcon;
+        default:
+          console.error(`Unknown value ${value} in getIconBySafetyNameAndValue.`);
+          return distancingUnknownIcon;
+      }
+    default:
+      console.error(`Unknown name ${name} in getIconBySafetyNameAndValue.`);
+      return distancingUnknownIcon;
+  }
+};
 
 // </editor-fold>

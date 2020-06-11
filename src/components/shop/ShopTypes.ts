@@ -24,9 +24,21 @@ export interface ShopOverviewProps {
   locationData: LocationData;
 }
 
+export interface StocksOverviewProps {
+  stocks: Stocks;
+}
+
+export interface SafetyOverviewProps {
+  safetyRating: number;
+}
+
 export interface ShopStockProps {
   stocks: Stocks;
   locationData: LocationData;
+}
+
+export interface SafetyScoreProps {
+  safetyScore: number;
 }
 
 export interface StockItemProps {

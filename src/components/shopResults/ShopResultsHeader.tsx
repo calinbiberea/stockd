@@ -5,21 +5,28 @@ import {
   Card,
   createStyles,
   Divider,
+  IconButton,
   makeStyles,
+  Popover,
+  Theme,
   Typography,
+  useMediaQuery,
 } from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
 import SortByMenu from "./SortByMenu";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { ShopResultsHeaderProps } from "./ShopResultsTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    controlsWrapper: {
+      marginLeft: "auto",
+    },
     controlsContainer: {
       display: "flex",
       flexDirection: "row",
       padding: "0 10px",
       alignItems: "center",
-      marginLeft: "auto",
     },
     controlsDivider: {
       margin: `0 ${theme.spacing(2)}px`,
@@ -43,33 +50,67 @@ const ShopResultsHeader: React.FC<ShopResultsHeaderProps> = ({
   setView,
   setSortBy,
 }: ShopResultsHeaderProps) => {
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const menuEl = useRef(null);
   const classes = useStyles();
+
+  const isSmallScreen = !useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
+
+  const controls = (
+    <Card className={classes.controlsContainer}>
+      <Typography component="div">
+        <ButtonGroup variant="contained" color="primary" size="small">
+          <Button disabled={view === "list"} onClick={() => setView("list")}>
+            List View
+          </Button>
+          <Button disabled={view === "map"} onClick={() => setView("map")}>
+            Map View
+          </Button>
+        </ButtonGroup>
+      </Typography>
+      <Divider
+        variant="fullWidth"
+        orientation="vertical"
+        flexItem
+        className={classes.controlsDivider}
+        style={{ margin: "0 10px" }}
+      />
+      <div className={classes.sortByContainer}>
+        <div className={classes.sortByWrapper}>
+          <SortByMenu setSortBy={setSortBy} className={classes.sortBy} />
+        </div>
+      </div>
+    </Card>
+  );
+
   return (
     <Header onBackClick={onBackClick}>
-      <Card className={classes.controlsContainer}>
-        <Typography component="div">
-          <ButtonGroup variant="contained" color="primary" size="small">
-            <Button disabled={view === "list"} onClick={() => setView("list")}>
-              List View
-            </Button>
-            <Button disabled={view === "map"} onClick={() => setView("map")}>
-              Map View
-            </Button>
-          </ButtonGroup>
-        </Typography>
-        <Divider
-          variant="fullWidth"
-          orientation="vertical"
-          flexItem
-          className={classes.controlsDivider}
-          style={{ margin: "0 10px" }}
-        />
-        <div className={classes.sortByContainer}>
-          <div className={classes.sortByWrapper}>
-            <SortByMenu setSortBy={setSortBy} className={classes.sortBy} />
-          </div>
-        </div>
-      </Card>
+      <div className={classes.controlsWrapper}>
+        {isSmallScreen ? (
+          <>
+            <IconButton ref={menuEl} onClick={() => setIsPopoverOpen(!isPopoverOpen)}>
+              <MenuIcon style={{ color: "#FFFFFF" }} />
+            </IconButton>
+            <Popover
+              open={isPopoverOpen}
+              anchorEl={menuEl.current}
+              onClose={() => setIsPopoverOpen(false)}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              {controls}
+            </Popover>
+          </>
+        ) : (
+          controls
+        )}
+      </div>
     </Header>
   );
 };

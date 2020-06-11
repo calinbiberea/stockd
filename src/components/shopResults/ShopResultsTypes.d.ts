@@ -1,6 +1,6 @@
 import { LocationData } from "../../util/googleMaps";
 
-export type SortBy = "distance" | "safetyRating";
+export type SortBy = "distance" | "safetyScore";
 
 export interface ShopResultsProps {
   onBackClick: () => void;

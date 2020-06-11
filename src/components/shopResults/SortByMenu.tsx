@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const options = ["Distance", "Safety Rating"];
+const options = ["Distance", "Safety Score"];
 
 const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy }: SortByMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -49,7 +49,7 @@ const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy }: SortByMenuProps) =
         setSortBy("distance");
         break;
       case 1:
-        setSortBy("safetyRating");
+        setSortBy("safetyScore");
         break;
       default:
         console.error("Invalid index in SortByMenu");

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, CircularProgress, makeStyles, createStyles, Fade } from "@material-ui/core";
+import { Box, CircularProgress, Fade, makeStyles, createStyles } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import Overlay from "../overlay/Overlay";
 import { SortBy, DBShopData, FindShopsResult, ShopResultsProps, View } from "./ShopResultsTypes";

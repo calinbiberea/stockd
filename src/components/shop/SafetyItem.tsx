@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Typography, makeStyles, createStyles } from "@material-ui/core";
-import { StockItemProps } from "./ShopTypes";
-import { getIconByStockValue } from "../../util/productsAndSafetyFeatures";
+import { SafetyItemProps } from "./ShopTypes";
+import { getIconBySafetyNameAndValue } from "../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -26,20 +26,18 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const StockItem: React.FC<StockItemProps> = ({ icon, name, value }: StockItemProps) => {
+const SafetyItem: React.FC<SafetyItemProps> = ({ name, value }: SafetyItemProps) => {
   const classes = useStyles();
 
-  const stockValueIcon = getIconByStockValue(value);
+  const safetyValueIcon = getIconBySafetyNameAndValue(name, value);
 
   return (
     <Card className={classes.container}>
-      <img src={icon} alt="Stock Item" className={classes.icon} />
-
       <Typography variant="h5">{name}</Typography>
 
-      <img src={stockValueIcon} alt="Stock Item value" className={classes.icon} />
+      <img src={safetyValueIcon} alt="Safety Item value" className={classes.icon} />
     </Card>
   );
 };
 
-export default StockItem;
+export default SafetyItem;

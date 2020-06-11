@@ -3,15 +3,14 @@ import { Card, makeStyles, createStyles } from "@material-ui/core";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
 import ShopStock from "./ShopStock";
-import { Stocks, ShopProps } from "./ShopTypes";
+import { Stocks, ShopProps, SafetyFeatures } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
-import { getProduct } from "../../util/productsAndSafetyFeatures";
-import breadIcon from "../../res/icons/bread.svg";
-import eggsIcon from "../../res/icons/eggs.svg";
-import milkIcon from "../../res/icons/milk.svg";
-import pastaIcon from "../../res/icons/pasta.svg";
-import medicineIcon from "../../res/icons/medicine.svg";
-import toiletPaperIcon from "../../res/icons/toiletPaper.svg";
+import {
+  getProduct,
+  getSafetyFeature,
+  products,
+  safetyFeatures,
+} from "../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -38,35 +37,18 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const defaultStocks: Stocks = {
-  Bread: {
-    icon: breadIcon,
-    stock: -1,
-  },
-  Eggs: {
-    icon: eggsIcon,
-    stock: -1,
-  },
-  Milk: {
-    icon: milkIcon,
-    stock: -1,
-  },
-  Pasta: {
-    icon: pastaIcon,
-    stock: -1,
-  },
-  Medicine: {
-    icon: medicineIcon,
-    stock: -1,
-  },
-  "Toilet Paper": {
-    icon: toiletPaperIcon,
-    stock: -1,
-  },
-};
+const defaultStocks: Stocks = Object.fromEntries(
+  Object.values(products).map(({ icon, name }) => [name, { icon, value: undefined }])
+);
+
+const defaultSafetyFeatures: SafetyFeatures = Object.fromEntries(
+  Object.values(safetyFeatures).map((name) => [name, undefined])
+);
 
 const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedScreen, onBackClick }: ShopProps) => {
   const [stocks, setStocks] = useState(defaultStocks);
+  const [safetyScore, setSafetyScore] = useState(0);
+  const [safetyFeatures, setSafetyFeatures] = useState(defaultSafetyFeatures);
 
   const classes = useStyles();
 
@@ -82,14 +64,14 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedSc
         (snapshot) => {
           const data = snapshot.data();
 
-          if (data?.displayed) {
+          if (data?.displayed?.stocks) {
             const newStocks: Stocks = Object.entries(data.displayed.stocks).reduce(
               (acc: Stocks, [key, value]) => {
                 const { name, icon } = getProduct(key);
 
                 acc[name] = {
                   icon,
-                  stock: value as number,
+                  value: value as number,
                 };
 
                 return acc;
@@ -99,6 +81,26 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedSc
 
             setStocks((prevState) => ({ ...prevState, ...newStocks }));
           }
+
+          if (data?.displayed.safetyScore) {
+            const newSafetyScore: number = data.displayed.safetyScore;
+
+            setSafetyScore(newSafetyScore);
+          }
+
+          if (data?.displayed?.safetyFeatures) {
+            const newSafetyFeatures: SafetyFeatures = Object.entries(
+              data.displayed.safetyFeatures
+            ).reduce((acc: SafetyFeatures, [key, value]) => {
+              const name = getSafetyFeature(key);
+
+              acc[name] = value as boolean | undefined;
+
+              return acc;
+            }, {});
+
+            setSafetyFeatures((prevState) => ({ ...prevState, ...newSafetyFeatures }));
+          }
         },
         (err) => console.error(`Encountered error: ${err}`)
       );
@@ -106,9 +108,16 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedSc
 
   let shopScreen: React.ReactNode;
   if (selectedScreen === "overview") {
-    shopScreen = <ShopOverview stocks={stocks} locationData={locationData} />;
+    shopScreen = (
+      <ShopOverview
+        locationData={locationData}
+        stocks={stocks}
+        safetyScore={safetyScore}
+        safetyFeatures={safetyFeatures}
+      />
+    );
   } else if (selectedScreen === "stock") {
-    shopScreen = <ShopStock stocks={stocks} locationData={locationData} />;
+    shopScreen = <ShopStock locationData={locationData} stocks={stocks} />;
   }
 
   return (

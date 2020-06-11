@@ -74,3 +74,22 @@ export const geocodeByPlaceId = (placeId: string): Promise<google.maps.LatLng> =
       }
     });
   });
+
+export const getPlacesMatchingNameInRadius = (
+  shopName: string,
+  location: { lat: number; lng: number },
+  radius: number
+): Promise<PlaceResult[] | null> => {
+  const latLng = new googleClient.maps.LatLng(location.lat, location.lng);
+  return new Promise((resolve) =>
+    placesService.nearbySearch({ location: latLng, radius }, (places, status) => {
+      if (status === googleClient.maps.places.PlacesServiceStatus.OK) {
+        resolve(null);
+      } else {
+        console.error(`Place details request failed with ${status}\n\n${places}`);
+
+        resolve(null);
+      }
+    })
+  );
+};

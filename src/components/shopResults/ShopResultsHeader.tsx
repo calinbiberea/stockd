@@ -13,6 +13,8 @@ import {
   useMediaQuery,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import MapIcon from "@material-ui/icons/Map";
+import ListIcon from "@material-ui/icons/List";
 import SortByMenu from "./SortByMenu";
 import React, { useRef, useState } from "react";
 import { ShopResultsHeaderProps } from "./ShopResultsTypes";
@@ -56,17 +58,31 @@ const ShopResultsHeader: React.FC<ShopResultsHeaderProps> = ({
 
   const isSmallScreen = !useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
 
+  const viewButton = (
+    <Button
+      color="primary"
+      variant="contained"
+      size="small"
+      style={{ width: "150px" }}
+      onClick={() => setView({ map: "list", list: "map" }[view])}
+    >
+      {{ list: <MapIcon />, map: <ListIcon /> }[view]}
+      &nbsp; Swap to {{ map: "list", list: "map" }[view]}
+    </Button>
+  );
+
   const controls = (
     <Card className={classes.controlsContainer}>
       <Typography component="div">
-        <ButtonGroup variant="contained" color="primary" size="small">
-          <Button disabled={view === "list"} onClick={() => setView("list")}>
-            List View
-          </Button>
-          <Button disabled={view === "map"} onClick={() => setView("map")}>
-            Map View
-          </Button>
-        </ButtonGroup>
+        {/*<ButtonGroup variant="contained" color="primary" size="small">*/}
+        {/*  <Button disabled={view === "list"} onClick={() => setView("list")}>*/}
+        {/*    List View*/}
+        {/*  </Button>*/}
+        {/*  <Button disabled={view === "map"} onClick={() => setView("map")}>*/}
+        {/*    Map View*/}
+        {/*  </Button>*/}
+        {/*</ButtonGroup>*/}
+        {viewButton}
       </Typography>
       <Divider
         variant="fullWidth"

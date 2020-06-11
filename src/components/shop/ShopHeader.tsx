@@ -1,3 +1,4 @@
+import React from "react";
 import { Typography, makeStyles, createStyles } from "@material-ui/core";
 import { ShopHeaderProps } from "./ShopTypes";
 import IconButton from "@material-ui/core/IconButton";

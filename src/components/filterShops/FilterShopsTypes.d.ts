@@ -1,5 +1,3 @@
-import { Product } from "../../util/productsAndSafetyFeatures";
-
 export interface FilterShopsProps {
   setRoute: (Route) => void;
 }
@@ -15,7 +13,7 @@ export interface LocationSearchProps {
 export interface SelectorPanelProps {
   title: string;
   selected: { [p: string]: boolean };
-  items: { [p: string]: Product };
+  items: { [p: string]: string };
   onSelect: (value: string) => void;
   onReset: () => void;
 }

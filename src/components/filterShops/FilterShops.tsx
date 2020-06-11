@@ -188,7 +188,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
         <SelectorPanel
           title="Products"
           selected={selectedProducts}
-          items={products}
+          items={Object.fromEntries(Object.entries(products).map(([key, { name }]) => [key, name]))}
           onSelect={(p) => toggleProduct(p as ProductId)}
           onReset={() => setSelectedProducts(defaultSelectedProducts)}
         />

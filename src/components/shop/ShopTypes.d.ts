@@ -15,24 +15,22 @@ export interface ShopHeaderProps {
 export interface Stocks {
   [name: string]: {
     icon: string;
-    stock: number;
+    value: number | undefined;
   };
 }
 
 export interface SafetyFeatures {
   [name: string]: {
     icon: string;
-    stock: number;
+    required: boolean | undefined;
   };
 }
 
 export interface ShopOverviewProps {
-  stocks: Stocks;
   locationData: LocationData;
-  safety: {
-    safetyScore: number;
-    safetyFeatures: SafetyFeatures;
-  };
+  stocks: Stocks;
+  safetyScore: number;
+  safetyFeatures: SafetyFeatures;
 }
 
 export interface StocksOverviewProps {
@@ -40,15 +38,13 @@ export interface StocksOverviewProps {
 }
 
 export interface SafetyOverviewProps {
-  safety: {
-    safetyScore: number;
-    safetyFeatures: SafetyFeatures;
-  };
+  safetyScore: number;
+  safetyFeatures: SafetyFeatures;
 }
 
 export interface ShopStockProps {
-  stocks: Stocks;
   locationData: LocationData;
+  stocks: Stocks;
 }
 
 export interface SafetyScoreProps {
@@ -58,5 +54,5 @@ export interface SafetyScoreProps {
 export interface StockItemProps {
   icon: string;
   name: string;
-  stock: number;
+  value: number | undefined;
 }

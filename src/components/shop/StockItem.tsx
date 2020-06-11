@@ -1,10 +1,7 @@
 import React from "react";
 import { Card, Typography, makeStyles, createStyles } from "@material-ui/core";
 import { StockItemProps } from "./ShopTypes";
-import unknown from "../../res/stock/unknown.png";
-import few from "../../res/stock/few.png";
-import some from "../../res/stock/some.png";
-import full from "../../res/stock/full.png";
+import { getIconByStockValue } from "../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -29,20 +26,10 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const getIconByNumber = (stock: number): string => {
-  if (stock === -1) {
-    return unknown;
-  } else if (stock === 0) {
-    return few;
-  } else if (stock === 50) {
-    return some;
-  } else return full;
-};
-
-const StockItem: React.FC<StockItemProps> = ({ icon, name, stock }: StockItemProps) => {
+const StockItem: React.FC<StockItemProps> = ({ icon, name, value }: StockItemProps) => {
   const classes = useStyles();
 
-  const stockValueIcon = getIconByNumber(stock);
+  const stockValueIcon = getIconByStockValue(value);
 
   return (
     <Card className={classes.container}>

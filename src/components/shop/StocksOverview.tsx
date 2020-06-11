@@ -14,9 +14,9 @@ const useStyles = makeStyles(() =>
 const StocksOverview: React.FC<StocksOverviewProps> = ({ stocks }: StocksOverviewProps) => {
   const classes = useStyles();
 
-  const stockItems = Object.entries(stocks).map(([name, { icon, stock }]) => (
+  const stockItems = Object.entries(stocks).map(([name, { icon, value }]) => (
     <Grid item xs={12} md={6} xl={4} key={name}>
-      <StockItem icon={icon} name={name} stock={stock} />
+      <StockItem icon={icon} name={name} value={value} />
     </Grid>
   ));
 

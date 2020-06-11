@@ -140,16 +140,10 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
 
     const response = ((await updateStock(data)).data as unknown) as EditShopResult;
 
-    if (!response.success) {
-      enqueueSnackbar("Failed to update. Reason: " + response.reason, { variant: "error" });
-      return;
-    }
-
     if (response.success) {
-      enqueueSnackbar("Successfully updated the shop information.", {
-        variant: "success",
-      });
-      return;
+      enqueueSnackbar("Successfully updated the shop information.", { variant: "success" });
+    } else {
+      enqueueSnackbar(`Failed to update. Reason: ${response.reason}`, { variant: "error" });
     }
   };
 

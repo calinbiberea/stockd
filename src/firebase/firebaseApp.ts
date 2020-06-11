@@ -19,7 +19,7 @@ export const setupFirebase = (): void => {
   db = firebaseApp.firestore();
   functions = firebaseApp.functions();
   findShops = functions.httpsCallable("findShops");
-  updateStock = functions.httpsCallable("pushUpdateStock");
+  updateStock = functions.httpsCallable("pushStockUpdate");
   authProviders = {
     google: new firebase.auth.GoogleAuthProvider(),
     facebook: new firebase.auth.FacebookAuthProvider(),

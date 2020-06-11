@@ -1,48 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  CircularProgress,
-  Grid,
-  Typography,
-  makeStyles,
-  createStyles,
-} from "@material-ui/core";
+import { Box, CircularProgress, makeStyles, createStyles, Fade } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import ShopListItem from "./ShopListItem";
-import SortByMenu from "./SortByMenu";
-import Header from "../header/Header";
 import Overlay from "../overlay/Overlay";
-import { SortBy, DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
+import { SortBy, DBShopData, FindShopsResult, ShopResultsProps, View } from "./ShopResultsTypes";
 import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
+import ShopList from "./ShopList";
+import ShopMap from "./ShopMap";
+import ShopResultsHeader from "./ShopResultsHeader";
 
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
       width: "100vw",
       height: "100vh",
-    },
-    sortContainer: {
-      marginLeft: "auto",
-    },
-    contentContainer: {
-      width: "100%",
-      height: "93%",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    title: {
-      margin: "30px",
-    },
-    gridContainer: {
-      height: "100%",
-      width: "100%",
-      alignItems: "center",
-      overflow: "auto",
-    },
-    gridItem: {
-      margin: "16px 0",
     },
     circularProgressContainer: {
       position: "absolute",
@@ -53,19 +24,16 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const compareByDistance = (a: DBShopData, b: DBShopData) => a.distance - b.distance;
-
-const compareBySafetyRating = (a: DBShopData, b: DBShopData) => {
-  const ratingA = ((a.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
-  const ratingB = ((b.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
-
-  return ratingB - ratingA;
-};
-
-const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: ShopListProps) => {
+const ShopResults: React.FC<ShopResultsProps> = ({
+  onBackClick,
+  filters,
+  location,
+}: ShopResultsProps) => {
   const [shopList, setShopList] = useState<DBShopData[] | undefined>(undefined);
   const [currentLocationData, setCurrentLocationData] = useState<LocationData | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>("distance");
+  const [view, setView] = useState<View>("list");
+  const [userPos, setUserPos] = useState({ lat: 0, lng: 0 });
 
   const classes = useStyles();
 
@@ -83,6 +51,7 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
 
     const getData = async () => {
       const userLocation = await getUserLocation();
+      setUserPos({ ...userLocation });
       const request = {
         products: filters.products.join(","),
         safetyFeatures: filters.safetyFeatures.join(","),
@@ -140,55 +109,31 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
   const closeOverlay = () => setCurrentLocationData(null);
   const onGetDetailsClick = (locationData: LocationData) => setCurrentLocationData(locationData);
 
-  let compareFunc: (a: DBShopData, b: DBShopData) => number;
-  switch (sortBy) {
-    case "distance":
-      compareFunc = compareByDistance;
-      break;
-    case "safetyRating":
-      compareFunc = compareBySafetyRating;
-      break;
-  }
-
-  const shopListItems = shopList
-    .slice()
-    .sort(compareFunc)
-    .map((shop) => (
-      <Grid item key={shop.id} className={classes.gridItem}>
-        <ShopListItem
-          shopData={shop}
-          startTime={"9:00"}
-          endTime={"21:00"}
-          onGetDetailsClick={onGetDetailsClick}
-        />
-      </Grid>
-    ));
-
   return (
     <div className={classes.container}>
-      <Header onBackClick={onBackClick}>
-        <SortByMenu setSortBy={setSortBy} className={classes.sortContainer} />
-      </Header>
-
-      <div className={classes.contentContainer}>
-        <Typography variant="h5" color="primary" className={classes.title}>
-          {shopListItems.length !== 0
-            ? "Here are the shops that we found"
-            : "We couldn't find any shops matching those filters."}
-        </Typography>
-
-        <Overlay
-          placeId={currentLocationData?.id || ""}
-          closeOverlay={closeOverlay}
-          locationData={currentLocationData}
-        />
-
-        <Grid container direction="column" wrap="nowrap" className={classes.gridContainer}>
-          {shopListItems}
-        </Grid>
-      </div>
+      <ShopResultsHeader
+        onBackClick={onBackClick}
+        view={view}
+        setView={setView}
+        setSortBy={setSortBy}
+      />
+      <Overlay
+        placeId={currentLocationData?.id || ""}
+        closeOverlay={closeOverlay}
+        locationData={currentLocationData}
+      />
+      <Fade in={view === "list"}>
+        <div>
+          <ShopList shopList={shopList} sortBy={sortBy} onShopSelect={onGetDetailsClick} />
+        </div>
+      </Fade>
+      <Fade in={view === "map"}>
+        <div>
+          <ShopMap shopList={shopList} onShopSelect={onGetDetailsClick} userPos={userPos} />
+        </div>
+      </Fade>
     </div>
   );
 };
 
-export default ShopList;
+export default ShopResults;

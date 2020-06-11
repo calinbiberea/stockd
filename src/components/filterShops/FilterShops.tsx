@@ -18,7 +18,7 @@ import { FilterShopsProps } from "./FilterShopsTypes";
 import SelectorPanel from "./SelectorPanel";
 import Header from "../header/Header";
 import LocationSearch from "./LocationSearch";
-import ShopList from "../shopList/ShopList";
+import ShopResults from "../shopResults/ShopResults";
 import {
   products,
   safetyFeatures,
@@ -166,7 +166,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
     const shopName = "";
 
     return (
-      <ShopList
+      <ShopResults
         onBackClick={() => setSubmitted(false)}
         filters={{ nameFilter, shopName, products, safetyFeatures, maxDistance }}
         location={location}

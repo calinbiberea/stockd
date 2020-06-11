@@ -6,6 +6,7 @@ import FilterShops from "./filterShops/FilterShops";
 import FindShop from "./findShop/FindShop";
 import EditShop from "./editShop/EditShop";
 import colors from "../res/colors";
+import CloseSnackbarButton from "./CloseSnackbarButton";
 
 const theme = createMuiTheme({
   palette: {
@@ -47,7 +48,7 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider>
+      <SnackbarProvider action={(key) => <CloseSnackbarButton id={key} />}>
         <LoginContext.Provider value={{ uid, setUid }}>{currentScreen}</LoginContext.Provider>
       </SnackbarProvider>
     </ThemeProvider>

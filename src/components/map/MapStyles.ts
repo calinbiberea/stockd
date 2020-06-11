@@ -1,6 +1,6 @@
 import colors from "../../res/colors";
 
-const mapStyles: google.maps.MapTypeStyle[] = [
+const mapStyles = (showMarkers: boolean): google.maps.MapTypeStyle[] => [
   {
     featureType: "all",
     elementType: "geometry",
@@ -39,7 +39,7 @@ const mapStyles: google.maps.MapTypeStyle[] = [
     featureType: "poi.business",
     stylers: [
       {
-        visibility: "on",
+        visibility: showMarkers ? "on" : "off",
       },
     ],
   },

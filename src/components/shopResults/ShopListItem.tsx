@@ -4,7 +4,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import StarIcon from "@material-ui/icons/Star";
 import Rating from "@material-ui/lab/Rating";
 import ShopHeader from "../shop/ShopHeader";
-import { ShopListItemProps } from "./ShopListTypes";
+import { ShopListItemProps } from "./ShopResultsTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

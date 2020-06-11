@@ -12,6 +12,13 @@ export interface ShopHeaderProps {
   locationData: LocationData;
 }
 
+export interface SafetyFeatures {
+  [name: string]: {
+    icon: string;
+    stock: number;
+  };
+}
+
 export interface Stocks {
   [name: string]: {
     icon: string;
@@ -22,6 +29,10 @@ export interface Stocks {
 export interface ShopOverviewProps {
   stocks: Stocks;
   locationData: LocationData;
+  safety: {
+    safetyRating: number;
+    safetyFeatures: SafetyFeatures;
+  };
 }
 
 export interface StocksOverviewProps {
@@ -29,7 +40,10 @@ export interface StocksOverviewProps {
 }
 
 export interface SafetyOverviewProps {
-  safetyRating: number;
+  safety: {
+    safetyRating: number;
+    safetyFeatures: SafetyFeatures;
+  };
 }
 
 export interface ShopStockProps {

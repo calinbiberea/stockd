@@ -3,9 +3,9 @@ import { Card, makeStyles, createStyles } from "@material-ui/core";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
 import ShopStock from "./ShopStock";
-import { Stocks, ShopProps } from "./ShopTypes";
+import { Stocks, ShopProps, SafetyFeatures } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
-import { getProduct } from "../../util/productsAndSafetyFeatures";
+import { getProduct, getSafetyFeature } from "../../util/productsAndSafetyFeatures";
 import breadIcon from "../../res/icons/bread.svg";
 import eggsIcon from "../../res/icons/eggs.svg";
 import milkIcon from "../../res/icons/milk.svg";
@@ -65,8 +65,14 @@ const defaultStocks: Stocks = {
   },
 };
 
+const defaultSafety = {
+  safetyRating: 0,
+  safetyFeatures: {} as SafetyFeatures,
+};
+
 const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) => {
   const [stocks, setStocks] = useState(defaultStocks);
+  const [safety, setSafety] = useState(defaultSafety);
 
   const classes = useStyles();
 
@@ -97,7 +103,29 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
               {}
             );
 
+            const safetyFeatures: SafetyFeatures = Object.entries(data.displayed.stocks).reduce(
+              (acc: Stocks, [key, value]) => {
+                const { name, icon } = getSafetyFeature(key);
+
+                acc[name] = {
+                  icon,
+                  stock: value as number,
+                };
+
+                return acc;
+              },
+              {}
+            );
+
+            const safetyRating: number = data.displayed.safetyScore;
+
+            const newSafety = {
+              safetyRating,
+              safetyFeatures,
+            };
+
             setStocks((prevState) => ({ ...prevState, ...newStocks }));
+            setSafety((prevState) => ({ ...prevState, ...newSafety }));
           }
         },
         (err) => console.error(`Encountered error: ${err}`)
@@ -106,7 +134,7 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
 
   let shopScreen: React.ReactNode;
   if (selectedScreen === "overview") {
-    shopScreen = <ShopOverview stocks={stocks} locationData={locationData} />;
+    shopScreen = <ShopOverview stocks={stocks} safety={safety} locationData={locationData} />;
   } else if (selectedScreen === "stock") {
     shopScreen = <ShopStock stocks={stocks} locationData={locationData} />;
   }

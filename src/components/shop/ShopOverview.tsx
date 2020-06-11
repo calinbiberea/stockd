@@ -19,7 +19,11 @@ const useStyles = makeStyles(() =>
 
 const tabNames = ["Stocks", "Safety"];
 
-const ShopOverview: React.FC<ShopOverviewProps> = ({ stocks, locationData }: ShopOverviewProps) => {
+const ShopOverview: React.FC<ShopOverviewProps> = ({
+  stocks,
+  locationData,
+  safety,
+}: ShopOverviewProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const classes = useStyles();
@@ -29,8 +33,7 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({ stocks, locationData }: Sho
       case 0:
         return <StocksOverview stocks={stocks} />;
       case 1:
-        /* TODO: get safetyRating as prop to ShopOverview */
-        return <SafetyOverview safetyRating={3.5} />;
+        return <SafetyOverview safety={safety} />;
       default:
         console.error("Invalid index in ShopOverview");
         return <StocksOverview stocks={stocks} />;

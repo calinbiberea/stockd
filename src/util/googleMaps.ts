@@ -75,6 +75,7 @@ export const geocodeByPlaceId = (placeId: string): Promise<google.maps.LatLng> =
     });
   });
 
+// Used for retrieving places
 export const getPlacesMatchingNameInRadius = (
   shopName: string,
   location: { lat: number; lng: number },

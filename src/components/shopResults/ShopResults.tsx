@@ -1,68 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  makeStyles,
-  createStyles,
-  Card,
-  Divider,
-  ButtonGroup,
-  Button,
-  Fade,
-} from "@material-ui/core";
+import { Box, CircularProgress, makeStyles, createStyles, Fade } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import SortByMenu from "./SortByMenu";
-import Header from "../header/Header";
 import Overlay from "../overlay/Overlay";
-import { SortBy, DBShopData, FindShopsResult, ShopResultsProps } from "./ShopResultsTypes";
+import { SortBy, DBShopData, FindShopsResult, ShopResultsProps, View } from "./ShopResultsTypes";
 import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
 import ShopList from "./ShopList";
 import ShopMap from "./ShopMap";
+import ShopResultsHeader from "./ShopResultsHeader";
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     container: {
       width: "100vw",
       height: "100vh",
-    },
-    controlsContainer: {
-      display: "flex",
-      flexDirection: "row",
-      padding: "0 10px",
-      alignItems: "center",
-      marginLeft: "auto",
-    },
-    controlsDivider: {
-      margin: `0 ${theme.spacing(2)}px`,
-    },
-    sortByContainer: {
-      minWidth: "96px",
-      textAlign: "center",
-    },
-    sortByWrapper: {
-      display: "inline-block",
-    },
-    sortBy: {
-      marginLeft: "auto",
-    },
-    contentContainer: {
-      width: "100%",
-      height: "93%",
-      position: "absolute",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    gridContainer: {
-      height: "100%",
-      width: "100%",
-      alignItems: "center",
-      overflow: "auto",
-    },
-    gridItem: {
-      margin: "16px 0",
     },
     circularProgressContainer: {
       position: "absolute",
@@ -81,7 +32,7 @@ const ShopResults: React.FC<ShopResultsProps> = ({
   const [shopList, setShopList] = useState<DBShopData[] | undefined>(undefined);
   const [currentLocationData, setCurrentLocationData] = useState<LocationData | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>("distance");
-  const [view, setView] = useState<"list" | "map">("list");
+  const [view, setView] = useState<View>("list");
   const [userPos, setUserPos] = useState({ lat: 0, lng: 0 });
 
   const classes = useStyles();
@@ -158,38 +109,14 @@ const ShopResults: React.FC<ShopResultsProps> = ({
   const closeOverlay = () => setCurrentLocationData(null);
   const onGetDetailsClick = (locationData: LocationData) => setCurrentLocationData(locationData);
 
-  const header = (
-    <Header onBackClick={onBackClick}>
-      <Card className={classes.controlsContainer}>
-        <Typography component="div">
-          <ButtonGroup variant="contained" color="primary" size="small">
-            <Button disabled={view === "list"} onClick={() => setView("list")}>
-              List View
-            </Button>
-            <Button disabled={view === "map"} onClick={() => setView("map")}>
-              Map View
-            </Button>
-          </ButtonGroup>
-        </Typography>
-        <Divider
-          variant="fullWidth"
-          orientation="vertical"
-          flexItem
-          className={classes.controlsDivider}
-          style={{ margin: "0 10px" }}
-        />
-        <div className={classes.sortByContainer}>
-          <div className={classes.sortByWrapper}>
-            <SortByMenu setSortBy={setSortBy} className={classes.sortBy} />
-          </div>
-        </div>
-      </Card>
-    </Header>
-  );
-
   return (
     <div className={classes.container}>
-      {header}
+      <ShopResultsHeader
+        onBackClick={onBackClick}
+        view={view}
+        setView={setView}
+        setSortBy={setSortBy}
+      />
       <Overlay
         placeId={currentLocationData?.id || ""}
         closeOverlay={closeOverlay}
@@ -205,7 +132,6 @@ const ShopResults: React.FC<ShopResultsProps> = ({
           <ShopMap shopList={shopList} onShopSelect={onGetDetailsClick} userPos={userPos} />
         </div>
       </Fade>
-      {/*{content}*/}
     </div>
   );
 };

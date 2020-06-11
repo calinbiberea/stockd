@@ -14,6 +14,15 @@ export interface ShopResultsProps {
   location: { geolocated: true; lat: number; lng: number } | { geolocated: false; placeId: string };
 }
 
+export type View = "list" | "map";
+
+export interface ShopResultsHeaderProps {
+  onBackClick: () => void;
+  view: View;
+  setView: (View) => void;
+  setSortBy: (SortBy) => void;
+}
+
 export interface ShopListProps {
   shopList: DBShopData[];
   sortBy: SortBy;

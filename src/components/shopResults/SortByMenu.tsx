@@ -8,7 +8,6 @@ import {
   makeStyles,
   createStyles,
 } from "@material-ui/core";
-import clsx from "clsx";
 import { SortByMenuProps } from "./ShopResultsTypes";
 
 const useStyles = makeStyles((theme) =>
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme) =>
 
 const options = ["Distance", "Safety Rating"];
 
-const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy, className }: SortByMenuProps) => {
+const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy }: SortByMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -74,7 +73,6 @@ const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy, className }: SortByM
   ));
 
   return (
-    // <div className={clsx(classes.container, className)}>
     <>
       <List component="nav" aria-label="Sort by" className={classes.list}>
         <ListItem
@@ -104,7 +102,6 @@ const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy, className }: SortByM
         {menuItems}
       </Menu>
     </>
-    // </div>
   );
 };
 

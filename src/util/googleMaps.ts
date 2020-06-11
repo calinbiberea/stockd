@@ -80,10 +80,10 @@ export const getPlacesMatchingNameInRadius = (
   shopName: string,
   location: { lat: number; lng: number },
   radius: number
-): Promise<PlaceResult[] | null> => {
+): Promise<google.maps.places.PlaceResult[] | null> => {
   const latLng = new googleClient.maps.LatLng(location.lat, location.lng);
   return new Promise((resolve) =>
-    placesService.nearbySearch({ location: latLng, radius }, (places, status) => {
+    placesService.nearbySearch({ name: shopName, location: latLng, radius }, (places, status) => {
       if (status === googleClient.maps.places.PlacesServiceStatus.OK) {
         resolve(null);
       } else {

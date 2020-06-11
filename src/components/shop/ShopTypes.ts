@@ -4,12 +4,15 @@ export interface ShopProps {
   locationData: LocationData;
   selectedScreen: ShopSelectedScreen;
   setSelectedScreen: (value: ShopSelectedScreen) => void;
+  onBackClick: () => void;
 }
 
 export type ShopSelectedScreen = "overview" | "safety" | "stock";
 
 export interface ShopHeaderProps {
   locationData: LocationData;
+  noBackButton: boolean;
+  onBackClick: () => void;
 }
 
 export interface Stocks {

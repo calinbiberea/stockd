@@ -65,7 +65,7 @@ const defaultStocks: Stocks = {
   },
 };
 
-const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) => {
+const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedScreen, onBackClick }: ShopProps) => {
   const [stocks, setStocks] = useState(defaultStocks);
 
   const classes = useStyles();
@@ -114,7 +114,9 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
   return (
     <Card className={classes.container}>
       <div className={classes.headerContainer}>
-        <ShopHeader locationData={locationData} />
+        <ShopHeader locationData={locationData}
+                    noBackButton={false}
+                    onBackClick={onBackClick}/>
       </div>
 
       <div className={classes.screenContainer}>{shopScreen}</div>

@@ -26,6 +26,12 @@ export const LoginContext = React.createContext({
   },
 });
 
+export const HomeContext = React.createContext( {
+  setRoute: (route: Route) => {
+    /* void */
+  },
+});
+
 const App: React.FC = () => {
   const [route, setRoute] = useState<Route>("landing");
   const [uid, setUid] = useState<string | null>(null);
@@ -49,7 +55,9 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider action={(key) => <CloseSnackbarButton id={key} />}>
-        <LoginContext.Provider value={{ uid, setUid }}>{currentScreen}</LoginContext.Provider>
+        <HomeContext.Provider value={{setRoute}}>
+          <LoginContext.Provider value={{ uid, setUid }}>{currentScreen}</LoginContext.Provider>
+        </HomeContext.Provider>
       </SnackbarProvider>
     </ThemeProvider>
   );

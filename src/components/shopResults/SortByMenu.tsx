@@ -9,7 +9,7 @@ import {
   createStyles,
 } from "@material-ui/core";
 import clsx from "clsx";
-import { SortByMenuProps } from "./ShopListTypes";
+import { SortByMenuProps } from "./ShopResultsTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

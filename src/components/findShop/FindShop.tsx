@@ -19,7 +19,7 @@ import { useSnackbar } from "notistack";
 import { FindShopProps } from "./FindShopTypes";
 import Header from "../header/Header";
 import LocationSearch from "../filterShops/LocationSearch";
-import ShopList from "../shopList/ShopList";
+import ShopResults from "../shopResults/ShopResults";
 import { getCurrentLocation } from "../../util/geolocate";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
@@ -124,7 +124,7 @@ const FindShop: React.FC<FindShopProps> = ({ setRoute }: FindShopProps) => {
     const nameFilter = true;
 
     return (
-      <ShopList
+      <ShopResults
         onBackClick={() => setSubmitted(false)}
         filters={{ nameFilter, shopName, products, safetyFeatures, maxDistance }}
         location={location}

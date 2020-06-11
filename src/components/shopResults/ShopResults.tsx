@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   CircularProgress,
-  Grid,
   Typography,
   makeStyles,
   createStyles,
@@ -13,17 +12,14 @@ import {
   Fade,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import ShopListItem from "./ShopListItem";
 import SortByMenu from "./SortByMenu";
 import Header from "../header/Header";
 import Overlay from "../overlay/Overlay";
-import { SortBy, DBShopData, FindShopsResult, ShopListProps } from "./ShopListTypes";
+import { SortBy, DBShopData, FindShopsResult, ShopResultsProps } from "./ShopResultsTypes";
 import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
-import Map from "../map/Map";
-import { Marker, OverlayView } from "@react-google-maps/api";
-import colors from "../../res/colors";
-import ShopPinIcon from "../../res/shopPin.png";
+import ShopList from "./ShopList";
+import ShopMap from "./ShopMap";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -59,9 +55,6 @@ const useStyles = makeStyles((theme) =>
       flexDirection: "column",
       alignItems: "center",
     },
-    title: {
-      margin: "30px",
-    },
     gridContainer: {
       height: "100%",
       width: "100%",
@@ -80,31 +73,11 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const CurrentPosition = (
-  <div
-    style={{
-      zIndex: 2001,
-      width: "16px",
-      height: "16px",
-      backgroundColor: colors.blue1,
-      borderRadius: "100%",
-      border: "2px solid white",
-      boxSizing: "border-box",
-      boxShadow: `0px 0px 24px 16px ${colors.blue3}`,
-    }}
-  />
-);
-
-const compareByDistance = (a: DBShopData, b: DBShopData) => a.distance - b.distance;
-
-const compareBySafetyRating = (a: DBShopData, b: DBShopData) => {
-  const ratingA = ((a.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
-  const ratingB = ((b.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
-
-  return ratingB - ratingA;
-};
-
-const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: ShopListProps) => {
+const ShopResults: React.FC<ShopResultsProps> = ({
+  onBackClick,
+  filters,
+  location,
+}: ShopResultsProps) => {
   const [shopList, setShopList] = useState<DBShopData[] | undefined>(undefined);
   const [currentLocationData, setCurrentLocationData] = useState<LocationData | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>("distance");
@@ -185,39 +158,6 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
   const closeOverlay = () => setCurrentLocationData(null);
   const onGetDetailsClick = (locationData: LocationData) => setCurrentLocationData(locationData);
 
-  let compareFunc: (a: DBShopData, b: DBShopData) => number;
-  switch (sortBy) {
-    case "distance":
-      compareFunc = compareByDistance;
-      break;
-    case "safetyRating":
-      compareFunc = compareBySafetyRating;
-      break;
-  }
-
-  const shopListItems = shopList
-    .slice()
-    .sort(compareFunc)
-    .map((shop) => (
-      <Grid item key={shop.id} className={classes.gridItem}>
-        <ShopListItem
-          shopData={shop}
-          startTime={"9:00"}
-          endTime={"21:00"}
-          onGetDetailsClick={onGetDetailsClick}
-        />
-      </Grid>
-    ));
-
-  const markers = shopList.map((shop) => (
-    <Marker
-      key={shop.id}
-      position={shop.location}
-      onClick={() => onGetDetailsClick(shop.locationData)}
-      icon={ShopPinIcon}
-    />
-  ));
-
   const header = (
     <Header onBackClick={onBackClick}>
       <Card className={classes.controlsContainer}>
@@ -247,31 +187,6 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
     </Header>
   );
 
-  const list = (
-    <div className={classes.contentContainer}>
-      <Typography variant="h5" color="primary" className={classes.title}>
-        {shopListItems.length !== 0
-          ? "Here are the shops that we found"
-          : "We couldn't find any shops matching those filters."}
-      </Typography>
-
-      <Grid container direction="column" wrap="nowrap" className={classes.gridContainer}>
-        {shopListItems}
-      </Grid>
-    </div>
-  );
-
-  const map = (
-    <div style={{ width: "100%", height: "100%", position: "absolute" }}>
-      <Map currentCenter={userPos}>
-        <OverlayView position={userPos} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
-          {CurrentPosition}
-        </OverlayView>
-        {markers}
-      </Map>
-    </div>
-  );
-
   return (
     <div className={classes.container}>
       {header}
@@ -280,10 +195,19 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
         closeOverlay={closeOverlay}
         locationData={currentLocationData}
       />
-      <Fade in={view === "list"}>{list}</Fade>
-      <Fade in={view === "map"}>{map}</Fade>
+      <Fade in={view === "list"}>
+        <div>
+          <ShopList shopList={shopList} sortBy={sortBy} onShopSelect={onGetDetailsClick} />
+        </div>
+      </Fade>
+      <Fade in={view === "map"}>
+        <div>
+          <ShopMap shopList={shopList} onShopSelect={onGetDetailsClick} userPos={userPos} />
+        </div>
+      </Fade>
+      {/*{content}*/}
     </div>
   );
 };
 
-export default ShopList;
+export default ShopResults;

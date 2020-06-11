@@ -2,7 +2,7 @@ import { LocationData } from "../../util/googleMaps";
 
 export type SortBy = "distance" | "safetyRating";
 
-export interface ShopListProps {
+export interface ShopResultsProps {
   onBackClick: () => void;
   filters: {
     nameFilter: boolean;
@@ -12,6 +12,21 @@ export interface ShopListProps {
     maxDistance: number;
   };
   location: { geolocated: true; lat: number; lng: number } | { geolocated: false; placeId: string };
+}
+
+export interface ShopListProps {
+  shopList: DBShopData[];
+  sortBy: SortBy;
+  onShopSelect: (LocationData) => void;
+}
+
+export interface ShopMapProps {
+  shopList: DBShopData[];
+  onShopSelect: (LocationData) => void;
+  userPos: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export interface ShopListItemProps {

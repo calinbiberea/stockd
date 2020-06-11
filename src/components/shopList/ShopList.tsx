@@ -55,11 +55,11 @@ const useStyles = makeStyles(() =>
 
 const compareByDistance = (a: DBShopData, b: DBShopData) => a.distance - b.distance;
 
-const compareBySafetyRating = (a: DBShopData, b: DBShopData) => {
-  const ratingA = ((a.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
-  const ratingB = ((b.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
+const compareBySafetyScore = (a: DBShopData, b: DBShopData) => {
+  const scoreA = ((a.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
+  const scoreB = ((b.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
 
-  return ratingB - ratingA;
+  return scoreB - scoreA;
 };
 
 const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: ShopListProps) => {
@@ -145,8 +145,8 @@ const ShopList: React.FC<ShopListProps> = ({ onBackClick, filters, location }: S
     case "distance":
       compareFunc = compareByDistance;
       break;
-    case "safetyRating":
-      compareFunc = compareBySafetyRating;
+    case "safetyScore":
+      compareFunc = compareBySafetyScore;
       break;
   }
 

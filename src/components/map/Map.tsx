@@ -1,6 +1,6 @@
 import React from "react";
 import { GoogleMap } from "@react-google-maps/api";
-import type MapProps from "./MapProps";
+import type MapProps from "./MapTypes";
 import mapStyles from "./MapStyles";
 import { setupGooglePlacesService } from "../../util/googleMaps";
 

@@ -5,7 +5,7 @@ import { SafetyOverviewProps } from "./ShopTypes";
 const SafetyOverview: React.FC<SafetyOverviewProps> = ({ safety }: SafetyOverviewProps) => {
   return (
     <div>
-      <SafetyScore safetyScore={safety.safetyRating} />
+      <SafetyScore safetyScore={safety.safetyScore} />
     </div>
   );
 };

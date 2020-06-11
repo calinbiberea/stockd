@@ -1,25 +1,25 @@
 import { LocationData } from "../../util/googleMaps";
 
+export type ShopSelectedScreen = "overview" | "safety" | "stock";
+
 export interface ShopProps {
   locationData: LocationData;
   selectedScreen: ShopSelectedScreen;
   setSelectedScreen: (value: ShopSelectedScreen) => void;
 }
 
-export type ShopSelectedScreen = "overview" | "safety" | "stock";
-
 export interface ShopHeaderProps {
   locationData: LocationData;
 }
 
-export interface SafetyFeatures {
+export interface Stocks {
   [name: string]: {
     icon: string;
     stock: number;
   };
 }
 
-export interface Stocks {
+export interface SafetyFeatures {
   [name: string]: {
     icon: string;
     stock: number;
@@ -30,7 +30,7 @@ export interface ShopOverviewProps {
   stocks: Stocks;
   locationData: LocationData;
   safety: {
-    safetyRating: number;
+    safetyScore: number;
     safetyFeatures: SafetyFeatures;
   };
 }
@@ -41,7 +41,7 @@ export interface StocksOverviewProps {
 
 export interface SafetyOverviewProps {
   safety: {
-    safetyRating: number;
+    safetyScore: number;
     safetyFeatures: SafetyFeatures;
   };
 }

@@ -66,7 +66,7 @@ const defaultStocks: Stocks = {
 };
 
 const defaultSafety = {
-  safetyRating: 0,
+  safetyScore: 0,
   safetyFeatures: {} as SafetyFeatures,
 };
 
@@ -117,10 +117,10 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen }: ShopProps) 
               {}
             );
 
-            const safetyRating: number = data.displayed.safetyScore;
+            const safetyScore: number = data.displayed.safetyScore;
 
             const newSafety = {
-              safetyRating,
+              safetyScore,
               safetyFeatures,
             };
 

@@ -72,6 +72,7 @@ const Overlay: React.FC<OverlayProps> = ({
                 locationData={localLocationData}
                 selectedScreen={selectedScreen}
                 setSelectedScreen={setSelectedScreen}
+                onBackClick={closeOverlay}
               />
             ) : null}
           </div>

@@ -9,24 +9,18 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  TextField,
   Typography,
   makeStyles,
   createStyles,
 } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
-import { FilterShopsProps } from "./FilterShopsTypes";
-import SelectorPanel from "./SelectorPanel";
-import Header from "../header/Header";
-import LocationSearch from "./LocationSearch";
-import ShopResults from "../shopResults/ShopResults";
-import {
-  products,
-  safetyFeatures,
-  ProductId,
-  SafetyFeatureId,
-} from "../../util/productsAndSafetyFeatures";
-import { getCurrentLocation } from "../../util/geolocate";
 import { useSnackbar } from "notistack";
+import { FindShopProps } from "./FindShopTypes";
+import Header from "../header/Header";
+import LocationSearch from "../filterShops/LocationSearch";
+import ShopResults from "../shopResults/ShopResults";
+import { getCurrentLocation } from "../../util/geolocate";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -79,19 +73,8 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const defaultSelectedProducts = Object.fromEntries(
-  Object.keys(products).map((productId) => [productId, false])
-) as { [p in ProductId]: boolean };
-
-const defaultSelectedSafetyFeatures = Object.fromEntries(
-  Object.keys(safetyFeatures).map((safetyFeatureId) => [safetyFeatureId, false])
-) as { [f in SafetyFeatureId]: boolean };
-
-const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps) => {
-  const [selectedProducts, setSelectedProducts] = useState(defaultSelectedProducts);
-  const [selectedSafetyFeatures, setSelectedSafetyFeatures] = useState(
-    defaultSelectedSafetyFeatures
-  );
+const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps) => {
+  const [shopName, setShopName] = useState("");
   const [maxDistance, setMaxDistance] = useState(50);
   const [selectedPlace, setSelectedPlace] = useState<AutocompletePrediction | null>(null);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
@@ -101,24 +84,6 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   const classes = useStyles();
 
   const { enqueueSnackbar } = useSnackbar();
-
-  const toggleProduct = (product: ProductId) => {
-    const newSelected = Object.assign({}, selectedProducts);
-
-    if (newSelected[product] !== undefined) {
-      newSelected[product] = !newSelected[product];
-      setSelectedProducts(newSelected);
-    }
-  };
-
-  const toggleSafetyFeature = (feature: SafetyFeatureId) => {
-    const newSelected = Object.assign({}, selectedSafetyFeatures);
-
-    if (newSelected[feature] !== undefined) {
-      newSelected[feature] = !newSelected[feature];
-      setSelectedSafetyFeatures(newSelected);
-    }
-  };
 
   const toggleGeolocation = async (enabled: boolean) => {
     let newUseCurrentLocation = enabled;
@@ -153,18 +118,10 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   };
 
   if (submitted) {
-    const products = Object.entries(selectedProducts)
-      .filter(([_, selected]) => selected)
-      .map(([product]) => product);
-
-    const safetyFeatures = Object.entries(selectedSafetyFeatures)
-      .filter(([_, selected]) => selected)
-      .map(([feature]) => feature);
-
     const location = getLocation();
-    const nameFilter = false;
-    const shopName = "";
-    const editShop = false;
+    const products = [] as string[];
+    const safetyFeatures = [] as string[];
+    const nameFilter = true;
 
     return (
       <ShopResults
@@ -175,34 +132,27 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
     );
   }
 
-  const canSubmit = useCurrentLocation ? currentLocation !== null : selectedPlace !== null;
+  const canSubmit =
+    shopName !== "" && (useCurrentLocation ? currentLocation !== null : selectedPlace !== null);
 
   return (
     <div className={classes.container}>
       <Header onBackClick={() => setRoute("landing")} />
 
       <Typography variant="h4" color="primary" className={classes.title}>
-        What are you looking for?
+        Which shop are you looking for?
       </Typography>
 
       <div className={classes.contentContainer}>
-        <SelectorPanel
-          title="Products"
-          selected={selectedProducts}
-          items={products}
-          onSelect={(p) => toggleProduct(p as ProductId)}
-          onReset={() => setSelectedProducts(defaultSelectedProducts)}
+        <TextField
+          required
+          label="Enter shop name"
+          variant="outlined"
+          defaultValue={shopName}
+          onChange={(event) => setShopName(event.target.value)}
         />
 
-        <SelectorPanel
-          title="Safety Features"
-          selected={selectedSafetyFeatures}
-          items={safetyFeatures}
-          onSelect={(f) => toggleSafetyFeature(f as SafetyFeatureId)}
-          onReset={() => setSelectedSafetyFeatures(defaultSelectedSafetyFeatures)}
-        />
-
-        <FormGroup className={classes.locationContainer}>
+        <FormGroup row className={classes.locationContainer}>
           <FormControl className={classes.distanceSelect}>
             <InputLabel>Max. distance</InputLabel>
 
@@ -218,7 +168,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
             </Select>
           </FormControl>
 
-          <Divider className={classes.locationDivider} orientation="vertical" flexItem />
+          <Divider orientation="vertical" flexItem className={classes.locationDivider} />
 
           <LocationSearch
             enabled={!useCurrentLocation}
@@ -243,8 +193,8 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
         size="large"
         color="primary"
         variant="contained"
-        onClick={() => setSubmitted(true)}
         disabled={!canSubmit}
+        onClick={() => setSubmitted(true)}
         className={classes.button}
       >
         <Typography variant="h6">{"Let's go!"}</Typography>
@@ -255,4 +205,4 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   );
 };
 
-export default FilterShops;
+export default FindShop;

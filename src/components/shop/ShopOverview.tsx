@@ -1,7 +1,9 @@
-import React from "react";
-import { Button, Grid, makeStyles, createStyles } from "@material-ui/core";
-import StockItem from "./StockItem";
+import React, { useState } from "react";
+import { Button, makeStyles, createStyles } from "@material-ui/core";
+import StocksOverview from "./StocksOverview";
 import { ShopOverviewProps } from "./ShopTypes";
+import SafetyOverview from "./SafetyOverview";
+import TabBar from "../tabBar/TabBar";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -12,20 +14,32 @@ const useStyles = makeStyles(() =>
       justifyContent: "space-between",
       alignItems: "center",
     },
-    gridContainer: {
-      overflow: "auto",
-    },
   })
 );
 
-const ShopOverview: React.FC<ShopOverviewProps> = ({ stocks, locationData }: ShopOverviewProps) => {
+const tabNames = ["Stocks", "Safety"];
+
+const ShopOverview: React.FC<ShopOverviewProps> = ({
+  locationData,
+  stocks,
+  safetyScore,
+  safetyFeatures,
+}: ShopOverviewProps) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const classes = useStyles();
 
-  const stockItems = Object.entries(stocks).map(([name, { icon, stock }]) => (
-    <Grid item xs={12} md={6} xl={4} key={name}>
-      <StockItem icon={icon} name={name} stock={stock} />
-    </Grid>
-  ));
+  const indexToScreen = (index: number): React.ReactNode => {
+    switch (index) {
+      case 0:
+        return <StocksOverview stocks={stocks} />;
+      case 1:
+        return <SafetyOverview safetyScore={safetyScore} safetyFeatures={safetyFeatures} />;
+      default:
+        console.error("Invalid index in ShopOverview");
+        return <StocksOverview stocks={stocks} />;
+    }
+  };
 
   const onButtonClick = () => {
     const getMapsUrl = (placeName: string, placeId: string) => {
@@ -39,12 +53,12 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({ stocks, locationData }: Sho
 
   return (
     <div className={classes.container}>
-      <Grid container className={classes.gridContainer}>
-        {stockItems}
-      </Grid>
+      <TabBar tabNames={tabNames} index={currentIndex} setIndex={setCurrentIndex} />
+
+      {indexToScreen(currentIndex)}
 
       <Button variant="contained" color="primary" onClick={onButtonClick}>
-        Take me there
+        Take me there!
       </Button>
     </div>
   );

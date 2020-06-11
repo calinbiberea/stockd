@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useContext } from "react";
 import {
   AppBar,
   Toolbar,
@@ -11,6 +11,7 @@ import {
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Logo from "../../res/logo.png";
 import { HeaderProps } from "./HeaderTypes";
+import { HomeContext } from "../App";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,11 +34,15 @@ const Header: React.FC<HeaderProps> = ({
   children,
 }: PropsWithChildren<HeaderProps>) => {
   const classes = useStyles();
+  const {setRoute} = useContext(HomeContext);
 
   const logo = (
-    <Card className={classes.logoContainer}>
-      <img src={Logo} alt="stockd logo" className={classes.logo} />
-    </Card>
+    <IconButton
+      onClick= {() => setRoute("landing")}>
+      <Card className={classes.logoContainer}>
+        <img src={Logo} alt="stockd logo" className={classes.logo} />
+      </Card>
+    </IconButton>
   );
 
   return (

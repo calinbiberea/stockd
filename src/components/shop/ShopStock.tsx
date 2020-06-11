@@ -88,7 +88,7 @@ const getMarks = (value: number) => [
 const getSubmitSuffix = (numUpdates: number) =>
   numUpdates === 0 ? undefined : `${numUpdates} update${numUpdates === 1 ? "" : "s"}`;
 
-const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStockProps) => {
+const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStockProps) => {
   const [localStocks, setLocalStocks] = useState<Record<string, number>>({});
 
   const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
@@ -102,7 +102,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, stock }], ix) => {
+  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, value }], ix) => {
     const currentValue = localStocks[name];
     const updated = currentValue !== undefined;
     const last = ix === numStocks - 1;
@@ -110,7 +110,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ stocks, locationData }: ShopStock
     return (
       <Grid item xs={12} key={name} className={classes.gridItem}>
         <div className={classes.stockItem}>
-          <StockItem icon={icon} name={name} stock={stock} />
+          <StockItem icon={icon} name={name} value={value} />
         </div>
 
         <Slider

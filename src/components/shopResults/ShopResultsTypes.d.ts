@@ -1,15 +1,42 @@
 import { LocationData } from "../../util/googleMaps";
 
-export type SortBy = "distance" | "safetyRating";
+export type SortBy = "distance" | "safetyScore";
 
-export interface ShopListProps {
+export interface ShopResultsProps {
   onBackClick: () => void;
   filters: {
+    editShop: boolean;
+    nameFilter: boolean;
+    shopName: string;
     products: string[];
     safetyFeatures: string[];
     maxDistance: number;
   };
   location: { geolocated: true; lat: number; lng: number } | { geolocated: false; placeId: string };
+}
+
+export type View = "list" | "map";
+
+export interface ShopResultsHeaderProps {
+  onBackClick: () => void;
+  view: View;
+  setView: (View) => void;
+  setSortBy: (SortBy) => void;
+}
+
+export interface ShopListProps {
+  shopList: DBShopData[];
+  sortBy: SortBy;
+  onShopSelect: (LocationData) => void;
+}
+
+export interface ShopMapProps {
+  shopList: DBShopData[];
+  onShopSelect: (LocationData) => void;
+  userPos: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export interface ShopListItemProps {
@@ -28,6 +55,7 @@ export interface DBShopData {
   id: string;
   distance: number;
   locationData: LocationData;
+  location: { lat: number; lng: number };
   [k: string]: unknown;
 }
 

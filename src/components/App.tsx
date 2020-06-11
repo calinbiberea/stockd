@@ -3,8 +3,10 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
 import Landing from "./landing/Landing";
 import FilterShops from "./filterShops/FilterShops";
+import FindShop from "./findShop/FindShop";
 import EditShop from "./editShop/EditShop";
 import colors from "../res/colors";
+import CloseSnackbarButton from "./CloseSnackbarButton";
 
 const theme = createMuiTheme({
   palette: {
@@ -24,6 +26,12 @@ export const LoginContext = React.createContext({
   },
 });
 
+export const HomeContext = React.createContext({
+  setRoute: (route: Route) => {
+    /* void */
+  },
+});
+
 const App: React.FC = () => {
   const [route, setRoute] = useState<Route>("landing");
   const [uid, setUid] = useState<string | null>(null);
@@ -37,7 +45,7 @@ const App: React.FC = () => {
       currentScreen = <FilterShops setRoute={setRoute} />;
       break;
     case "findShop":
-      currentScreen = null; // TODO: add a screen for finding by name
+      currentScreen = <FindShop editShop={false} setRoute={setRoute} />;
       break;
     case "editShop":
       currentScreen = <EditShop setRoute={setRoute} />;
@@ -46,10 +54,10 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider>
-        <LoginContext.Provider value={{ uid, setUid }}>
-          {currentScreen}
-        </LoginContext.Provider>
+      <SnackbarProvider action={(key) => <CloseSnackbarButton id={key} />}>
+        <HomeContext.Provider value={{ setRoute }}>
+          <LoginContext.Provider value={{ uid, setUid }}>{currentScreen}</LoginContext.Provider>
+        </HomeContext.Provider>
       </SnackbarProvider>
     </ThemeProvider>
   );

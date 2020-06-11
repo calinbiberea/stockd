@@ -8,8 +8,7 @@ import {
   makeStyles,
   createStyles,
 } from "@material-ui/core";
-import clsx from "clsx";
-import { SortByMenuProps } from "./ShopListTypes";
+import { SortByMenuProps } from "./ShopResultsTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -30,9 +29,9 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const options = ["Distance", "Safety Rating"];
+const options = ["Distance", "Safety Score"];
 
-const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy, className }: SortByMenuProps) => {
+const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy }: SortByMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -50,7 +49,7 @@ const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy, className }: SortByM
         setSortBy("distance");
         break;
       case 1:
-        setSortBy("safetyRating");
+        setSortBy("safetyScore");
         break;
       default:
         console.error("Invalid index in SortByMenu");
@@ -74,7 +73,7 @@ const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy, className }: SortByM
   ));
 
   return (
-    <div className={clsx(classes.container, className)}>
+    <>
       <List component="nav" aria-label="Sort by" className={classes.list}>
         <ListItem
           button
@@ -102,7 +101,7 @@ const SortByMenu: React.FC<SortByMenuProps> = ({ setSortBy, className }: SortByM
       >
         {menuItems}
       </Menu>
-    </div>
+    </>
   );
 };
 

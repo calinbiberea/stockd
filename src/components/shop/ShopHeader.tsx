@@ -7,14 +7,26 @@ import colors from "../../res/colors";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    buttonIcon: {
+      position: "absolute",
+      [theme.breakpoints.down("xs")]: {
+        width: "20px",
+        height: "20px",
+      }
+    },
     backButton: {
       position: "absolute",
       color: "#FFF",
+      marginLeft: "12px",
       backgroundColor: colors.blue1,
       [theme.breakpoints.down("xs")]: {
+        width: "20px",
+        height: "20px",
         marginTop: "50px",
       },
       [theme.breakpoints.up("sm")]: {
+        width: "35px",
+        height: "35px",
         marginTop: "20px",
       },
     },
@@ -97,12 +109,11 @@ export const ShopHeader: React.FC<ShopHeaderProps> = ({ locationData, noBackButt
       {noBackButton ? null :
         <IconButton
           edge="start"
-          size="small"
           aria-label="back"
           onClick={onBackClick}
           className={classes.backButton}
         >
-          <ArrowBackIcon />
+          <ArrowBackIcon className={classes.buttonIcon}/>
         </IconButton>
       }
       <div className={classes.imgAndText}>

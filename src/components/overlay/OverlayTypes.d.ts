@@ -4,6 +4,6 @@ export interface OverlayProps {
   placeId: string;
   closeOverlay: () => void;
   queryMap?: boolean;
-  defaultToStock?: boolean;
+  edit?: boolean;
   locationData?: LocationData | null;
 }

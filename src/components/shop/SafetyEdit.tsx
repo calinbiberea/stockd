@@ -1,44 +1,49 @@
 import React, { useState } from "react";
 import {
   Button,
-  Slider,
-  Grid,
   Divider,
+  FormGroup,
+  FormControlLabel,
+  Grid,
+  Switch,
   useMediaQuery,
   Theme,
   makeStyles,
   createStyles,
 } from "@material-ui/core";
-import { useSnackbar } from "notistack";
-import StockItem from "./StockItem";
-import updateStock from "../../firebase/firebaseOps";
-import { ShopStockProps } from "./ShopTypes";
+import SafetyScore from "./SafetyScore";
+import { SafetyEditProps } from "./ShopTypes";
+import SafetyItem from "./SafetyItem";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     container: {
       height: "100%",
+      width: "100%",
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
       alignItems: "center",
+      overflow: "auto",
+    },
+    safetyScoreContainer: {
+      margin: "16px 0 8px",
     },
     gridContainer: {
       overflow: "auto",
     },
     gridItem: {
       display: "flex",
+      alignItems: "center",
       [theme.breakpoints.up("md")]: {
         flexDirection: "row",
         justifyContent: "space-around",
-        alignItems: "center",
       },
       [theme.breakpoints.down("sm")]: {
         flexDirection: "column",
-        alignItems: "center",
       },
     },
-    stockItem: {
+    safetyItem: {
       [theme.breakpoints.up("md")]: {
         width: "50%",
       },
@@ -51,17 +56,10 @@ const useStyles = makeStyles((theme) =>
       height: "2px",
       margin: "4px 0",
     },
-    slider: {
-      [theme.breakpoints.up("md")]: {
-        width: "30%",
-      },
-      [theme.breakpoints.down("sm")]: {
-        width: "80%",
-      },
-    },
     buttonContainer: {
       display: "flex",
       flexDirection: "row",
+      marginTop: "8px",
     },
     buttonDivider: {
       width: "16px",
@@ -69,58 +67,50 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const getMarks = (value: number) => [
-  {
-    value: 0,
-    label: value === 0 ? <b>few</b> : <>few</>,
-  },
-  {
-    value: 50,
-    label: value === 50 ? <b>some</b> : <>some</>,
-  },
-  {
-    value: 100,
-    label: value === 100 ? <b>lots</b> : <>lots</>,
-  },
-];
-
 const getSubmitSuffix = (numUpdates: number) =>
   numUpdates === 0 ? undefined : `${numUpdates} update${numUpdates === 1 ? "" : "s"}`;
 
-const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStockProps) => {
-  const [localStocks, setLocalStocks] = useState<Record<string, number>>({});
+const SafetyEdit: React.FC<SafetyEditProps> = ({
+  safetyScore,
+  safetyFeatures,
+}: SafetyEditProps) => {
+  const [localSafetyScore, setLocalSafetyScore] = useState(safetyScore);
+  const [localSafetyFeatures, setLocalSafetyFeatures] = useState<Record<string, boolean>>({});
 
   const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
 
   const classes = useStyles();
 
-  const numUpdates = Object.keys(localStocks).length;
-  const numStocks = Object.keys(stocks).length;
+  const numUpdates =
+    Object.keys(localSafetyFeatures).length + (localSafetyScore !== safetyScore ? 1 : 0);
+  const numSafetyFeatures = Object.keys(safetyFeatures).length;
 
-  const { enqueueSnackbar } = useSnackbar();
-
-  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, value }], ix) => {
-    const currentValue = localStocks[name];
+  const safetyFeaturesAndSwitches = Object.entries(safetyFeatures).map(([name, value], ix) => {
+    const currentValue = localSafetyFeatures[name];
     const updated = currentValue !== undefined;
-    const last = ix === numStocks - 1;
+    const last = ix === numSafetyFeatures - 1;
+
+    const onSwitchChange = (_: React.ChangeEvent<unknown>, newValue: boolean) =>
+      setLocalSafetyFeatures((prevState) => ({ ...prevState, [name]: newValue }));
 
     return (
       <Grid item xs={12} key={name} className={classes.gridItem}>
-        <div className={classes.stockItem}>
-          <StockItem icon={icon} name={name} value={value} />
+        <div className={classes.safetyItem}>
+          <SafetyItem name={name} value={value} />
         </div>
 
-        <Slider
-          aria-labelledby="discrete-slider-restrict"
-          step={null}
-          marks={getMarks(currentValue)}
-          color={updated ? "primary" : "secondary"}
-          className={classes.slider}
-          value={updated ? currentValue : 50}
-          onChange={(event, value) => {
-            setLocalStocks((prevState) => ({ ...prevState, [name]: value as number }));
-          }}
-        />
+        <FormGroup>
+          <FormControlLabel
+            label="Required"
+            control={
+              <Switch
+                checked={updated ? currentValue : true}
+                color={updated ? "primary" : "secondary"}
+                onChange={onSwitchChange}
+              />
+            }
+          />
+        </FormGroup>
 
         {smallScreen && !last ? (
           <Divider variant="middle" orientation="horizontal" className={classes.gridDivider} />
@@ -129,10 +119,28 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
     );
   });
 
+  const onClearClick = () => {
+    setLocalSafetyScore(safetyScore);
+    setLocalSafetyFeatures({});
+  };
+
+  const onSubmitClick = () => {
+    console.warn("uh oh");
+    onClearClick();
+  };
+
   return (
     <div className={classes.container}>
+      <div className={classes.safetyScoreContainer}>
+        <SafetyScore
+          safetyScore={localSafetyScore}
+          setSafetyScore={setLocalSafetyScore}
+          size={smallScreen ? "medium" : "large"}
+        />
+      </div>
+
       <Grid container className={classes.gridContainer}>
-        {stocksAndSliders}
+        {safetyFeaturesAndSwitches}
       </Grid>
 
       <div className={classes.buttonContainer}>
@@ -140,11 +148,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
           variant="contained"
           color="primary"
           disabled={numUpdates === 0}
-          onClick={() => {
-            // noinspection JSIgnoredPromiseFromCall
-            updateStock(locationData, localStocks, enqueueSnackbar);
-            setLocalStocks({});
-          }}
+          onClick={onSubmitClick}
         >
           Submit {getSubmitSuffix(numUpdates)}
         </Button>
@@ -155,7 +159,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
           variant="contained"
           color="secondary"
           disabled={numUpdates === 0}
-          onClick={() => setLocalStocks({})}
+          onClick={onClearClick}
         >
           Clear
         </Button>
@@ -164,4 +168,4 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
   );
 };
 
-export default ShopStock;
+export default SafetyEdit;

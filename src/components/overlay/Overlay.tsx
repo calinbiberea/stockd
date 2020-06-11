@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import type { OverlayProps } from "./OverlayTypes";
 import type { LocationData } from "../../util/googleMaps";
 import { getLocationDataByPlaceId } from "../../util/googleMaps";
-import { ShopSelectedScreen } from "../shop/ShopTypes";
 import Shop from "../shop/Shop";
 
 const useStyles = makeStyles(() =>
@@ -33,13 +32,10 @@ const Overlay: React.FC<OverlayProps> = ({
   placeId,
   closeOverlay,
   queryMap,
-  defaultToStock,
+  edit = false,
   locationData = null,
 }: OverlayProps) => {
   const [localLocationData, setLocalLocationData] = useState<LocationData | null>(null);
-  const [selectedScreen, setSelectedScreen] = useState<ShopSelectedScreen>(
-    defaultToStock ? "stock" : "overview"
-  );
 
   const isOpen = placeId !== "";
   const isLoaded = localLocationData?.id === placeId;
@@ -68,12 +64,7 @@ const Overlay: React.FC<OverlayProps> = ({
         <Slide direction="up" in={isLoaded}>
           <div>
             {localLocationData !== null ? (
-              <Shop
-                locationData={localLocationData}
-                selectedScreen={selectedScreen}
-                setSelectedScreen={setSelectedScreen}
-                onBackClick={closeOverlay}
-              />
+              <Shop locationData={localLocationData} onBackClick={closeOverlay} edit={edit} />
             ) : null}
           </div>
         </Slide>

@@ -88,7 +88,7 @@ const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
 
       <Header onBackClick={onBackClick} />
 
-      <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} queryMap defaultToStock />
+      <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} queryMap edit />
 
       <Map onPlaceClick={onPlaceClick} currentCenter={defaultCenter} showGoogleMarkers />
     </>

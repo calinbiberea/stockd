@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, makeStyles, createStyles } from "@material-ui/core";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
-import ShopStock from "./ShopStock";
+import ShopEdit from "./ShopEdit";
 import { Stocks, ShopProps, SafetyFeatures } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
 import {
@@ -45,7 +45,7 @@ const defaultSafetyFeatures: SafetyFeatures = Object.fromEntries(
   Object.values(safetyFeatures).map((name) => [name, undefined])
 );
 
-const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedScreen, onBackClick }: ShopProps) => {
+const Shop: React.FC<ShopProps> = ({ locationData, edit, onBackClick }: ShopProps) => {
   const [stocks, setStocks] = useState(defaultStocks);
   const [safetyScore, setSafetyScore] = useState(0);
   const [safetyFeatures, setSafetyFeatures] = useState(defaultSafetyFeatures);
@@ -107,7 +107,7 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedSc
   }, [locationData.id]);
 
   let shopScreen: React.ReactNode;
-  if (selectedScreen === "overview") {
+  if (!edit) {
     shopScreen = (
       <ShopOverview
         locationData={locationData}
@@ -116,16 +116,21 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedSc
         safetyFeatures={safetyFeatures}
       />
     );
-  } else if (selectedScreen === "stock") {
-    shopScreen = <ShopStock locationData={locationData} stocks={stocks} />;
+  } else {
+    shopScreen = (
+      <ShopEdit
+        locationData={locationData}
+        stocks={stocks}
+        safetyScore={safetyScore}
+        safetyFeatures={safetyFeatures}
+      />
+    );
   }
 
   return (
     <Card className={classes.container}>
       <div className={classes.headerContainer}>
-        <ShopHeader locationData={locationData}
-                    noBackButton={false}
-                    onBackClick={onBackClick}/>
+        <ShopHeader locationData={locationData} noBackButton={false} onBackClick={onBackClick} />
       </div>
 
       <div className={classes.screenContainer}>{shopScreen}</div>

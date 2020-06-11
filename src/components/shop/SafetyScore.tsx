@@ -22,9 +22,12 @@ const useStyles = makeStyles((theme) =>
 
 const SafetyScore: React.FC<SafetyScoreProps> = ({
   safetyScore,
+  setSafetyScore,
   size = "small",
 }: SafetyScoreProps) => {
   const classes = useStyles();
+
+  const canEdit = setSafetyScore !== undefined;
 
   const getTypographySize = () => {
     if (size === "small") {
@@ -36,16 +39,25 @@ const SafetyScore: React.FC<SafetyScoreProps> = ({
     }
   };
 
+  const onChange = (event: React.ChangeEvent<unknown>, newValue: number | null) => {
+    if (setSafetyScore && newValue) {
+      setSafetyScore(newValue);
+    } else return;
+  };
+
   return (
     <div className={classes.container}>
       <Typography variant={getTypographySize()}>Safety score:</Typography>
 
       <Rating
         size={size}
-        defaultValue={safetyScore}
+        defaultValue={canEdit ? undefined : safetyScore}
+        value={canEdit ? safetyScore : undefined}
+        onChange={onChange}
         precision={0.5}
         emptyIcon={<StarIcon fontSize="inherit" />}
-        readOnly
+        readOnly={!canEdit}
+        name="Safety Rating"
       />
     </div>
   );

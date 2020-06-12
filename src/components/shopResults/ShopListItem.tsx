@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Card, Typography, makeStyles, createStyles } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ShopHeader from "../shop/ShopHeader";
-import SafetyScore from "../shop/SafetyScore";
+import SafetyScore from "../shop/safety/SafetyScore";
 import { ShopListItemProps } from "./ShopResultsTypes";
 
 const useStyles = makeStyles((theme) =>

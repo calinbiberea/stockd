@@ -12,9 +12,9 @@ import {
   createStyles,
 } from "@material-ui/core";
 import SafetyScore from "./SafetyScore";
-import { SafetyEditProps } from "./ShopTypes";
+import { SafetyEditProps } from "../ShopTypes";
 import SafetyItem from "./SafetyItem";
-import { SafetyFeatureId, safetyFeatures } from "../../util/productsAndSafetyFeatures";
+import { SafetyFeatureId, safetyFeatures } from "../../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

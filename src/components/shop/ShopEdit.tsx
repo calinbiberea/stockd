@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { makeStyles, createStyles } from "@material-ui/core";
 import { ShopEditProps } from "./ShopTypes";
 import TabBar from "../tabBar/TabBar";
-import StocksEdit from "./StocksEdit";
-import SafetyEdit from "./SafetyEdit";
+import StocksEdit from "./stock/StocksEdit";
+import SafetyEdit from "./safety/SafetyEdit";
 
 const useStyles = makeStyles(() =>
   createStyles({

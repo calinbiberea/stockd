@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid, makeStyles, createStyles } from "@material-ui/core";
 import StockItem from "./StockItem";
-import { StocksOverviewProps } from "./ShopTypes";
-import { getProduct } from "../../util/productsAndSafetyFeatures";
+import { StocksOverviewProps } from "../ShopTypes";
+import { getProduct } from "../../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles(() =>
   createStyles({

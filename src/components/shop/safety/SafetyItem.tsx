@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Typography, makeStyles, createStyles } from "@material-ui/core";
-import { SafetyItemProps } from "./ShopTypes";
-import { getSafetyFeature, SafetyEnabled, SafetyIcons } from "../../util/productsAndSafetyFeatures";
+import { SafetyItemProps } from "../ShopTypes";
+import { getSafetyFeature, SafetyEnabled, SafetyIcons } from "../../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

@@ -11,9 +11,9 @@ import {
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import StockItem from "./StockItem";
-import { updateStock } from "../../firebase/firebaseApp";
-import { EditShopResult, StocksEditProps, Stocks } from "./ShopTypes";
-import { ProductId, products } from "../../util/productsAndSafetyFeatures";
+import { updateStock } from "../../../firebase/firebaseApp";
+import { EditShopResult, StocksEditProps, Stocks } from "../ShopTypes";
+import { ProductId, products } from "../../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

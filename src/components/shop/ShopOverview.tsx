@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, makeStyles, createStyles } from "@material-ui/core";
-import StocksOverview from "./StocksOverview";
+import StocksOverview from "./stock/StocksOverview";
 import { ShopOverviewProps } from "./ShopTypes";
-import SafetyOverview from "./SafetyOverview";
+import SafetyOverview from "./safety/SafetyOverview";
 import TabBar from "../tabBar/TabBar";
 
 const useStyles = makeStyles(() =>

@@ -20,6 +20,11 @@ export const loadGoogleMapsScript = async (): Promise<void> => {
   return;
 };
 
+export const setupGooglePlacesServiceEdit = (): void => {
+  const container = document.getElementById("pseudoMap") as HTMLDivElement;
+  placesService = new googleClient.maps.places.PlacesService(container);
+};
+
 export const setupGooglePlacesService = (map: google.maps.Map): void => {
   placesService = new googleClient.maps.places.PlacesService(map);
 };

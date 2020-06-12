@@ -71,8 +71,19 @@ const ShopResults: React.FC<ShopResultsProps> = ({
           location,
           filters.maxDistance
         );
+
+        if (response === null) {
+          enqueueSnackbar("Failed to retrieve a list of places", { variant: "error" });
+          onBackClick();
+          return;
+        }
+
         // eslint-disable-next-line no-console
         console.log(response);
+        // eslint-disable-next-line no-console
+        console.log("HOW DO WE MAKE A SHOPLIST FROM THIS");
+
+        return;
       }
 
       const request = {

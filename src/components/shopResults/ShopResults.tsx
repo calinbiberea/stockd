@@ -3,7 +3,11 @@ import { Box, CircularProgress, Fade, makeStyles, createStyles } from "@material
 import { useSnackbar } from "notistack";
 import Overlay from "../overlay/Overlay";
 import { SortBy, DBShopData, FindShopsResult, ShopResultsProps, View } from "./ShopResultsTypes";
-import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
+import {
+  geocodeByPlaceId,
+  getPlacesMatchingNameInRadius,
+  LocationData,
+} from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
 import ShopList from "./ShopList";
 import ShopMap from "./ShopMap";
@@ -55,8 +59,20 @@ const ShopResults: React.FC<ShopResultsProps> = ({
 
       if (filters.editShop) {
         // eslint-disable-next-line no-console
-        console.log("Calling places to retrieve shop information.");
-        return;
+        console.log("Calling places to retrieve shop information for editing");
+
+        const location = {
+          lat: userLocation.lat,
+          lng: userLocation.lng,
+        };
+
+        const response = await getPlacesMatchingNameInRadius(
+          filters.shopName,
+          location,
+          filters.maxDistance
+        );
+        // eslint-disable-next-line no-console
+        console.log(response);
       }
 
       const request = {

@@ -80,12 +80,31 @@ export const getPlacesMatchingNameInRadius = (
   shopName: string,
   location: { lat: number; lng: number },
   radius: number
-): Promise<google.maps.places.PlaceResult[] | null> => {
+): Promise<LocationData[] | null> => {
   const latLng = new googleClient.maps.LatLng(location.lat, location.lng);
   return new Promise((resolve) =>
     placesService.nearbySearch({ name: shopName, location: latLng, radius }, (places, status) => {
       if (status === googleClient.maps.places.PlacesServiceStatus.OK) {
-        resolve(null);
+        const locationDatas = [] as LocationData[];
+
+        places.forEach((item) => {
+          const locationData = {
+            name: item.name,
+            id: item.id,
+            photo: item.photos
+              ? item.photos.length > 0
+                ? item.photos[0].getUrl({ maxWidth: 500 })
+                : null
+              : null,
+            road:
+              item.address_components?.find((component) => component.types.includes("route"))
+                ?.long_name ?? null,
+          } as LocationData;
+
+          locationDatas.push(locationData);
+        });
+
+        resolve(locationDatas);
       } else {
         console.error(`Place details request failed with ${status}\n\n${places}`);
 

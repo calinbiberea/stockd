@@ -13,7 +13,6 @@ import { useSnackbar } from "notistack";
 import StockItem from "./StockItem";
 import { updateStock } from "../../firebase/firebaseApp";
 import { EditShopResult, StocksEditProps, Stocks } from "./ShopTypes";
-import { LoginContext } from "../App";
 import { ProductId, products } from "../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>

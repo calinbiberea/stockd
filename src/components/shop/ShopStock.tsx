@@ -11,9 +11,10 @@ import {
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import StockItem from "./StockItem";
-import { EditShopResult, ShopStockProps } from "./ShopTypes";
+import { EditShopResult, ShopStockProps, Stocks } from "./ShopTypes";
 import { updateStock } from "../../firebase/firebaseApp";
 import { LoginContext } from "../App";
+import { ProductId, products } from "../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -70,7 +71,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const getMarks = (value: number) => [
+const getMarks = (value: number | undefined) => [
   {
     value: 0,
     label: value === 0 ? <b>few</b> : <>few</>,
@@ -89,7 +90,7 @@ const getSubmitSuffix = (numUpdates: number) =>
   numUpdates === 0 ? undefined : `${numUpdates} update${numUpdates === 1 ? "" : "s"}`;
 
 const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStockProps) => {
-  const [localStocks, setLocalStocks] = useState<Record<string, number>>({});
+  const [localStocks, setLocalStocks] = useState<Stocks>({});
 
   const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
 
@@ -102,15 +103,15 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, value }], ix) => {
-    const currentValue = localStocks[name];
+  const stocksAndSliders = Object.entries(products).map(([productId, { name, icon }], ix) => {
+    const currentValue = localStocks[productId as ProductId];
     const updated = currentValue !== undefined;
     const last = ix === numStocks - 1;
 
     return (
-      <Grid item xs={12} key={name} className={classes.gridItem}>
+      <Grid item xs={12} key={productId} className={classes.gridItem}>
         <div className={classes.stockItem}>
-          <StockItem icon={icon} name={name} value={value} />
+          <StockItem icon={icon} name={name} value={stocks[productId as ProductId]} />
         </div>
 
         <Slider

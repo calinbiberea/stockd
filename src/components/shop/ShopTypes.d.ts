@@ -1,5 +1,6 @@
 import { LocationData } from "../../util/googleMaps";
 import { FindShopsResult } from "../../../functions/src/findShops/util";
+import { ProductId, SafetyFeatureId } from "../../util/productsAndSafetyFeatures";
 
 export type ShopSelectedScreen = "overview" | "safety" | "stock";
 
@@ -18,22 +19,15 @@ export interface ShopHeaderProps {
   onBackClick: () => void;
 }
 
-export interface Stocks {
-  [name: string]: {
-    icon: string;
-    value: number | undefined;
-  };
-}
+export type Stocks = Partial<Record<ProductId, number>>;
 
-export interface SafetyFeatures {
-  [name: string]: boolean | undefined;
-}
+export type SafetyFeatures = Partial<Record<SafetyFeatureId, boolean>>;
 
 export interface ShopOverviewProps {
   locationData: LocationData;
   stocks: Stocks;
   safetyScore: number;
-  safetyFeatures: SafetyFeatures;
+  usedSafetyFeatures: SafetyFeatures;
 }
 
 export interface StocksOverviewProps {
@@ -42,7 +36,7 @@ export interface StocksOverviewProps {
 
 export interface SafetyOverviewProps {
   safetyScore: number;
-  safetyFeatures: SafetyFeatures;
+  usedSafetyFeatures: SafetyFeatures;
 }
 
 export interface ShopStockProps {
@@ -62,6 +56,6 @@ export interface StockItemProps {
 }
 
 export interface SafetyItemProps {
-  name: string;
+  feature: SafetyFeatureId;
   value: boolean | undefined;
 }

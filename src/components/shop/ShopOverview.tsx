@@ -23,7 +23,7 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({
   locationData,
   stocks,
   safetyScore,
-  safetyFeatures,
+  usedSafetyFeatures,
 }: ShopOverviewProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -34,7 +34,7 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({
       case 0:
         return <StocksOverview stocks={stocks} />;
       case 1:
-        return <SafetyOverview safetyScore={safetyScore} safetyFeatures={safetyFeatures} />;
+        return <SafetyOverview safetyScore={safetyScore} usedSafetyFeatures={usedSafetyFeatures} />;
       default:
         console.error("Invalid index in ShopOverview");
         return <StocksOverview stocks={stocks} />;

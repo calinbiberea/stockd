@@ -3,6 +3,7 @@ import { Grid, useMediaQuery, Theme, makeStyles, createStyles } from "@material-
 import SafetyScore from "./SafetyScore";
 import SafetyItem from "./SafetyItem";
 import { SafetyOverviewProps } from "./ShopTypes";
+import { SafetyFeatureId, safetyFeatures } from "../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -27,15 +28,18 @@ const useStyles = makeStyles(() =>
 
 const SafetyOverview: React.FC<SafetyOverviewProps> = ({
   safetyScore,
-  safetyFeatures,
+  usedSafetyFeatures,
 }: SafetyOverviewProps) => {
   const classes = useStyles();
 
   const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("xs"));
 
-  const safetyItems = Object.entries(safetyFeatures).map(([name, value]) => (
-    <Grid item xs={12} md={6} xl={4} key={name}>
-      <SafetyItem key={name} name={name} value={value} />
+  const safetyItems = Object.keys(safetyFeatures).map((feature) => (
+    <Grid item xs={12} md={6} xl={4} key={feature}>
+      <SafetyItem
+        feature={feature as SafetyFeatureId}
+        value={usedSafetyFeatures[feature as SafetyFeatureId]}
+      />
     </Grid>
   ));
 

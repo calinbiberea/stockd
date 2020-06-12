@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Typography, makeStyles, createStyles } from "@material-ui/core";
 import { SafetyItemProps } from "./ShopTypes";
-import { getIconBySafetyNameAndValue } from "../../util/productsAndSafetyFeatures";
+import { getSafetyFeature, SafetyEnabled, SafetyIcons } from "../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -26,16 +26,30 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const SafetyItem: React.FC<SafetyItemProps> = ({ name, value }: SafetyItemProps) => {
+const SafetyItem: React.FC<SafetyItemProps> = ({ feature, value }: SafetyItemProps) => {
   const classes = useStyles();
 
-  const safetyValueIcon = getIconBySafetyNameAndValue(name, value);
+  const name = getSafetyFeature(feature);
+
+  let enabled: SafetyEnabled;
+  switch (value) {
+    case true:
+      enabled = "yes";
+      break;
+    case false:
+      enabled = "no";
+      break;
+    case undefined:
+      enabled = "unknown";
+      break;
+  }
+  const icon = SafetyIcons[feature][enabled];
 
   return (
     <Card className={classes.container}>
       <Typography variant="h5">{name}</Typography>
 
-      <img src={safetyValueIcon} alt="Safety Item value" className={classes.icon} />
+      <img src={icon} alt="Safety Item value" className={classes.icon} />
     </Card>
   );
 };

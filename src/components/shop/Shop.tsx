@@ -5,12 +5,6 @@ import ShopOverview from "./ShopOverview";
 import ShopStock from "./ShopStock";
 import { Stocks, ShopProps, SafetyFeatures } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
-import {
-  getProduct,
-  getSafetyFeature,
-  products,
-  safetyFeatures,
-} from "../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -37,23 +31,16 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const defaultStocks: Stocks = Object.fromEntries(
-  Object.values(products).map(({ icon, name }) => [name, { icon, value: undefined }])
-);
-
-const defaultSafetyFeatures: SafetyFeatures = Object.fromEntries(
-  Object.values(safetyFeatures).map((name) => [name, undefined])
-);
-
-const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedScreen, onBackClick }: ShopProps) => {
-  const [stocks, setStocks] = useState(defaultStocks);
+const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, onBackClick }: ShopProps) => {
+  const [stocks, setStocks] = useState<Stocks>({});
   const [safetyScore, setSafetyScore] = useState(0);
-  const [safetyFeatures, setSafetyFeatures] = useState(defaultSafetyFeatures);
+  const [usedSafetyFeatures, setSafetyFeatures] = useState<SafetyFeatures>({});
 
   const classes = useStyles();
 
+  // Reset stocks on location ID change
   useEffect(() => {
-    setStocks(defaultStocks);
+    setStocks({});
   }, [locationData.id]);
 
   useEffect(() => {
@@ -65,41 +52,15 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedSc
           const data = snapshot.data();
 
           if (data?.displayed?.stocks) {
-            const newStocks: Stocks = Object.entries(data.displayed.stocks).reduce(
-              (acc: Stocks, [key, value]) => {
-                const { name, icon } = getProduct(key);
-
-                acc[name] = {
-                  icon,
-                  value: value as number,
-                };
-
-                return acc;
-              },
-              {}
-            );
-
-            setStocks((prevState) => ({ ...prevState, ...newStocks }));
+            setStocks(data.displayed.stocks as Stocks);
           }
 
-          if (data?.displayed.safetyScore) {
-            const newSafetyScore: number = data.displayed.safetyScore;
-
-            setSafetyScore(newSafetyScore);
+          if (data?.displayed?.safetyScore) {
+            setSafetyScore(data.displayed.safetyScore);
           }
 
           if (data?.displayed?.safetyFeatures) {
-            const newSafetyFeatures: SafetyFeatures = Object.entries(
-              data.displayed.safetyFeatures
-            ).reduce((acc: SafetyFeatures, [key, value]) => {
-              const name = getSafetyFeature(key);
-
-              acc[name] = value as boolean | undefined;
-
-              return acc;
-            }, {});
-
-            setSafetyFeatures((prevState) => ({ ...prevState, ...newSafetyFeatures }));
+            setSafetyFeatures(data.displayed.safetyFeatures);
           }
         },
         (err) => console.error(`Encountered error: ${err}`)
@@ -113,7 +74,7 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedSc
         locationData={locationData}
         stocks={stocks}
         safetyScore={safetyScore}
-        safetyFeatures={safetyFeatures}
+        usedSafetyFeatures={usedSafetyFeatures}
       />
     );
   } else if (selectedScreen === "stock") {
@@ -123,9 +84,7 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, setSelectedSc
   return (
     <Card className={classes.container}>
       <div className={classes.headerContainer}>
-        <ShopHeader locationData={locationData}
-                    noBackButton={false}
-                    onBackClick={onBackClick}/>
+        <ShopHeader locationData={locationData} noBackButton={false} onBackClick={onBackClick} />
       </div>
 
       <div className={classes.screenContainer}>{shopScreen}</div>

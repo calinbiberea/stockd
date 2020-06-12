@@ -76,59 +76,37 @@ export const getIconByStockValue = (value: number | undefined): string => {
 
 // <editor-fold desc="Safety Features">
 
+export type SafetyFeature = Product;
+
 export const safetyFeatures = {
-  masks: "Masks",
-  gloves: "Gloves",
-  socialdistancing: "Social Distancing",
+  masks: { name: "Masks", icon: "" },
+  gloves: { name: "Gloves", icon: "" },
+  socialdistancing: { name: "Social Distancing", icon: "" },
 } as const;
 
 export type SafetyFeatureId = keyof typeof safetyFeatures;
 
-export const getSafetyFeature = (key: string): string =>
-  safetyFeatures[key as SafetyFeatureId] || key;
+export const getSafetyFeature = (key: string): SafetyFeature =>
+  safetyFeatures[key as SafetyFeatureId] || { name: key, icon: "" };
 
-export const getIconBySafetyNameAndValue = (name: string, value: boolean | undefined): string => {
-  switch (name) {
-    case "Masks":
-      switch (value) {
-        case undefined:
-          return masksUnknownIcon;
-        case false:
-          return masksNoIcon;
-        case true:
-          return masksYesIcon;
-        default:
-          console.error(`Unknown value ${value} in getIconBySafetyNameAndValue.`);
-          return masksUnknownIcon;
-      }
-    case "Gloves":
-      switch (value) {
-        case undefined:
-          return glovesUnknownIcon;
-        case false:
-          return glovesNoIcon;
-        case true:
-          return glovesYesIcon;
-        default:
-          console.error(`Unknown value ${value} in getIconBySafetyNameAndValue.`);
-          return glovesUnknownIcon;
-      }
-    case "Social Distancing":
-      switch (value) {
-        case undefined:
-          return distancingUnknownIcon;
-        case false:
-          return distancingNoIcon;
-        case true:
-          return distancingYesIcon;
-        default:
-          console.error(`Unknown value ${value} in getIconBySafetyNameAndValue.`);
-          return distancingUnknownIcon;
-      }
-    default:
-      console.error(`Unknown name ${name} in getIconBySafetyNameAndValue.`);
-      return distancingUnknownIcon;
-  }
+export type SafetyEnabled = "yes" | "no" | "unknown";
+
+export const SafetyIcons: Record<SafetyFeatureId, Record<SafetyEnabled, string>> = {
+  masks: {
+    yes: masksYesIcon,
+    no: masksNoIcon,
+    unknown: masksUnknownIcon,
+  },
+  gloves: {
+    yes: glovesYesIcon,
+    no: glovesNoIcon,
+    unknown: glovesUnknownIcon,
+  },
+  socialdistancing: {
+    yes: distancingYesIcon,
+    no: distancingNoIcon,
+    unknown: distancingUnknownIcon,
+  },
 };
 
 // </editor-fold>

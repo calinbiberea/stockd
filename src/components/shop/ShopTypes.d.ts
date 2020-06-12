@@ -12,7 +12,7 @@ export type EditShopResult = { success: false; reason: string } | { success: tru
 export interface ShopHeaderProps {
   locationData: LocationData;
   noBackButton: boolean;
-  onBackClick: () => void;
+  onBackClick?: () => void;
 }
 
 export type Stocks = Partial<Record<ProductId, number>>;

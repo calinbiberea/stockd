@@ -34,11 +34,10 @@ const Header: React.FC<HeaderProps> = ({
   children,
 }: PropsWithChildren<HeaderProps>) => {
   const classes = useStyles();
-  const {setRoute} = useContext(HomeContext);
+  const { setRoute } = useContext(HomeContext);
 
   const logo = (
-    <IconButton
-      onClick= {() => setRoute("landing")}>
+    <IconButton onClick={() => setRoute("landing")}>
       <Card className={classes.logoContainer}>
         <img src={Logo} alt="stockd logo" className={classes.logo} />
       </Card>

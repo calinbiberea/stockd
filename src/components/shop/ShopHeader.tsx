@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) =>
       [theme.breakpoints.down("xs")]: {
         width: "20px",
         height: "20px",
-      }
+      },
     },
     backButton: {
       position: "absolute",
@@ -43,20 +43,20 @@ const useStyles = makeStyles((theme) =>
       display: "flex",
 
       [theme.breakpoints.down("xs")]: {
-        flexDirection: "column-reverse"
+        flexDirection: "column-reverse",
       },
       [theme.breakpoints.up("sm")]: {
-        flexDirection: "row"
+        flexDirection: "row",
       },
     },
     imgContainer: {
       [theme.breakpoints.down("xs")]: {
         width: "100%",
-        height: "50%" ,
+        height: "50%",
       },
       [theme.breakpoints.up("sm")]: {
         width: "50%",
-        height: "100%" ,
+        height: "100%",
       },
       display: "flex",
       backgroundSize: "cover",
@@ -64,58 +64,68 @@ const useStyles = makeStyles((theme) =>
       backgroundPosition: "center",
     },
     nameRoadContainer: {
+      margin: "0 8px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
       [theme.breakpoints.down("xs")]: {
         width: "100%",
-        height: "50%" ,
+        height: "50%",
         flexDirection: "row",
       },
       [theme.breakpoints.up("sm")]: {
         width: "50%",
-        height: "100%" ,
+        height: "100%",
         flexDirection: "column",
       },
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
     },
     name: {
       color: "#FFF",
+      textAlign: "center",
       [theme.breakpoints.down("xs")]: {
-        padding: "3%",
-        width: "60%",
+        width: "50%",
         fontSize: "4vw",
-        display: "flex",
+      },
+      [theme.breakpoints.up("sm")]: {
+        width: "100%",
       },
     },
     divider: {
       height: "5%",
     },
     road: {
-      [theme.breakpoints.down("xs")]: {
-        padding: "3%",
-        width: "40%",
-        fontSize: "3vw",
-        display: "flex",
-      },
       color: theme.palette.secondary.main,
+      textAlign: "center",
+      [theme.breakpoints.down("xs")]: {
+        width: "50%",
+        fontSize: "3vw",
+      },
+      [theme.breakpoints.up("sm")]: {
+        width: "100%",
+      },
     },
   })
 );
 
-export const ShopHeader: React.FC<ShopHeaderProps> = ({ locationData, noBackButton, onBackClick }: ShopHeaderProps) => {
+export const ShopHeader: React.FC<ShopHeaderProps> = ({
+  locationData,
+  noBackButton,
+  onBackClick,
+}: ShopHeaderProps) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      {noBackButton ? null :
+      {noBackButton ? null : (
         <IconButton
           edge="start"
           aria-label="back"
           onClick={onBackClick}
           className={classes.backButton}
         >
-          <ArrowBackIcon className={classes.buttonIcon}/>
+          <ArrowBackIcon className={classes.buttonIcon} />
         </IconButton>
-      }
+      )}
+
       <div className={classes.imgAndText}>
         <div
           style={{ backgroundImage: `url(${locationData.photo})` }}
@@ -134,7 +144,7 @@ export const ShopHeader: React.FC<ShopHeaderProps> = ({ locationData, noBackButt
           </Typography>
         </div>
       </div>
-     </div>
+    </div>
   );
 };
 

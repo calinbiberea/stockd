@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, makeStyles, createStyles } from "@material-ui/core";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
-import ShopStock from "./ShopStock";
+import ShopEdit from "./ShopEdit";
 import { Stocks, ShopProps, SafetyFeatures } from "./ShopTypes";
 import { db } from "../../firebase/firebaseApp";
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, onBackClick }: ShopProps) => {
+const Shop: React.FC<ShopProps> = ({ locationData, edit, onBackClick }: ShopProps) => {
   const [stocks, setStocks] = useState<Stocks>({});
   const [safetyScore, setSafetyScore] = useState(0);
   const [usedSafetyFeatures, setSafetyFeatures] = useState<SafetyFeatures>({});
@@ -68,7 +68,9 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, onBackClick }
   }, [locationData.id]);
 
   let shopScreen: React.ReactNode;
-  if (selectedScreen === "overview") {
+  if (edit) {
+    shopScreen = <ShopEdit {...{ locationData, stocks, safetyScore, usedSafetyFeatures }} />;
+  } else {
     shopScreen = (
       <ShopOverview
         locationData={locationData}
@@ -77,8 +79,6 @@ const Shop: React.FC<ShopProps> = ({ locationData, selectedScreen, onBackClick }
         usedSafetyFeatures={usedSafetyFeatures}
       />
     );
-  } else if (selectedScreen === "stock") {
-    shopScreen = <ShopStock locationData={locationData} stocks={stocks} />;
   }
 
   return (

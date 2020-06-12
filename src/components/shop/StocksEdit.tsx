@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Slider,
@@ -11,8 +11,8 @@ import {
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import StockItem from "./StockItem";
-import { EditShopResult, ShopStockProps, Stocks } from "./ShopTypes";
 import { updateStock } from "../../firebase/firebaseApp";
+import { EditShopResult, StocksEditProps, Stocks } from "./ShopTypes";
 import { LoginContext } from "../App";
 import { ProductId, products } from "../../util/productsAndSafetyFeatures";
 
@@ -20,24 +20,25 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     container: {
       height: "100%",
+      width: "100%",
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
       alignItems: "center",
+      overflow: "auto",
     },
     gridContainer: {
       overflow: "auto",
     },
     gridItem: {
       display: "flex",
+      alignItems: "center",
       [theme.breakpoints.up("md")]: {
         flexDirection: "row",
         justifyContent: "space-around",
-        alignItems: "center",
       },
       [theme.breakpoints.down("sm")]: {
         flexDirection: "column",
-        alignItems: "center",
       },
     },
     stockItem: {
@@ -64,6 +65,7 @@ const useStyles = makeStyles((theme) =>
     buttonContainer: {
       display: "flex",
       flexDirection: "row",
+      marginTop: "8px",
     },
     buttonDivider: {
       width: "16px",
@@ -89,14 +91,12 @@ const getMarks = (value: number | undefined) => [
 const getSubmitSuffix = (numUpdates: number) =>
   numUpdates === 0 ? undefined : `${numUpdates} update${numUpdates === 1 ? "" : "s"}`;
 
-const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStockProps) => {
+const StocksEdit: React.FC<StocksEditProps> = ({ locationData, stocks }: StocksEditProps) => {
   const [localStocks, setLocalStocks] = useState<Stocks>({});
 
   const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
 
   const classes = useStyles();
-
-  const context = useContext(LoginContext);
 
   const numUpdates = Object.keys(localStocks).length;
   const numStocks = Object.keys(stocks).length;
@@ -108,8 +108,11 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
     const updated = currentValue !== undefined;
     const last = ix === numStocks - 1;
 
+    const onSliderChange = (_: React.ChangeEvent<unknown>, newValue: number | number[]) =>
+      setLocalStocks((prevState) => ({ ...prevState, [productId]: newValue as number }));
+
     return (
-      <Grid item xs={12} key={productId} className={classes.gridItem}>
+      <Grid item xs={12} key={name} className={classes.gridItem}>
         <div className={classes.stockItem}>
           <StockItem icon={icon} name={name} value={stocks[productId as ProductId]} />
         </div>
@@ -121,9 +124,7 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
           color={updated ? "primary" : "secondary"}
           className={classes.slider}
           value={updated ? currentValue : 50}
-          onChange={(event, value) => {
-            setLocalStocks((prevState) => ({ ...prevState, [name]: value as number }));
-          }}
+          onChange={onSliderChange}
         />
 
         {smallScreen && !last ? (
@@ -133,7 +134,9 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
     );
   });
 
-  const updateData = async () => {
+  const onClearClick = () => setLocalStocks({});
+
+  const onSubmitClick = async () => {
     const data = {
       shopId: locationData.id,
       scores: localStocks,
@@ -146,6 +149,8 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
     } else {
       enqueueSnackbar(`Failed to update. Reason: ${response.reason}`, { variant: "error" });
     }
+
+    onClearClick();
   };
 
   return (
@@ -155,20 +160,14 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
       </Grid>
 
       <div className={classes.buttonContainer}>
-        <LoginContext.Provider value={context}>
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={numUpdates === 0}
-            onClick={() => {
-              // noinspection JSIgnoredPromiseFromCall
-              updateData();
-              setLocalStocks({});
-            }}
-          >
-            Submit {getSubmitSuffix(numUpdates)}
-          </Button>
-        </LoginContext.Provider>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={numUpdates === 0}
+          onClick={onSubmitClick}
+        >
+          Submit {getSubmitSuffix(numUpdates)}
+        </Button>
 
         <div className={classes.buttonDivider} />
 
@@ -185,4 +184,4 @@ const ShopStock: React.FC<ShopStockProps> = ({ locationData, stocks }: ShopStock
   );
 };
 
-export default ShopStock;
+export default StocksEdit;

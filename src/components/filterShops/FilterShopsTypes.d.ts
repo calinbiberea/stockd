@@ -1,5 +1,3 @@
-import { Product } from "../../util/productsAndSafetyFeatures";
-
 export interface FilterShopsProps {
   setRoute: (Route) => void;
 }

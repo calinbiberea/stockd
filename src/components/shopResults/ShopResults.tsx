@@ -128,6 +128,7 @@ const ShopResults: React.FC<ShopResultsProps> = ({
         placeId={currentLocationData?.id || ""}
         closeOverlay={closeOverlay}
         locationData={currentLocationData}
+        edit={filters.editShop}
       />
       <Fade in={view === "list"}>
         <div>

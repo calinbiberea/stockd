@@ -1,13 +1,9 @@
 import { LocationData } from "../../util/googleMaps";
-import { FindShopsResult } from "../../../functions/src/findShops/util";
 import { ProductId, SafetyFeatureId } from "../../util/productsAndSafetyFeatures";
-
-export type ShopSelectedScreen = "overview" | "safety" | "stock";
 
 export interface ShopProps {
   locationData: LocationData;
-  selectedScreen: ShopSelectedScreen;
-  setSelectedScreen: (value: ShopSelectedScreen) => void;
+  edit: boolean;
   onBackClick: () => void;
 }
 
@@ -39,13 +35,26 @@ export interface SafetyOverviewProps {
   usedSafetyFeatures: SafetyFeatures;
 }
 
-export interface ShopStockProps {
+export interface ShopEditProps {
+  locationData: LocationData;
+  stocks: Stocks;
+  safetyScore: number;
+  usedSafetyFeatures: SafetyFeatures;
+}
+
+export interface StocksEditProps {
   locationData: LocationData;
   stocks: Stocks;
 }
 
+export interface SafetyEditProps {
+  safetyScore: number;
+  usedSafetyFeatures: SafetyFeatures;
+}
+
 export interface SafetyScoreProps {
   safetyScore: number;
+  setSafetyScore?: (newValue: number) => void;
   size?: "small" | "medium" | "large";
 }
 

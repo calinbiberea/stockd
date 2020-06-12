@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   Backdrop,
   Button,
@@ -8,13 +8,15 @@ import {
   makeStyles,
   createStyles,
 } from "@material-ui/core";
+import Overlay from "../overlay/Overlay";
+import Header from "../header/Header";
+import Map from "../map/Map";
 import { EditShopProps } from "./EditShopTypes";
 import { LoginContext } from "../App";
 import GoogleIcon from "../../res/google.png";
 import FacebookIcon from "../../res/facebook.png";
 import { Provider, logIn } from "../../firebase/firebaseLogin";
 import { useSnackbar } from "notistack";
-import FindShop from "../findShop/FindShop";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -37,7 +39,14 @@ const useStyles = makeStyles(() =>
   })
 );
 
+const defaultCenter = {
+  lat: 51.49788,
+  lng: -0.183699,
+};
+
 const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
+  const [currentPlaceId, setCurrentPlaceId] = useState("");
+
   const { uid, setUid } = useContext(LoginContext);
 
   const classes = useStyles();
@@ -45,6 +54,8 @@ const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const onBackClick = () => setRoute("landing");
+  const closeOverlay = () => setCurrentPlaceId("");
+  const onPlaceClick = (placeId: string) => setCurrentPlaceId(placeId);
 
   const performLogin = (provider: Provider) => async () => {
     const uid = await logIn(provider, enqueueSnackbar);
@@ -55,8 +66,6 @@ const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
 
   return (
     <>
-      <FindShop editShop setRoute={setRoute} />
-
       <Backdrop className={classes.backdrop} open={uid === null} onClick={onBackClick}>
         <Card onClick={(e) => e.stopPropagation()} className={classes.cardContainer}>
           <Typography>Please log in to contribute data:</Typography>
@@ -76,6 +85,12 @@ const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
           </Button>
         </Card>
       </Backdrop>
+
+      <Header onBackClick={onBackClick} />
+
+      <Overlay placeId={currentPlaceId} closeOverlay={closeOverlay} queryMap edit />
+
+      <Map onPlaceClick={onPlaceClick} currentCenter={defaultCenter} showGoogleMarkers />
     </>
   );
 };

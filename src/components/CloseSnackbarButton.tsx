@@ -18,7 +18,9 @@ const CloseSnackbarButton: React.FC<CloseButtonProps> = ({ id }: CloseButtonProp
         top: 0,
         width: "100%",
       }}
-    />
+    >
+      {""}
+    </Button>
   );
 };
 

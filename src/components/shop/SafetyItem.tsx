@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) =>
 const SafetyItem: React.FC<SafetyItemProps> = ({ feature, value }: SafetyItemProps) => {
   const classes = useStyles();
 
-  const name = getSafetyFeature(feature);
+  const { name } = getSafetyFeature(feature);
 
   let enabled: SafetyEnabled;
   switch (value) {

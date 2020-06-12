@@ -18,7 +18,7 @@ export const onStockUpdate = functions.firestore
     const before = change.before.data() as StocksEntry;
     if (
       before?.submissions !== undefined &&
-      scanForDifferences(before.submissions, after.submissions)
+      !scanForDifferences(before.submissions, after.submissions)
     ) {
       return;
     }
@@ -29,7 +29,7 @@ export const onStockUpdate = functions.firestore
     const batch = admin.firestore().batch();
 
     const shopRef = admin.firestore().collection("shops").doc(shopId);
-    batch.set(shopRef, { "displayed.stocks": averages }, { merge: true });
+    batch.set(shopRef, { displayed: { stocks: averages } }, { merge: true });
 
     const tomorrow = formatDate(Date.now() + 86400000);
     const tomorrowSubmissionRef = shopRef.collection("stocks").doc(tomorrow);

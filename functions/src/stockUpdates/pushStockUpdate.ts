@@ -28,18 +28,13 @@ export const pushStockUpdate = functions.https.onCall(async (data, context) => {
 
   const date = formatDate(Date.now());
 
-  // Unpack scores to update individual map values
-  const scoreUpdates = Object.keys(scores).reduce(
-    (acc, cur) => ({
-      ...acc,
-      [`submissions.${uid}.scores.${cur}`]: scores[cur],
-    }),
-    {}
-  );
-
   const updates = {
-    [`submissions.${uid}.time`]: admin.firestore.FieldValue.serverTimestamp(),
-    ...scoreUpdates,
+    submissions: {
+      [uid]: {
+        time: admin.firestore.FieldValue.serverTimestamp(),
+        scores,
+      },
+    },
   };
 
   const ref = admin.firestore().collection("shops").doc(shopId).collection("stocks").doc(date);

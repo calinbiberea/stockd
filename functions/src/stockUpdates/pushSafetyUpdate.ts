@@ -2,7 +2,7 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { allowedScores, failReason, formatDate, getPlaceDetails, LocationData } from "./util";
 
-export const pushStockUpdate = functions.https.onCall(async (data, context) => {
+export const pushSafetyUpdate = functions.https.onCall(async (data, context) => {
   // Check if logged in
   const uid = context.auth?.uid;
   if (uid === undefined) {
@@ -21,18 +21,21 @@ export const pushStockUpdate = functions.https.onCall(async (data, context) => {
     return { success: true };
   }
   for (const i of Object.values(scores)) {
-    if (!allowedScores.stocks.includes(i)) {
+    if (!allowedScores.safety.includes(i)) {
       return failReason("Invalid args");
     }
   }
 
   const date = formatDate(Date.now());
+  const rating = data.rating;
 
   const updates = {
     submissions: {
       [uid]: {
         time: admin.firestore.FieldValue.serverTimestamp(),
         scores,
+        ...(rating !== undefined ? { rating } : {}),
+        // rating: data.rating ?? undefined,
       },
     },
   };
@@ -43,7 +46,7 @@ export const pushStockUpdate = functions.https.onCall(async (data, context) => {
   }
 
   const shopRef = admin.firestore().collection("shops").doc(shopId);
-  const submissionsRef = shopRef.collection("stocks").doc(date);
+  const submissionsRef = shopRef.collection("safety").doc(date);
 
   try {
     const batch = admin.firestore().batch();

@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { collectAverages, formatDate, scanForDifferences, StocksEntry } from "./util";
+import { collectAverages, formatDate, getBeforeAfter, StocksEntry, StockSubmission } from "./util";
 
 type DocumentSnapshot<T> = admin.firestore.DocumentSnapshot<T>;
 type Change<T> = functions.Change<T>;
@@ -9,29 +9,35 @@ export const onStockUpdate = functions.firestore
   .document("shops/{shopId}/stocks/{date}")
   .onWrite(async (change: Change<DocumentSnapshot<StocksEntry>>, context) => {
     const shopId = context.params.shopId as string;
-    const after = change.after.data() as StocksEntry;
 
-    if (after?.submissions === undefined) {
+    const beforeAfter = getBeforeAfter<StocksEntry, StockSubmission>(change);
+    if (beforeAfter === null) {
       return;
     }
+    const { after } = beforeAfter;
 
-    const before = change.before.data() as StocksEntry;
-    if (
-      before?.submissions !== undefined &&
-      !scanForDifferences(before.submissions, after.submissions)
-    ) {
-      return;
-    }
-
-    const submissions = after.submissions;
+    const submissions = after.submissions as Record<string, StockSubmission>;
     const averages = collectAverages(submissions, after.prevScores);
+    const booleans = Object.entries(averages).reduce(
+      (acc, [product, avg]) => ({
+        [product]: avg > 30,
+        ...acc,
+      }),
+      {}
+    );
+    const now = Date.now();
+    const today = formatDate(now);
+    const tomorrow = formatDate(now + 86400000);
 
     const batch = admin.firestore().batch();
 
     const shopRef = admin.firestore().collection("shops").doc(shopId);
-    batch.set(shopRef, { displayed: { stocks: averages } }, { merge: true });
+    batch.set(
+      shopRef,
+      { displayed: { stocks: averages }, query: { stocks: booleans }, stockLastUpdated: today },
+      { merge: true }
+    );
 
-    const tomorrow = formatDate(Date.now() + 86400000);
     const tomorrowSubmissionRef = shopRef.collection("stocks").doc(tomorrow);
     batch.set(tomorrowSubmissionRef, { prevScores: averages }, { merge: true });
 

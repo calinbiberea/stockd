@@ -116,6 +116,12 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
         setLocalSafetyFeatures((prevState) => ({ ...prevState, [featureId]: newValue }));
       };
 
+      const onRadioClick = (required: boolean) => () => {
+        if (!updated && radioValue === required) {
+          onRadioChange(null, `${required}`);
+        }
+      }
+
       return (
         <Grid item xs={12} key={featureId} className={classes.gridItem}>
           <div className={classes.safetyItem}>
@@ -130,7 +136,7 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
               label="Not required"
               value="false"
               labelPlacement="start"
-              control={<Radio color={radioColor} />}
+              control={<Radio color={radioColor} onClick={onRadioClick(false)} />}
               style={updated && radioValue === false ? { color: colors.blue1 } : {}}
             />
             <Divider
@@ -143,7 +149,7 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
               label="Required"
               value="true"
               labelPlacement="end"
-              control={<Radio color={radioColor} />}
+              control={<Radio color={radioColor} onClick={onRadioClick(true)} />}
               style={updated && radioValue === true ? { color: colors.blue1 } : {}}
             />
           </RadioGroup>

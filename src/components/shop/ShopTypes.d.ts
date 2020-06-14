@@ -1,4 +1,5 @@
 import { LocationData } from "../../util/googleMaps";
+import { ProductId, SafetyFeatureId } from "../../util/productsAndSafetyFeatures";
 
 export interface ShopProps {
   locationData: LocationData;
@@ -6,28 +7,23 @@ export interface ShopProps {
   onBackClick: () => void;
 }
 
+export type EditResult = { success: false; reason: string } | { success: true };
+
 export interface ShopHeaderProps {
   locationData: LocationData;
   noBackButton: boolean;
-  onBackClick: () => void;
+  onBackClick?: () => void;
 }
 
-export interface Stocks {
-  [name: string]: {
-    icon: string;
-    value: number | undefined;
-  };
-}
+export type Stocks = Partial<Record<ProductId, number>>;
 
-export interface SafetyFeatures {
-  [name: string]: boolean | undefined;
-}
+export type SafetyFeatures = Partial<Record<SafetyFeatureId, number>>;
 
 export interface ShopOverviewProps {
   locationData: LocationData;
   stocks: Stocks;
   safetyScore: number;
-  safetyFeatures: SafetyFeatures;
+  usedSafetyFeatures: SafetyFeatures;
 }
 
 export interface StocksOverviewProps {
@@ -36,14 +32,14 @@ export interface StocksOverviewProps {
 
 export interface SafetyOverviewProps {
   safetyScore: number;
-  safetyFeatures: SafetyFeatures;
+  usedSafetyFeatures: SafetyFeatures;
 }
 
 export interface ShopEditProps {
   locationData: LocationData;
   stocks: Stocks;
   safetyScore: number;
-  safetyFeatures: SafetyFeatures;
+  usedSafetyFeatures: SafetyFeatures;
 }
 
 export interface StocksEditProps {
@@ -52,14 +48,16 @@ export interface StocksEditProps {
 }
 
 export interface SafetyEditProps {
+  locationData: LocationData;
   safetyScore: number;
-  safetyFeatures: SafetyFeatures;
+  usedSafetyFeatures: SafetyFeatures;
 }
 
 export interface SafetyScoreProps {
   safetyScore: number;
   setSafetyScore?: (newValue: number) => void;
   size?: "small" | "medium" | "large";
+  updated?: boolean;
 }
 
 export interface StockItemProps {
@@ -69,6 +67,6 @@ export interface StockItemProps {
 }
 
 export interface SafetyItemProps {
-  name: string;
-  value: boolean | undefined;
+  feature: SafetyFeatureId;
+  value: number | undefined;
 }

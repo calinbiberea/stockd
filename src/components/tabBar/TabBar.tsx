@@ -1,6 +1,6 @@
 import React from "react";
-import { TabBarProps } from "./TabBarTypes";
 import { Tab, Tabs, useMediaQuery, Theme, makeStyles, createStyles } from "@material-ui/core";
+import { TabBarProps } from "./TabBarTypes";
 
 const useStyles = makeStyles(() =>
   createStyles({

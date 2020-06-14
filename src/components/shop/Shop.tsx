@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Card, makeStyles, createStyles } from "@material-ui/core";
+import { db } from "../../firebase/firebaseApp";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
 import ShopEdit from "./ShopEdit";
 import { Stocks, ShopProps, SafetyFeatures } from "./ShopTypes";
-import { db } from "../../firebase/firebaseApp";
-import {
-  getProduct,
-  getSafetyFeature,
-  products,
-  safetyFeatures,
-} from "../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -37,23 +31,16 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const defaultStocks: Stocks = Object.fromEntries(
-  Object.values(products).map(({ icon, name }) => [name, { icon, value: undefined }])
-);
-
-const defaultSafetyFeatures: SafetyFeatures = Object.fromEntries(
-  Object.values(safetyFeatures).map((name) => [name, undefined])
-);
-
 const Shop: React.FC<ShopProps> = ({ locationData, edit, onBackClick }: ShopProps) => {
-  const [stocks, setStocks] = useState(defaultStocks);
+  const [stocks, setStocks] = useState<Stocks>({});
   const [safetyScore, setSafetyScore] = useState(0);
-  const [safetyFeatures, setSafetyFeatures] = useState(defaultSafetyFeatures);
+  const [usedSafetyFeatures, setSafetyFeatures] = useState<SafetyFeatures>({});
 
   const classes = useStyles();
 
+  // Reset stocks on location ID change
   useEffect(() => {
-    setStocks(defaultStocks);
+    setStocks({});
   }, [locationData.id]);
 
   useEffect(() => {
@@ -65,41 +52,15 @@ const Shop: React.FC<ShopProps> = ({ locationData, edit, onBackClick }: ShopProp
           const data = snapshot.data();
 
           if (data?.displayed?.stocks) {
-            const newStocks: Stocks = Object.entries(data.displayed.stocks).reduce(
-              (acc: Stocks, [key, value]) => {
-                const { name, icon } = getProduct(key);
-
-                acc[name] = {
-                  icon,
-                  value: value as number,
-                };
-
-                return acc;
-              },
-              {}
-            );
-
-            setStocks((prevState) => ({ ...prevState, ...newStocks }));
+            setStocks(data.displayed.stocks as Stocks);
           }
 
-          if (data?.displayed.safetyScore) {
-            const newSafetyScore: number = data.displayed.safetyScore;
-
-            setSafetyScore(newSafetyScore);
+          if (data?.displayed?.safetyRating) {
+            setSafetyScore(data.displayed.safetyRating);
           }
 
-          if (data?.displayed?.safetyFeatures) {
-            const newSafetyFeatures: SafetyFeatures = Object.entries(
-              data.displayed.safetyFeatures
-            ).reduce((acc: SafetyFeatures, [key, value]) => {
-              const name = getSafetyFeature(key);
-
-              acc[name] = value as boolean | undefined;
-
-              return acc;
-            }, {});
-
-            setSafetyFeatures((prevState) => ({ ...prevState, ...newSafetyFeatures }));
+          if (data?.displayed?.safety) {
+            setSafetyFeatures(data.displayed.safety);
           }
         },
         (err) => console.error(`Encountered error: ${err}`)
@@ -107,24 +68,10 @@ const Shop: React.FC<ShopProps> = ({ locationData, edit, onBackClick }: ShopProp
   }, [locationData.id]);
 
   let shopScreen: React.ReactNode;
-  if (!edit) {
-    shopScreen = (
-      <ShopOverview
-        locationData={locationData}
-        stocks={stocks}
-        safetyScore={safetyScore}
-        safetyFeatures={safetyFeatures}
-      />
-    );
+  if (edit) {
+    shopScreen = <ShopEdit {...{ locationData, stocks, safetyScore, usedSafetyFeatures }} />;
   } else {
-    shopScreen = (
-      <ShopEdit
-        locationData={locationData}
-        stocks={stocks}
-        safetyScore={safetyScore}
-        safetyFeatures={safetyFeatures}
-      />
-    );
+    shopScreen = <ShopOverview {...{ locationData, stocks, safetyScore, usedSafetyFeatures }} />;
   }
 
   return (

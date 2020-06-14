@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
+import colors from "../res/colors";
 import Landing from "./landing/Landing";
 import FilterShops from "./filterShops/FilterShops";
 import FindShop from "./findShop/FindShop";
 import EditShop from "./editShop/EditShop";
-import colors from "../res/colors";
 import CloseSnackbarButton from "./CloseSnackbarButton";
 
 const theme = createMuiTheme({
@@ -21,15 +21,15 @@ const theme = createMuiTheme({
 
 export const LoginContext = React.createContext({
   uid: null as string | null,
-  setUid: (uid: string) => {
+  setUid: (() => {
     /* void */
-  },
+  }) as (uid: string) => void,
 });
 
 export const HomeContext = React.createContext({
-  setRoute: (route: Route) => {
+  setRoute: (() => {
     /* void */
-  },
+  }) as (route: Route) => void,
 });
 
 const App: React.FC = () => {
@@ -45,7 +45,7 @@ const App: React.FC = () => {
       currentScreen = <FilterShops setRoute={setRoute} />;
       break;
     case "findShop":
-      currentScreen = <FindShop setRoute={setRoute} />;
+      currentScreen = <FindShop editShop={false} setRoute={setRoute} />;
       break;
     case "editShop":
       currentScreen = <EditShop setRoute={setRoute} />;

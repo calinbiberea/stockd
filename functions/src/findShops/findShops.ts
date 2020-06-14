@@ -21,8 +21,8 @@ export const findShops = functions.https.onCall(
     }
 
     const distanceFromShop = (shop: FirebaseFirestore.QueryDocumentSnapshot): number | null => {
-      const shopLat = shop.data()?.location?.lat;
-      const shopLong = shop.data()?.location?.lng;
+      const shopLat = shop.data()?.locationData?.lat;
+      const shopLong = shop.data()?.locationData?.lng;
 
       if (typeof shopLat !== "number" || typeof shopLong !== "number") {
         return null;

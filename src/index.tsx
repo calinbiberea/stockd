@@ -10,6 +10,7 @@ import {
   loadGoogleMapsScript,
   setupGoogleAutocompleteService,
   setupGoogleGeocoder,
+  setupGooglePlacesServiceEdit,
 } from "./util/googleMaps";
 import "fontsource-roboto";
 
@@ -18,6 +19,7 @@ const runApp = async () => {
   await loadGoogleMapsScript();
   setupGoogleAutocompleteService();
   setupGoogleGeocoder();
+  setupGooglePlacesServiceEdit();
 
   ReactDOM.render(
     <React.StrictMode>

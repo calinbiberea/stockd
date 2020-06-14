@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, Fade, makeStyles, createStyles } from "@material-ui/core";
 import { useSnackbar } from "notistack";
+import { findShops } from "../../firebase/firebaseApp";
+import { geocodeByPlaceId, getPlacesInRadius, LocationData } from "../../util/googleMaps";
+import { getDistanceFromLatLonInKm } from "../../util/getLatLngDistance";
 import Overlay from "../overlay/Overlay";
 import { SortBy, DBShopData, FindShopsResult, ShopResultsProps, View } from "./ShopResultsTypes";
-import { geocodeByPlaceId, LocationData } from "../../util/googleMaps";
-import { findShops } from "../../firebase/firebaseApp";
 import ShopList from "./ShopList";
 import ShopMap from "./ShopMap";
 import ShopResultsHeader from "./ShopResultsHeader";
@@ -52,6 +53,39 @@ const ShopResults: React.FC<ShopResultsProps> = ({
     const getData = async () => {
       const userLocation = await getUserLocation();
       setUserPos({ ...userLocation });
+
+      if (filters.editShop) {
+        const location = {
+          lat: userLocation.lat,
+          lng: userLocation.lng,
+        };
+
+        const locations = await getPlacesInRadius(location, filters.maxDistance);
+
+        if (locations === null) {
+          enqueueSnackbar("Failed to retrieve a list of places", { variant: "error" });
+          onBackClick();
+          return;
+        }
+
+        const newShopData = locations.map((locationData) => {
+          return {
+            id: locationData.id,
+            distance: getDistanceFromLatLonInKm(
+              location.lat,
+              location.lng,
+              locationData.lat,
+              locationData.lng
+            ),
+            locationData: { updateLocationData: true, ...locationData },
+          } as DBShopData;
+        });
+
+        setShopList(newShopData);
+
+        return;
+      }
+
       const request = {
         products: filters.products.join(","),
         safetyFeatures: filters.safetyFeatures.join(","),
@@ -75,23 +109,7 @@ const ShopResults: React.FC<ShopResultsProps> = ({
         return;
       }
 
-      if (!filters.nameFilter) {
-        setShopList(response.results);
-      } else {
-        const lowerCaseShopName = filters.shopName.toLowerCase();
-        const filterByName = (result: DBShopData, lowerCaseShopName: string) => {
-          const splits = result.locationData.name.split(" ");
-          let match = false;
-
-          splits.forEach((split) => {
-            match = match || split.toLowerCase().lastIndexOf(lowerCaseShopName, 0) === 0;
-          });
-
-          return match;
-        };
-
-        setShopList(response.results.filter((result) => filterByName(result, lowerCaseShopName)));
-      }
+      setShopList(response.results);
     };
 
     // noinspection JSIgnoredPromiseFromCall
@@ -107,7 +125,8 @@ const ShopResults: React.FC<ShopResultsProps> = ({
   }
 
   const closeOverlay = () => setCurrentLocationData(null);
-  const onGetDetailsClick = (locationData: LocationData) => setCurrentLocationData(locationData);
+  const { maxDistance } = filters;
+  const onShopSelect = (locationData: LocationData) => setCurrentLocationData(locationData);
 
   return (
     <div className={classes.container}>
@@ -121,15 +140,16 @@ const ShopResults: React.FC<ShopResultsProps> = ({
         placeId={currentLocationData?.id || ""}
         closeOverlay={closeOverlay}
         locationData={currentLocationData}
+        edit={filters.editShop}
       />
       <Fade in={view === "list"}>
         <div>
-          <ShopList shopList={shopList} sortBy={sortBy} onShopSelect={onGetDetailsClick} />
+          <ShopList {...{ shopList, sortBy, onShopSelect }} />
         </div>
       </Fade>
       <Fade in={view === "map"}>
         <div>
-          <ShopMap shopList={shopList} onShopSelect={onGetDetailsClick} userPos={userPos} />
+          <ShopMap {...{ shopList, userPos, maxDistance, onShopSelect }} />
         </div>
       </Fade>
     </div>

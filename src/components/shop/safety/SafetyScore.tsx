@@ -1,8 +1,9 @@
 import React from "react";
-import { Typography, makeStyles, createStyles } from "@material-ui/core";
+import { Typography, makeStyles, createStyles, withStyles } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import StarIcon from "@material-ui/icons/Star";
-import { SafetyScoreProps } from "./ShopTypes";
+import colors from "../../../res/colors";
+import { SafetyScoreProps } from "../ShopTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -24,6 +25,7 @@ const SafetyScore: React.FC<SafetyScoreProps> = ({
   safetyScore,
   setSafetyScore,
   size = "small",
+  updated = true,
 }: SafetyScoreProps) => {
   const classes = useStyles();
 
@@ -45,11 +47,20 @@ const SafetyScore: React.FC<SafetyScoreProps> = ({
     } else return;
   };
 
+  const ColoredRating = withStyles({
+    iconFilled: {
+      color: updated ? colors.blue1 : colors.blue3,
+    },
+    iconHover: {
+      color: colors.blue2,
+    },
+  })(Rating);
+
   return (
     <div className={classes.container}>
       <Typography variant={getTypographySize()}>Safety score:</Typography>
 
-      <Rating
+      <ColoredRating
         size={size}
         defaultValue={canEdit ? undefined : safetyScore}
         value={canEdit ? safetyScore : undefined}

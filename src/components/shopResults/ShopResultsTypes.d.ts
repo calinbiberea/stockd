@@ -5,8 +5,8 @@ export type SortBy = "distance" | "safetyScore";
 export interface ShopResultsProps {
   onBackClick: () => void;
   filters: {
+    editShop: boolean;
     nameFilter: boolean;
-    shopName: string;
     products: string[];
     safetyFeatures: string[];
     maxDistance: number;
@@ -36,6 +36,7 @@ export interface ShopMapProps {
     lat: number;
     lng: number;
   };
+  maxDistance: number;
 }
 
 export interface ShopListItemProps {
@@ -54,7 +55,6 @@ export interface DBShopData {
   id: string;
   distance: number;
   locationData: LocationData;
-  location: { lat: number; lng: number };
   [k: string]: unknown;
 }
 

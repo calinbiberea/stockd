@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { makeStyles, createStyles } from "@material-ui/core";
-import { ShopEditProps } from "./ShopTypes";
+import { makeStyles, createStyles, Slide } from "@material-ui/core";
 import TabBar from "../tabBar/TabBar";
-import StocksEdit from "./StocksEdit";
-import SafetyEdit from "./SafetyEdit";
+import StocksEdit from "./stock/StocksEdit";
+import SafetyEdit from "./safety/SafetyEdit";
+import { ShopEditProps } from "./ShopTypes";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -14,6 +14,22 @@ const useStyles = makeStyles(() =>
       flexDirection: "column",
       alignItems: "center",
     },
+    slideContainer: {
+      width: "100%",
+      height: "100%",
+      overflowX: "hidden",
+      overflowY: "hidden",
+    },
+    slidePanel: {
+      position: "relative",
+      width: "100%",
+      height: "100%",
+    },
+    slidePanelInner: {
+      transform: "translate(0, -100%)",
+      width: "100%",
+      height: "100%",
+    },
   })
 );
 
@@ -23,29 +39,30 @@ const ShopEdit: React.FC<ShopEditProps> = ({
   locationData,
   stocks,
   safetyScore,
-  safetyFeatures,
+  usedSafetyFeatures,
 }: ShopEditProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const classes = useStyles();
 
-  const indexToScreen = (index: number): React.ReactNode => {
-    switch (index) {
-      case 0:
-        return <StocksEdit locationData={locationData} stocks={stocks} />;
-      case 1:
-        return <SafetyEdit safetyScore={safetyScore} safetyFeatures={safetyFeatures} />;
-      default:
-        console.error("Invalid index in ShopEdit");
-        return <StocksEdit locationData={locationData} stocks={stocks} />;
-    }
-  };
-
   return (
     <div className={classes.container}>
       <TabBar tabNames={tabNames} index={currentIndex} setIndex={setCurrentIndex} />
 
-      {indexToScreen(currentIndex)}
+      <div className={classes.slideContainer}>
+        <Slide in={currentIndex === 0} direction="right">
+          <div className={classes.slidePanel}>
+            <StocksEdit {...{ locationData, stocks }} />
+          </div>
+        </Slide>
+        <Slide in={currentIndex === 1} direction="left">
+          <div className={classes.slidePanel}>
+            <div className={classes.slidePanelInner}>
+              <SafetyEdit {...{ locationData, safetyScore, usedSafetyFeatures }} />
+            </div>
+          </div>
+        </Slide>
+      </div>
     </div>
   );
 };

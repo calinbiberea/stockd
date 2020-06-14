@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { CircularProgress, Fade, Slide, Modal, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import type { OverlayProps } from "./OverlayTypes";
 import type { LocationData } from "../../util/googleMaps";
-import { getLocationDataByPlaceId } from "../../util/googleMaps";
 import Shop from "../shop/Shop";
+import type { OverlayProps } from "./OverlayTypes";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -31,7 +30,6 @@ const useStyles = makeStyles(() =>
 const Overlay: React.FC<OverlayProps> = ({
   placeId,
   closeOverlay,
-  queryMap,
   edit = false,
   locationData = null,
 }: OverlayProps) => {
@@ -45,12 +43,6 @@ const Overlay: React.FC<OverlayProps> = ({
   useEffect(() => {
     setLocalLocationData(locationData);
   }, [locationData]);
-
-  useEffect(() => {
-    if (queryMap && isOpen && !isLoaded) {
-      getLocationDataByPlaceId(placeId).then((data) => setLocalLocationData(data));
-    }
-  }, [placeId, isLoaded, isOpen, queryMap]);
 
   return (
     <Modal open={isOpen} onClose={closeOverlay} className={classes.modal}>

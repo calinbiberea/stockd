@@ -13,7 +13,7 @@ export interface LocationSearchProps {
 export interface SelectorPanelProps {
   title: string;
   selected: { [p: string]: boolean };
-  items: { [p: string]: string };
+  items: { [p: string]: Product };
   onSelect: (value: string) => void;
   onReset: () => void;
 }

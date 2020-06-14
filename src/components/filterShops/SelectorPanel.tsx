@@ -42,7 +42,7 @@ const SelectorPanel: React.FC<SelectorPanelProps> = ({
         style={selected[id] ? {} : { backgroundColor: "#FFF" }}
         onClick={() => onSelect(id)}
       >
-        {item}
+        {item.name}
       </Button>
     </Grid>
   ));

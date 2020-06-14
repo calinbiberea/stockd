@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import {
   Button,
-  Divider,
-  Grid,
   Slider,
+  Grid,
+  Divider,
   useMediaQuery,
   Theme,
   makeStyles,
   createStyles,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
+import { updateStock } from "../../../firebase/firebaseApp";
+import { ProductId, products } from "../../../util/productsAndSafetyFeatures";
+import { EditResult, StocksEditProps, Stocks } from "../ShopTypes";
 import StockItem from "./StockItem";
-import updateStock from "../../firebase/firebaseOps";
-import { StocksEditProps } from "./ShopTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const getMarks = (value: number) => [
+const getMarks = (value: number | undefined) => [
   {
     value: 0,
     label: value === 0 ? <b>few</b> : <>few</>,
@@ -90,7 +91,7 @@ const getSubmitSuffix = (numUpdates: number) =>
   numUpdates === 0 ? undefined : `${numUpdates} update${numUpdates === 1 ? "" : "s"}`;
 
 const StocksEdit: React.FC<StocksEditProps> = ({ locationData, stocks }: StocksEditProps) => {
-  const [localStocks, setLocalStocks] = useState<Record<string, number>>({});
+  const [localStocks, setLocalStocks] = useState<Stocks>({});
 
   const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
 
@@ -101,18 +102,18 @@ const StocksEdit: React.FC<StocksEditProps> = ({ locationData, stocks }: StocksE
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const stocksAndSliders = Object.entries(stocks).map(([name, { icon, value }], ix) => {
-    const currentValue = localStocks[name];
+  const stocksAndSliders = Object.entries(products).map(([productId, { name, icon }], ix) => {
+    const currentValue = localStocks[productId as ProductId];
     const updated = currentValue !== undefined;
     const last = ix === numStocks - 1;
 
     const onSliderChange = (_: React.ChangeEvent<unknown>, newValue: number | number[]) =>
-      setLocalStocks((prevState) => ({ ...prevState, [name]: newValue as number }));
+      setLocalStocks((prevState) => ({ ...prevState, [productId]: newValue as number }));
 
     return (
       <Grid item xs={12} key={name} className={classes.gridItem}>
         <div className={classes.stockItem}>
-          <StockItem icon={icon} name={name} value={value} />
+          <StockItem icon={icon} name={name} value={stocks[productId as ProductId]} />
         </div>
 
         <Slider
@@ -134,9 +135,21 @@ const StocksEdit: React.FC<StocksEditProps> = ({ locationData, stocks }: StocksE
 
   const onClearClick = () => setLocalStocks({});
 
-  const onSubmitClick = () => {
-    // noinspection JSIgnoredPromiseFromCall
-    updateStock(locationData, localStocks, enqueueSnackbar);
+  const onSubmitClick = async () => {
+    const data = {
+      shopId: locationData.id,
+      scores: localStocks,
+      updateLocationData: locationData.updateLocationData,
+    };
+
+    const response = ((await updateStock(data)).data as unknown) as EditResult;
+
+    if (response.success) {
+      enqueueSnackbar("Successfully updated stock information.", { variant: "success" });
+    } else {
+      enqueueSnackbar(`Failed to update. Reason: ${response.reason}`, { variant: "error" });
+    }
+
     onClearClick();
   };
 
@@ -162,7 +175,7 @@ const StocksEdit: React.FC<StocksEditProps> = ({ locationData, stocks }: StocksE
           variant="contained"
           color="secondary"
           disabled={numUpdates === 0}
-          onClick={onClearClick}
+          onClick={() => setLocalStocks({})}
         >
           Clear
         </Button>

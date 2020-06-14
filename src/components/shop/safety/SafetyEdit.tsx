@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import {
   Button,
   Divider,
-  FormGroup,
   FormControlLabel,
   Grid,
-  Switch,
   useMediaQuery,
   Theme,
   makeStyles,
   createStyles,
-  FormControl,
   RadioGroup,
   Radio,
 } from "@material-ui/core";
@@ -120,7 +117,7 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
         if (!updated && radioValue === required) {
           onRadioChange(null, `${required}`);
         }
-      }
+      };
 
       return (
         <Grid item xs={12} key={featureId} className={classes.gridItem}>

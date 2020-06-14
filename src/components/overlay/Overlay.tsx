@@ -3,7 +3,6 @@ import { CircularProgress, Fade, Slide, Modal, createStyles } from "@material-ui
 import { makeStyles } from "@material-ui/core/styles";
 import type { OverlayProps } from "./OverlayTypes";
 import type { LocationData } from "../../util/googleMaps";
-import { getLocationDataByPlaceId } from "../../util/googleMaps";
 import Shop from "../shop/Shop";
 
 const useStyles = makeStyles(() =>
@@ -31,7 +30,6 @@ const useStyles = makeStyles(() =>
 const Overlay: React.FC<OverlayProps> = ({
   placeId,
   closeOverlay,
-  queryMap,
   edit = false,
   locationData = null,
 }: OverlayProps) => {

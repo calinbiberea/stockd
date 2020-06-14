@@ -55,9 +55,6 @@ const ShopResults: React.FC<ShopResultsProps> = ({
       setUserPos({ ...userLocation });
 
       if (filters.editShop) {
-        // eslint-disable-next-line no-console
-        console.log("Calling places to retrieve shop information for editing");
-
         const location = {
           lat: userLocation.lat,
           lng: userLocation.lng,
@@ -70,11 +67,6 @@ const ShopResults: React.FC<ShopResultsProps> = ({
           onBackClick();
           return;
         }
-
-        // eslint-disable-next-line no-console
-        console.log(locations);
-        // // eslint-disable-next-line no-console
-        // console.log("HOW DO WE MAKE A SHOPLIST FROM THIS");
 
         const newShopData = locations.map((locationData) => {
           return {

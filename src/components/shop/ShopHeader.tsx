@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, makeStyles, createStyles } from "@material-ui/core";
+import { createStyles, makeStyles, Typography } from "@material-ui/core";
 import { ShopHeaderProps } from "./ShopTypes";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -114,8 +114,7 @@ const getPhotoUrl = (reference: unknown, maxWidth = 500): string | null => {
   }
   const endpoint = "https://maps.googleapis.com/maps/api/place/photo";
   const apiKey = envVars.googleMapsKey.value;
-  const url = `${endpoint}?key=${apiKey}&photoreference=${reference}&maxwidth=${maxWidth}`;
-  return url;
+  return `${endpoint}?key=${apiKey}&photoreference=${reference}&maxwidth=${maxWidth}`;
 };
 
 export const ShopHeader: React.FC<ShopHeaderProps> = ({

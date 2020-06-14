@@ -10,8 +10,6 @@ import {
   MenuItem,
   Select,
   Typography,
-  makeStyles,
-  createStyles,
 } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
 import { FilterShopsProps } from "./FilterShopsTypes";
@@ -25,60 +23,11 @@ import {
   ProductId,
   SafetyFeatureId,
 } from "../../util/productsAndSafetyFeatures";
-import { getCurrentLocation } from "../../util/geolocate";
+import { setLocationState, toggleGeolocationState } from "../../util/geolocate";
 import { useSnackbar } from "notistack";
-import { DISTANCES } from "../../util/consts";
+import { DISTANCES, useFilterScreenStyles } from "../../util/consts";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
-
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    container: {
-      width: "100vw",
-      height: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      overflowY: "auto",
-    },
-    title: {
-      padding: "20px",
-    },
-    contentContainer: {
-      margin: "20px",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    locationContainer: {
-      marginTop: "8px",
-      alignItems: "center",
-      [theme.breakpoints.up("sm")]: {
-        flexDirection: "row",
-      },
-      [theme.breakpoints.down("xs")]: {
-        flexDirection: "column",
-      },
-    },
-    distanceSelect: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    locationDivider: {
-      margin: `0px ${theme.spacing(2)}px`,
-      [theme.breakpoints.down("xs")]: {
-        visibility: "hidden",
-      },
-    },
-    button: {
-      margin: "auto 20px 16px",
-      flex: 0,
-    },
-    buttonIcon: {
-      marginLeft: "16px",
-    },
-  })
-);
 
 const defaultSelectedProducts = Object.fromEntries(
   Object.keys(products).map((productId) => [productId, false])
@@ -99,7 +48,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   const [currentLocation, setCurrentLocation] = useState<Position | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const classes = useStyles();
+  const classes = useFilterScreenStyles();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -121,37 +70,17 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
     }
   };
 
-  const toggleGeolocation = async (enabled: boolean) => {
-    let newUseCurrentLocation = enabled;
-    if (enabled) {
-      const maybeCurrentLocation = await getCurrentLocation(enqueueSnackbar);
+  const toggleGeolocation = toggleGeolocationState(
+    setCurrentLocation,
+    setUseCurrentLocation,
+    enqueueSnackbar
+  );
 
-      if (maybeCurrentLocation === null) {
-        newUseCurrentLocation = false;
-      }
-
-      setCurrentLocation(maybeCurrentLocation);
-    }
-
-    setUseCurrentLocation(newUseCurrentLocation);
-  };
-
-  const getLocation = () => {
-    if (useCurrentLocation) {
-      const coords = (currentLocation as Position).coords;
-
-      return {
-        geolocated: true as const,
-        lat: coords.latitude,
-        lng: coords.longitude,
-      };
-    } else {
-      return {
-        geolocated: false as const,
-        placeId: (selectedPlace as AutocompletePrediction).place_id,
-      };
-    }
-  };
+  const getLocation = setLocationState(
+    useCurrentLocation,
+    currentLocation as Position,
+    selectedPlace as AutocompletePrediction
+  );
 
   if (submitted) {
     const products = Object.entries(selectedProducts)

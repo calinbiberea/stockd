@@ -1,7 +1,7 @@
 import * as admin from "firebase-admin";
 import { Change } from "firebase-functions";
-import * as https from "https";
-import API_KEY from "../apiKey";
+import { CallableContext } from "firebase-functions/lib/providers/https";
+import { getPlaceDetails, LocationData } from "./googleMaps";
 import DocumentSnapshot = admin.firestore.DocumentSnapshot;
 
 type Timestamp = admin.firestore.Timestamp;
@@ -17,6 +17,8 @@ export const formatDate = (millis: number): string => {
 };
 
 export const failReason = (reason: string) => ({ success: false, reason } as const);
+
+export type PushResponse = { success: false; reason: string } | { success: true };
 
 // <editor-fold desc="User data types">
 
@@ -117,84 +119,66 @@ export const getBeforeAfter = <T extends Entry<S>, S extends Submission>(
   return { before, after };
 };
 
-// <editor-fold desc="Google maps">
-
-export interface LocationData {
-  id: string;
-  name: string;
-  photoReference: string | null;
-  road: string | null;
-  lat: number;
-  lng: number;
-}
-
-interface PlaceDetailsResponse {
-  status: string;
-  result: {
-    name: string;
-    geometry: {
-      location: {
-        lat: number;
-        lng: number;
-      };
-    };
-    photos: {
-      photo_reference: string;
-    }[];
-    address_components: {
-      long_name: string;
-      types: string[];
-    }[];
-  };
-}
-
-const ENDPOINT = "https://maps.googleapis.com/maps/api/place/details/json";
-const FIELDS = ["name", "photos", "address_components", "geometry"];
-
-const placeDetailsURL = (placeId: string): string => {
-  const params = { place_id: placeId, key: API_KEY, fields: FIELDS.join(",") };
-  const paramString = Object.entries(params)
-    .map(([k, v]) => `${k}=${v}`)
-    .join("&");
-  return `${ENDPOINT}?${paramString}`;
-};
-
-// from https://stackoverflow.com/questions/6968448/where-is-body-in-a-nodejs-http-get-response
-const httpsGet = (url: string): Promise<string> =>
-  new Promise((resolve, reject) => {
-    https
-      .get(url, (res) => {
-        res.setEncoding("utf8");
-        let body = "";
-        res.on("data", (chunk) => (body += chunk));
-        res.on("end", () => resolve(body));
-      })
-      .on("error", reject);
-  });
-
-export const getPlaceDetails = async (placeId: string): Promise<LocationData | null> => {
-  const url = placeDetailsURL(placeId);
-  const rawResponse = await httpsGet(url);
-  const response = JSON.parse(rawResponse) as PlaceDetailsResponse;
-  if (response.status !== "OK") {
-    console.error(url + "\n" + rawResponse);
-    return null;
+export const validate = (
+  data: Record<string, unknown>,
+  context: CallableContext
+):
+  | { response: PushResponse }
+  | { response: null; uid: string; shopId: string; scores: Record<string, number> } => {
+  // Check if logged in
+  const uid = context.auth?.uid;
+  if (uid === undefined) {
+    return { response: failReason("No user id (you might not be logged in)") };
   }
 
-  return {
-    name: response.result.name,
-    id: placeId,
-    photoReference: response.result.photos
-      ? response.result.photos.length > 0
-        ? response.result.photos[0].photo_reference
-        : null
-      : null,
-    road:
-      response.result.address_components?.find((component) => component.types.includes("route"))
-        ?.long_name ?? null,
-    lat: response.result.geometry.location.lat,
-    lng: response.result.geometry.location.lng,
-  };
+  // Validate shopId
+  const shopId: string | unknown = data.shopId;
+  if (typeof shopId !== "string") {
+    return { response: failReason("Invalid args") };
+  }
+
+  // Validate scores
+  if (data.scores === null || data.scors === undefined) {
+    return { response: failReason("Invalid args") };
+  }
+  const scores: Record<string, number> = data.scores as Record<string, number>;
+  if (Object.keys(scores).length === 0) {
+    return { response: { success: true } };
+  }
+  for (const i of Object.values(scores)) {
+    if (!allowedScores.safety.includes(i)) {
+      return { response: failReason("Invalid args") };
+    }
+  }
+
+  return { response: null, uid, shopId, scores };
 };
 
-// </editor-fold>
+export const pushUpdates = async (
+  type: "stocks" | "safety",
+  shopId: string,
+  updates: unknown,
+  updateLocationData: boolean
+): Promise<PushResponse> => {
+  const date = formatDate(Date.now());
+
+  let locationData: LocationData | null = null;
+  if (updateLocationData) {
+    locationData = await getPlaceDetails(shopId);
+  }
+
+  const shopRef = admin.firestore().collection("shops").doc(shopId);
+  const submissionsRef = shopRef.collection(type).doc(date);
+
+  try {
+    const batch = admin.firestore().batch();
+    batch.set(submissionsRef, updates, { merge: true });
+    if (locationData !== null) {
+      batch.set(shopRef, { locationData: locationData }, { merge: true });
+    }
+    await batch.commit();
+    return { success: true as const };
+  } catch (e) {
+    return failReason(e.message);
+  }
+};

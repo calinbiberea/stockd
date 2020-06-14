@@ -21,15 +21,15 @@ const theme = createMuiTheme({
 
 export const LoginContext = React.createContext({
   uid: null as string | null,
-  setUid: (uid: string) => {
+  setUid: (() => {
     /* void */
-  },
+  }) as (uid: string) => void,
 });
 
 export const HomeContext = React.createContext({
-  setRoute: (route: Route) => {
+  setRoute: (() => {
     /* void */
-  },
+  }) as (route: Route) => void,
 });
 
 const App: React.FC = () => {

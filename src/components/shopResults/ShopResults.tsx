@@ -3,15 +3,12 @@ import { Box, CircularProgress, Fade, makeStyles, createStyles } from "@material
 import { useSnackbar } from "notistack";
 import Overlay from "../overlay/Overlay";
 import { SortBy, DBShopData, FindShopsResult, ShopResultsProps, View } from "./ShopResultsTypes";
-import {
-  geocodeByPlaceId,
-  getPlacesMatchingNameInRadius,
-  LocationData,
-} from "../../util/googleMaps";
+import { geocodeByPlaceId, getPlacesInRadius, LocationData } from "../../util/googleMaps";
 import { findShops } from "../../firebase/firebaseApp";
 import ShopList from "./ShopList";
 import ShopMap from "./ShopMap";
 import ShopResultsHeader from "./ShopResultsHeader";
+import { getDistanceFromLatLonInKm } from "../../util/getLatLngDistance";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -66,22 +63,33 @@ const ShopResults: React.FC<ShopResultsProps> = ({
           lng: userLocation.lng,
         };
 
-        const response = await getPlacesMatchingNameInRadius(
-          filters.shopName,
-          location,
-          filters.maxDistance
-        );
+        const locations = await getPlacesInRadius(location, filters.maxDistance);
 
-        if (response === null) {
+        if (locations === null) {
           enqueueSnackbar("Failed to retrieve a list of places", { variant: "error" });
           onBackClick();
           return;
         }
 
         // eslint-disable-next-line no-console
-        console.log(response);
-        // eslint-disable-next-line no-console
-        console.log("HOW DO WE MAKE A SHOPLIST FROM THIS");
+        console.log(locations);
+        // // eslint-disable-next-line no-console
+        // console.log("HOW DO WE MAKE A SHOPLIST FROM THIS");
+
+        const newShopData = locations.map((locationData) => {
+          return {
+            id: locationData.id,
+            distance: getDistanceFromLatLonInKm(
+              location.lat,
+              location.lng,
+              locationData.lat,
+              locationData.lng
+            ),
+            locationData: { updateLocationData: true, ...locationData },
+          } as DBShopData;
+        });
+
+        setShopList(newShopData);
 
         return;
       }
@@ -109,23 +117,7 @@ const ShopResults: React.FC<ShopResultsProps> = ({
         return;
       }
 
-      if (!filters.nameFilter) {
-        setShopList(response.results);
-      } else {
-        const lowerCaseShopName = filters.shopName.toLowerCase();
-        const filterByName = (result: DBShopData, lowerCaseShopName: string) => {
-          const splits = result.locationData.name.split(" ");
-          let match = false;
-
-          splits.forEach((split) => {
-            match = match || split.toLowerCase().lastIndexOf(lowerCaseShopName, 0) === 0;
-          });
-
-          return match;
-        };
-
-        setShopList(response.results.filter((result) => filterByName(result, lowerCaseShopName)));
-      }
+      setShopList(response.results);
     };
 
     // noinspection JSIgnoredPromiseFromCall
@@ -159,7 +151,7 @@ const ShopResults: React.FC<ShopResultsProps> = ({
       />
       <Fade in={view === "list"}>
         <div>
-          <ShopList shopList={shopList} sortBy={sortBy} onShopSelect={onGetDetailsClick} />
+          <ShopList shopList={shopList} onShopSelect={onGetDetailsClick} sortBy={sortBy} />
         </div>
       </Fade>
       <Fade in={view === "map"}>

@@ -5,7 +5,11 @@ export interface LocationData {
   name: string;
   id: string;
   photo: string | null;
+  photoReference: string | null;
   road: string | null;
+  lat: number;
+  lng: number;
+  updateLocationData?: boolean;
 }
 
 let googleClient: google;
@@ -13,7 +17,7 @@ let placesService: google.maps.places.PlacesService;
 let autocompleteService: google.maps.places.AutocompleteService;
 let geocoder: google.maps.Geocoder;
 
-const detailsRequestField = ["name", "photos", "address_components"];
+const detailsRequestField = ["name", "photos", "address_components", "geometry"];
 
 export const loadGoogleMapsScript = async (): Promise<void> => {
   googleClient = await new Loader(envVars.googleMapsKey.value, { libraries: ["places"] }).load();
@@ -49,11 +53,13 @@ export const getLocationDataByPlaceId = (placeId: string): Promise<LocationData 
               ? place.photos[0].getUrl({ maxWidth: 500 })
               : null
             : null,
+          photoReference: null,
           road:
             place.address_components?.find((component) => component.types.includes("route"))
               ?.long_name ?? null,
+          lat: place.geometry?.location.lat() as number,
+          lng: place.geometry?.location.lng() as number,
         };
-
         resolve(locationData);
       } else {
         console.error(`Place details request failed with ${status}\n\n${place}`);
@@ -81,40 +87,45 @@ export const geocodeByPlaceId = (placeId: string): Promise<google.maps.LatLng> =
   });
 
 // Used for retrieving places
-export const getPlacesMatchingNameInRadius = (
-  shopName: string,
+export const getPlacesInRadius = (
   location: { lat: number; lng: number },
   radius: number
 ): Promise<LocationData[] | null> => {
   const latLng = new googleClient.maps.LatLng(location.lat, location.lng);
   return new Promise((resolve) =>
-    placesService.nearbySearch({ name: shopName, location: latLng, radius }, (places, status) => {
-      if (status === googleClient.maps.places.PlacesServiceStatus.OK) {
-        const locationDatas = [] as LocationData[];
+    placesService.nearbySearch(
+      { location: latLng, radius: radius * 1000, type: "grocery_or_supermarket" },
+      (places, status) => {
+        if (status === googleClient.maps.places.PlacesServiceStatus.OK) {
+          const locations: LocationData[] = [];
 
-        places.forEach((item) => {
-          const locationData = {
-            name: item.name,
-            id: item.id,
-            photo: item.photos
-              ? item.photos.length > 0
-                ? item.photos[0].getUrl({ maxWidth: 500 })
-                : null
-              : null,
-            road:
-              item.address_components?.find((component) => component.types.includes("route"))
-                ?.long_name ?? null,
-          } as LocationData;
+          places.forEach((item) => {
+            const locationData = {
+              name: item.name,
+              id: item.place_id,
+              photo: item.photos
+                ? item.photos.length > 0
+                  ? item.photos[0].getUrl({ maxWidth: 500 })
+                  : null
+                : null,
+              photoReference: null,
+              road:
+                item.address_components?.find((component) => component.types.includes("route"))
+                  ?.long_name ?? null,
+              lat: item.geometry?.location.lat() as number,
+              lng: item.geometry?.location.lng() as number,
+            } as LocationData;
 
-          locationDatas.push(locationData);
-        });
+            locations.push(locationData);
+          });
 
-        resolve(locationDatas);
-      } else {
-        console.error(`Place details request failed with ${status}\n\n${places}`);
+          resolve(locations);
+        } else {
+          console.error(`Place details request failed with ${status}\n\n${places}`);
 
-        resolve(null);
+          resolve(null);
+        }
       }
-    })
+    )
   );
 };

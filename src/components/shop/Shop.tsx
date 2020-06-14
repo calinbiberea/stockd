@@ -55,12 +55,12 @@ const Shop: React.FC<ShopProps> = ({ locationData, edit, onBackClick }: ShopProp
             setStocks(data.displayed.stocks as Stocks);
           }
 
-          if (data?.displayed?.safetyScore) {
-            setSafetyScore(data.displayed.safetyScore);
+          if (data?.displayed?.safetyRating) {
+            setSafetyScore(data.displayed.safetyRating);
           }
 
-          if (data?.displayed?.safetyFeatures) {
-            setSafetyFeatures(data.displayed.safetyFeatures);
+          if (data?.displayed?.safety) {
+            setSafetyFeatures(data.displayed.safety);
           }
         },
         (err) => console.error(`Encountered error: ${err}`)

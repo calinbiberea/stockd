@@ -32,9 +32,11 @@ const ShopEdit: React.FC<ShopEditProps> = ({
   const indexToScreen = (index: number): React.ReactNode => {
     switch (index) {
       case 0:
-        return <StocksEdit locationData={locationData} stocks={stocks} />;
+        return <StocksEdit {...{ locationData, stocks }} />;
       case 1:
-        return <SafetyEdit safetyScore={safetyScore} usedSafetyFeatures={usedSafetyFeatures} />;
+        return (
+          <SafetyEdit usedSafetyFeatures={usedSafetyFeatures} {...{ locationData, safetyScore }} />
+        );
       default:
         console.error("Invalid index in ShopEdit");
         return <StocksEdit locationData={locationData} stocks={stocks} />;

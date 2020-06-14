@@ -1,7 +1,12 @@
 import React from "react";
 import { Card, Typography, makeStyles, createStyles } from "@material-ui/core";
 import { SafetyItemProps } from "../ShopTypes";
-import { getSafetyFeature, SafetyEnabled, SafetyIcons } from "../../../util/productsAndSafetyFeatures";
+import {
+  getSafetyFeature,
+  SafetyEnabled,
+  SafetyIcons,
+} from "../../../util/productsAndSafetyFeatures";
+import { SAFETY_FEATURE_THRESHOLD } from "../../../util/consts";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -32,16 +37,12 @@ const SafetyItem: React.FC<SafetyItemProps> = ({ feature, value }: SafetyItemPro
   const { name } = getSafetyFeature(feature);
 
   let enabled: SafetyEnabled;
-  switch (value) {
-    case true:
-      enabled = "yes";
-      break;
-    case false:
-      enabled = "no";
-      break;
-    case undefined:
-      enabled = "unknown";
-      break;
+  if (value === undefined) {
+    enabled = "unknown";
+  } else if (value < SAFETY_FEATURE_THRESHOLD) {
+    enabled = "no";
+  } else {
+    enabled = "yes";
   }
   const icon = SafetyIcons[feature][enabled];
 

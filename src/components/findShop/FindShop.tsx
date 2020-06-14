@@ -74,7 +74,6 @@ const useStyles = makeStyles((theme) =>
 );
 
 const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps) => {
-  const [shopName, setShopName] = useState("");
   const [maxDistance, setMaxDistance] = useState(50);
   const [selectedPlace, setSelectedPlace] = useState<AutocompletePrediction | null>(null);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
@@ -126,14 +125,13 @@ const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps
     return (
       <ShopResults
         onBackClick={() => setSubmitted(false)}
-        filters={{ editShop, nameFilter, shopName, products, safetyFeatures, maxDistance }}
+        filters={{ editShop, nameFilter, products, safetyFeatures, maxDistance }}
         location={location}
       />
     );
   }
 
-  const canSubmit =
-    shopName !== "" && (useCurrentLocation ? currentLocation !== null : selectedPlace !== null);
+  const canSubmit = useCurrentLocation ? currentLocation !== null : selectedPlace !== null;
 
   return (
     <div className={classes.container}>
@@ -144,14 +142,6 @@ const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps
       </Typography>
 
       <div className={classes.contentContainer}>
-        <TextField
-          required
-          label="Enter shop name"
-          variant="outlined"
-          defaultValue={shopName}
-          onChange={(event) => setShopName(event.target.value)}
-        />
-
         <FormGroup row className={classes.locationContainer}>
           <FormControl className={classes.distanceSelect}>
             <InputLabel>Max. distance</InputLabel>

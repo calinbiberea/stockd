@@ -12,7 +12,7 @@ import {
 import { useSnackbar } from "notistack";
 import StockItem from "./StockItem";
 import { updateStock } from "../../../firebase/firebaseApp";
-import { EditShopResult, StocksEditProps, Stocks } from "../ShopTypes";
+import { EditResult, StocksEditProps, Stocks } from "../ShopTypes";
 import { ProductId, products } from "../../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles((theme) =>
@@ -139,12 +139,13 @@ const StocksEdit: React.FC<StocksEditProps> = ({ locationData, stocks }: StocksE
     const data = {
       shopId: locationData.id,
       scores: localStocks,
+      updateLocationData: locationData.updateLocationData,
     };
 
-    const response = ((await updateStock(data)).data as unknown) as EditShopResult;
+    const response = ((await updateStock(data)).data as unknown) as EditResult;
 
     if (response.success) {
-      enqueueSnackbar("Successfully updated the shop information.", { variant: "success" });
+      enqueueSnackbar("Successfully updated stock information.", { variant: "success" });
     } else {
       enqueueSnackbar(`Failed to update. Reason: ${response.reason}`, { variant: "error" });
     }

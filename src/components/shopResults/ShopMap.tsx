@@ -24,7 +24,7 @@ const ShopMap: React.FC<ShopMapProps> = ({ shopList, userPos, onShopSelect }: Sh
   const markers = shopList.map((shop) => (
     <Marker
       key={shop.id}
-      position={shop.location}
+      position={shop.locationData}
       onClick={() => onShopSelect(shop.locationData)}
       icon={ShopPinIcon}
     />

@@ -10,11 +10,18 @@ import {
   Theme,
   makeStyles,
   createStyles,
+  FormControl,
+  RadioGroup,
+  Radio,
 } from "@material-ui/core";
 import SafetyScore from "./SafetyScore";
-import { SafetyEditProps } from "../ShopTypes";
+import { EditResult, SafetyEditProps } from "../ShopTypes";
 import SafetyItem from "./SafetyItem";
 import { SafetyFeatureId, safetyFeatures } from "../../../util/productsAndSafetyFeatures";
+import { updateSafety } from "../../../firebase/firebaseApp";
+import { useSnackbar } from "notistack";
+import colors from "../../../res/colors";
+import { SAFETY_FEATURE_THRESHOLD } from "../../../util/consts";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -72,10 +79,11 @@ const getSubmitSuffix = (numUpdates: number) =>
   numUpdates === 0 ? undefined : `${numUpdates} update${numUpdates === 1 ? "" : "s"}`;
 
 const SafetyEdit: React.FC<SafetyEditProps> = ({
+  locationData,
   safetyScore,
   usedSafetyFeatures,
 }: SafetyEditProps) => {
-  const [localSafetyScore, setLocalSafetyScore] = useState(safetyScore);
+  const [localSafetyScore, setLocalSafetyScore] = useState<number | undefined>(undefined);
   const [localSafetyFeatures, setLocalSafetyFeatures] = useState<Record<string, boolean>>({});
 
   const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
@@ -83,17 +91,30 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
   const classes = useStyles();
 
   const numUpdates =
-    Object.keys(localSafetyFeatures).length + (localSafetyScore !== safetyScore ? 1 : 0);
+    Object.keys(localSafetyFeatures).length + (localSafetyScore !== undefined ? 1 : 0);
   const numSafetyFeatures = Object.keys(usedSafetyFeatures).length;
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const safetyFeaturesAndSwitches = Object.entries(safetyFeatures).map(
     ([featureId, { name }], ix) => {
-      const currentValue = localSafetyFeatures[name];
+      const currentValue = localSafetyFeatures[featureId];
       const updated = currentValue !== undefined;
       const last = ix === numSafetyFeatures - 1;
 
-      const onSwitchChange = (_: React.ChangeEvent<unknown>, newValue: boolean) =>
-        setLocalSafetyFeatures((prevState) => ({ ...prevState, [name]: newValue }));
+      // const onSwitchChange = (_: React.ChangeEvent<unknown>, newValue: boolean) =>
+      //   setLocalSafetyFeatures((prevState) => ({ ...prevState, [featureId]: newValue }));
+
+      const radioColor = updated ? "primary" : "secondary";
+      const featureScore = usedSafetyFeatures[featureId as SafetyFeatureId];
+      const featureEnabled =
+        featureScore !== undefined ? featureScore >= SAFETY_FEATURE_THRESHOLD : undefined;
+      const radioValue = updated ? currentValue : featureEnabled;
+
+      const onRadioChange = (event: unknown, value: string) => {
+        const newValue = value === "true";
+        setLocalSafetyFeatures((prevState) => ({ ...prevState, [featureId]: newValue }));
+      };
 
       return (
         <Grid item xs={12} key={featureId} className={classes.gridItem}>
@@ -104,18 +125,28 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
             />
           </div>
 
-          <FormGroup>
+          <RadioGroup row value={`${radioValue}`} onChange={onRadioChange}>
+            <FormControlLabel
+              label="Not required"
+              value="false"
+              labelPlacement="start"
+              control={<Radio color={radioColor} />}
+              style={updated && radioValue === false ? { color: colors.blue1 } : {}}
+            />
+            <Divider
+              flexItem
+              variant="fullWidth"
+              orientation="vertical"
+              style={{ margin: "0 20px" }}
+            />
             <FormControlLabel
               label="Required"
-              control={
-                <Switch
-                  checked={updated ? currentValue : true}
-                  color={updated ? "primary" : "secondary"}
-                  onChange={onSwitchChange}
-                />
-              }
+              value="true"
+              labelPlacement="end"
+              control={<Radio color={radioColor} />}
+              style={updated && radioValue === true ? { color: colors.blue1 } : {}}
             />
-          </FormGroup>
+          </RadioGroup>
 
           {smallScreen && !last ? (
             <Divider variant="middle" orientation="horizontal" className={classes.gridDivider} />
@@ -126,12 +157,29 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
   );
 
   const onClearClick = () => {
-    setLocalSafetyScore(safetyScore);
+    setLocalSafetyScore(undefined);
     setLocalSafetyFeatures({});
   };
 
-  const onSubmitClick = () => {
-    console.warn("uh oh");
+  const onSubmitClick = async () => {
+    const safetyScores = Object.entries(localSafetyFeatures).map(([feature, enabled]) => [
+      feature,
+      enabled ? 100 : 0,
+    ]) as [string, 100 | 0][];
+    const data = {
+      shopId: locationData.id,
+      scores: Object.fromEntries(safetyScores),
+      rating: localSafetyScore,
+      updateLocationData: locationData.updateLocationData,
+    };
+
+    const response = ((await updateSafety(data)).data as unknown) as EditResult;
+
+    if (response.success) {
+      enqueueSnackbar("Successfully updated safety information.", { variant: "success" });
+    } else {
+      enqueueSnackbar(`Failed to update. Reason: ${response.reason}`, { variant: "error" });
+    }
     onClearClick();
   };
 
@@ -139,9 +187,10 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
     <div className={classes.container}>
       <div className={classes.safetyScoreContainer}>
         <SafetyScore
-          safetyScore={localSafetyScore}
+          safetyScore={localSafetyScore ?? safetyScore}
           setSafetyScore={setLocalSafetyScore}
           size={smallScreen ? "medium" : "large"}
+          updated={localSafetyScore !== undefined}
         />
       </div>
 

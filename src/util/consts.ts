@@ -1,0 +1,1 @@
+export const SAFETY_FEATURE_THRESHOLD = 30;

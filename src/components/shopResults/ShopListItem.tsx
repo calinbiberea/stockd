@@ -48,6 +48,12 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
 }: ShopListItemProps) => {
   const classes = useStyles();
 
+  const displayed = shopData.displayed as Record<string, unknown>;
+  const safetyScore =
+    typeof displayed?.safetyRating === "number" && !isNaN(displayed.safetyRating) ? (
+      <SafetyScore safetyScore={displayed.safetyRating as number} />
+    ) : undefined;
+
   return (
     <Card className={classes.container}>
       <div className={classes.headerContainer}>
@@ -57,11 +63,7 @@ const ShopListItem: React.FC<ShopListItemProps> = ({
       <div className={classes.contentContainer}>
         <Typography>Distance: {shopData.distance.toFixed(2)}km</Typography>
 
-        <SafetyScore
-          safetyScore={
-            ((shopData.displayed as Record<string, unknown>)?.safetyScore || 0) as number
-          }
-        />
+        {safetyScore}
 
         <Typography>
           Opening times: {startTime} - {endTime}

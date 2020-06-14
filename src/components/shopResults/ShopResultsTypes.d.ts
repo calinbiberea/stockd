@@ -7,7 +7,6 @@ export interface ShopResultsProps {
   filters: {
     editShop: boolean;
     nameFilter: boolean;
-    shopName: string;
     products: string[];
     safetyFeatures: string[];
     maxDistance: number;
@@ -55,7 +54,6 @@ export interface DBShopData {
   id: string;
   distance: number;
   locationData: LocationData;
-  location: { lat: number; lng: number };
   [k: string]: unknown;
 }
 

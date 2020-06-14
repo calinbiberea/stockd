@@ -4,6 +4,7 @@ import { ShopHeaderProps } from "./ShopTypes";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import colors from "../../res/colors";
+import envVars from "../../util/envVars";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -107,12 +108,23 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
+const getPhotoUrl = (reference: unknown, maxWidth = 500): string | null => {
+  if (typeof reference !== "string") {
+    return null;
+  }
+  const endpoint = "https://maps.googleapis.com/maps/api/place/photo";
+  const apiKey = envVars.googleMapsKey.value;
+  const url = `${endpoint}?key=${apiKey}&photoreference=${reference}&maxwidth=${maxWidth}`;
+  return url;
+};
+
 export const ShopHeader: React.FC<ShopHeaderProps> = ({
   locationData,
   noBackButton,
   onBackClick,
 }: ShopHeaderProps) => {
   const classes = useStyles();
+  const photo = locationData.photo ?? getPhotoUrl(locationData.photoReference);
   return (
     <div className={classes.container}>
       {noBackButton ? null : (
@@ -128,7 +140,7 @@ export const ShopHeader: React.FC<ShopHeaderProps> = ({
 
       <div className={classes.imgAndText}>
         <div
-          style={{ backgroundImage: `url(${locationData.photo})` }}
+          style={photo !== null ? { backgroundImage: `url(${photo})` } : {}}
           className={classes.imgContainer}
         />
 

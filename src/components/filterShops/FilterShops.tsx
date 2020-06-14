@@ -163,13 +163,12 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
 
     const location = getLocation();
     const nameFilter = false;
-    const shopName = "";
     const editShop = false;
 
     return (
       <ShopResults
         onBackClick={() => setSubmitted(false)}
-        filters={{ editShop, nameFilter, shopName, products, safetyFeatures, maxDistance }}
+        filters={{ editShop, nameFilter, products, safetyFeatures, maxDistance }}
         location={location}
       />
     );

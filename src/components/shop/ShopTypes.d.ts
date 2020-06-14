@@ -7,7 +7,7 @@ export interface ShopProps {
   onBackClick: () => void;
 }
 
-export type EditShopResult = { success: false; reason: string } | { success: true };
+export type EditResult = { success: false; reason: string } | { success: true };
 
 export interface ShopHeaderProps {
   locationData: LocationData;
@@ -17,7 +17,7 @@ export interface ShopHeaderProps {
 
 export type Stocks = Partial<Record<ProductId, number>>;
 
-export type SafetyFeatures = Partial<Record<SafetyFeatureId, boolean>>;
+export type SafetyFeatures = Partial<Record<SafetyFeatureId, number>>;
 
 export interface ShopOverviewProps {
   locationData: LocationData;
@@ -48,6 +48,7 @@ export interface StocksEditProps {
 }
 
 export interface SafetyEditProps {
+  locationData: LocationData;
   safetyScore: number;
   usedSafetyFeatures: SafetyFeatures;
 }
@@ -56,6 +57,7 @@ export interface SafetyScoreProps {
   safetyScore: number;
   setSafetyScore?: (newValue: number) => void;
   size?: "small" | "medium" | "large";
+  updated?: boolean;
 }
 
 export interface StockItemProps {
@@ -66,5 +68,5 @@ export interface StockItemProps {
 
 export interface SafetyItemProps {
   feature: SafetyFeatureId;
-  value: boolean | undefined;
+  value: number | undefined;
 }

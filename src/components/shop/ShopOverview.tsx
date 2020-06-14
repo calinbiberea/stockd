@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, makeStyles, createStyles } from "@material-ui/core";
+import { Button, makeStyles, createStyles, Slide } from "@material-ui/core";
 import StocksOverview from "./stock/StocksOverview";
 import { ShopOverviewProps } from "./ShopTypes";
 import SafetyOverview from "./safety/SafetyOverview";
@@ -13,6 +13,22 @@ const useStyles = makeStyles(() =>
       flexDirection: "column",
       justifyContent: "space-between",
       alignItems: "center",
+    },
+    slideContainer: {
+      width: "100%",
+      height: "100%",
+      overflowX: "hidden",
+      overflowY: "hidden",
+    },
+    slidePanel: {
+      position: "relative",
+      width: "100%",
+      height: "100%",
+    },
+    slidePanelInner: {
+      transform: "translate(0, -100%)",
+      width: "100%",
+      height: "100%",
     },
   })
 );
@@ -29,18 +45,6 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({
 
   const classes = useStyles();
 
-  const indexToScreen = (index: number): React.ReactNode => {
-    switch (index) {
-      case 0:
-        return <StocksOverview stocks={stocks} />;
-      case 1:
-        return <SafetyOverview safetyScore={safetyScore} usedSafetyFeatures={usedSafetyFeatures} />;
-      default:
-        console.error("Invalid index in ShopOverview");
-        return <StocksOverview stocks={stocks} />;
-    }
-  };
-
   const onButtonClick = () => {
     const getMapsUrl = (placeName: string, placeId: string) => {
       const encodedName = encodeURI(placeName);
@@ -55,7 +59,20 @@ const ShopOverview: React.FC<ShopOverviewProps> = ({
     <div className={classes.container}>
       <TabBar tabNames={tabNames} index={currentIndex} setIndex={setCurrentIndex} />
 
-      {indexToScreen(currentIndex)}
+      <div className={classes.slideContainer}>
+        <Slide in={currentIndex === 0} direction="right">
+          <div className={classes.slidePanel}>
+            <StocksOverview stocks={stocks} />
+          </div>
+        </Slide>
+        <Slide in={currentIndex === 1} direction="left">
+          <div className={classes.slidePanel}>
+            <div className={classes.slidePanelInner}>
+              <SafetyOverview safetyScore={safetyScore} usedSafetyFeatures={usedSafetyFeatures} />
+            </div>
+          </div>
+        </Slide>
+      </div>
 
       <Button variant="contained" color="primary" onClick={onButtonClick}>
         Take me there!

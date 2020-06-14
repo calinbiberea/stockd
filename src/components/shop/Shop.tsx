@@ -71,14 +71,7 @@ const Shop: React.FC<ShopProps> = ({ locationData, edit, onBackClick }: ShopProp
   if (edit) {
     shopScreen = <ShopEdit {...{ locationData, stocks, safetyScore, usedSafetyFeatures }} />;
   } else {
-    shopScreen = (
-      <ShopOverview
-        locationData={locationData}
-        stocks={stocks}
-        safetyScore={safetyScore}
-        usedSafetyFeatures={usedSafetyFeatures}
-      />
-    );
+    shopScreen = <ShopOverview {...{ locationData, stocks, safetyScore, usedSafetyFeatures }} />;
   }
 
   return (

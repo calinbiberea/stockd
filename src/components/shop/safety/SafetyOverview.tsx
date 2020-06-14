@@ -1,9 +1,9 @@
 import React from "react";
 import { Grid, useMediaQuery, Theme, makeStyles, createStyles } from "@material-ui/core/";
+import { SafetyFeatureId, safetyFeatures } from "../../../util/productsAndSafetyFeatures";
+import { SafetyOverviewProps } from "../ShopTypes";
 import SafetyScore from "./SafetyScore";
 import SafetyItem from "./SafetyItem";
-import { SafetyOverviewProps } from "../ShopTypes";
-import { SafetyFeatureId, safetyFeatures } from "../../../util/productsAndSafetyFeatures";
 
 const useStyles = makeStyles(() =>
   createStyles({

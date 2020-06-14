@@ -1,4 +1,4 @@
-import Header from "../header/Header";
+import React, { useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -14,8 +14,8 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import MapIcon from "@material-ui/icons/Map";
 import ListIcon from "@material-ui/icons/List";
+import Header from "../header/Header";
 import SortByMenu from "./SortByMenu";
-import React, { useRef, useState } from "react";
 import { ShopResultsHeaderProps } from "./ShopResultsTypes";
 
 const useStyles = makeStyles((theme) =>

@@ -11,14 +11,14 @@ import {
   RadioGroup,
   Radio,
 } from "@material-ui/core";
-import SafetyScore from "./SafetyScore";
-import { EditResult, SafetyEditProps } from "../ShopTypes";
-import SafetyItem from "./SafetyItem";
-import { SafetyFeatureId, safetyFeatures } from "../../../util/productsAndSafetyFeatures";
-import { updateSafety } from "../../../firebase/firebaseApp";
 import { useSnackbar } from "notistack";
+import { updateSafety } from "../../../firebase/firebaseApp";
 import colors from "../../../res/colors";
 import { SAFETY_FEATURE_THRESHOLD } from "../../../util/consts";
+import { SafetyFeatureId, safetyFeatures } from "../../../util/productsAndSafetyFeatures";
+import { EditResult, SafetyEditProps } from "../ShopTypes";
+import SafetyScore from "./SafetyScore";
+import SafetyItem from "./SafetyItem";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

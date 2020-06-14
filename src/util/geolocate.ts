@@ -1,4 +1,5 @@
 import { NotifyFunc } from "./types";
+
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
 export const getCurrentLocation = (notify?: NotifyFunc): Promise<Position | null> =>

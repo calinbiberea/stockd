@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Typography, makeStyles, createStyles } from "@material-ui/core";
-import { StockItemProps } from "../ShopTypes";
 import { getIconByStockValue } from "../../../util/productsAndSafetyFeatures";
+import { StockItemProps } from "../ShopTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

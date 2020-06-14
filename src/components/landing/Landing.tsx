@@ -1,9 +1,9 @@
 import React from "react";
 import { Divider, makeStyles, createStyles } from "@material-ui/core";
+import colors from "../../res/colors";
 import LandingTile from "./LandingTile";
 import LandingHeader from "./LandingHeader";
 import type { LandingProps } from "./LandingTypes";
-import colors from "../../res/colors";
 
 const itemExamples = [
   "milk",

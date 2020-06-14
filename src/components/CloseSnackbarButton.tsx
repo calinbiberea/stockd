@@ -1,6 +1,6 @@
-import { SnackbarKey, useSnackbar } from "notistack";
 import React from "react";
 import { Button } from "@material-ui/core";
+import { SnackbarKey, useSnackbar } from "notistack";
 
 interface CloseButtonProps {
   id: SnackbarKey;

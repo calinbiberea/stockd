@@ -12,11 +12,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
-import { FilterShopsProps } from "./FilterShopsTypes";
-import SelectorPanel from "./SelectorPanel";
-import Header from "../header/Header";
-import LocationSearch from "./LocationSearch";
-import ShopResults from "../shopResults/ShopResults";
+import { useSnackbar } from "notistack";
 import {
   products,
   safetyFeatures,
@@ -24,8 +20,12 @@ import {
   SafetyFeatureId,
 } from "../../util/productsAndSafetyFeatures";
 import { setLocationState, toggleGeolocationState } from "../../util/geolocate";
-import { useSnackbar } from "notistack";
 import { DISTANCES, useFilterScreenStyles } from "../../util/consts";
+import Header from "../header/Header";
+import ShopResults from "../shopResults/ShopResults";
+import { FilterShopsProps } from "./FilterShopsTypes";
+import SelectorPanel from "./SelectorPanel";
+import LocationSearch from "./LocationSearch";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 

@@ -1,5 +1,5 @@
-import { auth, authProviders } from "./firebaseApp";
 import { NotifyFunc } from "../util/types";
+import { auth, authProviders } from "./firebaseApp";
 
 export type Provider = keyof typeof authProviders;
 

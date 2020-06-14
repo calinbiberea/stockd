@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Button, makeStyles, createStyles, Slide } from "@material-ui/core";
-import StocksOverview from "./stock/StocksOverview";
-import { ShopOverviewProps } from "./ShopTypes";
-import SafetyOverview from "./safety/SafetyOverview";
 import TabBar from "../tabBar/TabBar";
+import StocksOverview from "./stock/StocksOverview";
+import SafetyOverview from "./safety/SafetyOverview";
+import { ShopOverviewProps } from "./ShopTypes";
 
 const useStyles = makeStyles(() =>
   createStyles({

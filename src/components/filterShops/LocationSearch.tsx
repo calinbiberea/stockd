@@ -2,10 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { TextField, Grid, Typography, makeStyles, createStyles } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
-import { LocationSearchProps } from "./FilterShopsTypes";
+import parse from "autosuggest-highlight/parse";
 import { getPlacePredictions } from "../../util/googleMaps";
+import { LocationSearchProps } from "./FilterShopsTypes";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 

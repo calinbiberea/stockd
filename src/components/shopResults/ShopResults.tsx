@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, Fade, makeStyles, createStyles } from "@material-ui/core";
 import { useSnackbar } from "notistack";
+import { findShops } from "../../firebase/firebaseApp";
+import { geocodeByPlaceId, getPlacesInRadius, LocationData } from "../../util/googleMaps";
+import { getDistanceFromLatLonInKm } from "../../util/getLatLngDistance";
 import Overlay from "../overlay/Overlay";
 import { SortBy, DBShopData, FindShopsResult, ShopResultsProps, View } from "./ShopResultsTypes";
-import { geocodeByPlaceId, getPlacesInRadius, LocationData } from "../../util/googleMaps";
-import { findShops } from "../../firebase/firebaseApp";
 import ShopList from "./ShopList";
 import ShopMap from "./ShopMap";
 import ShopResultsHeader from "./ShopResultsHeader";
-import { getDistanceFromLatLonInKm } from "../../util/getLatLngDistance";
 
 const useStyles = makeStyles(() =>
   createStyles({

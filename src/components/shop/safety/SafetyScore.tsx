@@ -2,8 +2,8 @@ import React from "react";
 import { Typography, makeStyles, createStyles, withStyles } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import StarIcon from "@material-ui/icons/Star";
-import { SafetyScoreProps } from "../ShopTypes";
 import colors from "../../../res/colors";
+import { SafetyScoreProps } from "../ShopTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

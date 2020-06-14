@@ -10,8 +10,8 @@ import {
 } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Logo from "../../res/logo.png";
-import { HeaderProps } from "./HeaderTypes";
 import { HomeContext } from "../App";
+import { HeaderProps } from "./HeaderTypes";
 
 const useStyles = makeStyles(() =>
   createStyles({

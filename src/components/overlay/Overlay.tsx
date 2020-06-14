@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { CircularProgress, Fade, Slide, Modal, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import type { OverlayProps } from "./OverlayTypes";
 import type { LocationData } from "../../util/googleMaps";
 import Shop from "../shop/Shop";
+import type { OverlayProps } from "./OverlayTypes";
 
 const useStyles = makeStyles(() =>
   createStyles({

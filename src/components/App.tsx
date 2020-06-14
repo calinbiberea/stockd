@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
+import colors from "../res/colors";
 import Landing from "./landing/Landing";
 import FilterShops from "./filterShops/FilterShops";
 import FindShop from "./findShop/FindShop";
 import EditShop from "./editShop/EditShop";
-import colors from "../res/colors";
 import CloseSnackbarButton from "./CloseSnackbarButton";
 
 const theme = createMuiTheme({

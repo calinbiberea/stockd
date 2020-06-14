@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { makeStyles, createStyles, Slide } from "@material-ui/core";
-import { ShopEditProps } from "./ShopTypes";
 import TabBar from "../tabBar/TabBar";
 import StocksEdit from "./stock/StocksEdit";
 import SafetyEdit from "./safety/SafetyEdit";
+import { ShopEditProps } from "./ShopTypes";
 
 const useStyles = makeStyles(() =>
   createStyles({

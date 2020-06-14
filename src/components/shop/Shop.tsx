@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Card, makeStyles, createStyles } from "@material-ui/core";
+import { db } from "../../firebase/firebaseApp";
 import ShopHeader from "./ShopHeader";
 import ShopOverview from "./ShopOverview";
 import ShopEdit from "./ShopEdit";
 import { Stocks, ShopProps, SafetyFeatures } from "./ShopTypes";
-import { db } from "../../firebase/firebaseApp";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

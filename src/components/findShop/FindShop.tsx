@@ -13,12 +13,12 @@ import {
 } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
 import { useSnackbar } from "notistack";
-import { FindShopProps } from "./FindShopTypes";
+import { setLocationState, toggleGeolocationState } from "../../util/geolocate";
+import { DISTANCES, useFilterScreenStyles } from "../../util/consts";
 import Header from "../header/Header";
 import LocationSearch from "../filterShops/LocationSearch";
 import ShopResults from "../shopResults/ShopResults";
-import { setLocationState, toggleGeolocationState } from "../../util/geolocate";
-import { DISTANCES, useFilterScreenStyles } from "../../util/consts";
+import { FindShopProps } from "./FindShopTypes";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 

@@ -1,10 +1,10 @@
 import React from "react";
 import { createStyles, makeStyles, Typography } from "@material-ui/core";
-import { ShopHeaderProps } from "./ShopTypes";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import colors from "../../res/colors";
 import envVars from "../../util/envVars";
+import { ShopHeaderProps } from "./ShopTypes";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

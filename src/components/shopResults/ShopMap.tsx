@@ -1,9 +1,9 @@
-import Map from "../map/Map";
-import { Circle, Marker, OverlayView } from "@react-google-maps/api";
 import React from "react";
+import { Circle, Marker, OverlayView } from "@react-google-maps/api";
 import colors from "../../res/colors";
-import { ShopMapProps } from "./ShopResultsTypes";
 import ShopPinIcon from "../../res/shopPin.png";
+import Map from "../map/Map";
+import { ShopMapProps } from "./ShopResultsTypes";
 
 const currentPositionMarker = (
   <div

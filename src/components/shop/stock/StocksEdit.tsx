@@ -10,10 +10,10 @@ import {
   createStyles,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import StockItem from "./StockItem";
 import { updateStock } from "../../../firebase/firebaseApp";
-import { EditResult, StocksEditProps, Stocks } from "../ShopTypes";
 import { ProductId, products } from "../../../util/productsAndSafetyFeatures";
+import { EditResult, StocksEditProps, Stocks } from "../ShopTypes";
+import StockItem from "./StockItem";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

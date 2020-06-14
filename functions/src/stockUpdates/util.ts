@@ -2,7 +2,8 @@ import * as admin from "firebase-admin";
 import { Change } from "firebase-functions";
 import { CallableContext } from "firebase-functions/lib/providers/https";
 import { getPlaceDetails, LocationData } from "./googleMaps";
-import DocumentSnapshot = admin.firestore.DocumentSnapshot;
+
+type DocumentSnapshot<T> = admin.firestore.DocumentSnapshot<T>;
 
 type Timestamp = admin.firestore.Timestamp;
 

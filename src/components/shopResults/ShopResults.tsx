@@ -133,7 +133,8 @@ const ShopResults: React.FC<ShopResultsProps> = ({
   }
 
   const closeOverlay = () => setCurrentLocationData(null);
-  const onGetDetailsClick = (locationData: LocationData) => setCurrentLocationData(locationData);
+  const { maxDistance } = filters;
+  const onShopSelect = (locationData: LocationData) => setCurrentLocationData(locationData);
 
   return (
     <div className={classes.container}>
@@ -151,12 +152,12 @@ const ShopResults: React.FC<ShopResultsProps> = ({
       />
       <Fade in={view === "list"}>
         <div>
-          <ShopList shopList={shopList} onShopSelect={onGetDetailsClick} sortBy={sortBy} />
+          <ShopList {...{ shopList, sortBy, onShopSelect }} />
         </div>
       </Fade>
       <Fade in={view === "map"}>
         <div>
-          <ShopMap shopList={shopList} onShopSelect={onGetDetailsClick} userPos={userPos} />
+          <ShopMap {...{ shopList, userPos, maxDistance, onShopSelect }} />
         </div>
       </Fade>
     </div>

@@ -46,12 +46,6 @@ const Overlay: React.FC<OverlayProps> = ({
     setLocalLocationData(locationData);
   }, [locationData]);
 
-  // useEffect(() => {
-  //   if (queryMap && isOpen && !isLoaded) {
-  //     getLocationDataByPlaceId(placeId).then((data) => setLocalLocationData(data));
-  //   }
-  // }, [placeId, isLoaded, isOpen, queryMap]);
-
   return (
     <Modal open={isOpen} onClose={closeOverlay} className={classes.modal}>
       <div className={classes.modalContainer}>

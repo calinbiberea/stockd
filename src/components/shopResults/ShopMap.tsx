@@ -1,5 +1,5 @@
 import Map from "../map/Map";
-import { Marker, OverlayView } from "@react-google-maps/api";
+import { Circle, Marker, OverlayView } from "@react-google-maps/api";
 import React from "react";
 import colors from "../../res/colors";
 import { ShopMapProps } from "./ShopResultsTypes";
@@ -20,7 +20,24 @@ const currentPositionMarker = (
   />
 );
 
-const ShopMap: React.FC<ShopMapProps> = ({ shopList, userPos, onShopSelect }: ShopMapProps) => {
+const circleOptions = {
+  strokeColor: colors.blue1,
+  strokeOpacity: 0.8,
+  strokeWeight: 2,
+  fillColor: colors.blue3,
+  fillOpacity: 0.2,
+  clickable: false,
+  draggable: false,
+  editable: false,
+  visible: true,
+};
+
+const ShopMap: React.FC<ShopMapProps> = ({
+  shopList,
+  userPos,
+  onShopSelect,
+  maxDistance,
+}: ShopMapProps) => {
   const markers = shopList.map((shop) => (
     <Marker
       key={shop.id}
@@ -36,6 +53,7 @@ const ShopMap: React.FC<ShopMapProps> = ({ shopList, userPos, onShopSelect }: Sh
         <OverlayView position={userPos} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
           {currentPositionMarker}
         </OverlayView>
+        <Circle center={userPos} radius={maxDistance * 1000} options={circleOptions} />
         {markers}
       </Map>
     </div>

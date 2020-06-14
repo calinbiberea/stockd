@@ -36,6 +36,7 @@ export interface ShopMapProps {
     lat: number;
     lng: number;
   };
+  maxDistance: number;
 }
 
 export interface ShopListItemProps {

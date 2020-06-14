@@ -27,6 +27,7 @@ import {
 } from "../../util/productsAndSafetyFeatures";
 import { getCurrentLocation } from "../../util/geolocate";
 import { useSnackbar } from "notistack";
+import { DISTANCES } from "../../util/consts";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -92,7 +93,7 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
   const [selectedSafetyFeatures, setSelectedSafetyFeatures] = useState(
     defaultSelectedSafetyFeatures
   );
-  const [maxDistance, setMaxDistance] = useState(50);
+  const [maxDistance, setMaxDistance] = useState(DISTANCES[0]);
   const [selectedPlace, setSelectedPlace] = useState<AutocompletePrediction | null>(null);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<Position | null>(null);
@@ -209,11 +210,9 @@ const FilterShops: React.FC<FilterShopsProps> = ({ setRoute }: FilterShopsProps)
               value={maxDistance}
               onChange={(e) => setMaxDistance(parseInt(e.target.value as string))}
             >
-              <MenuItem value={10}>10km</MenuItem>
-
-              <MenuItem value={25}>25km</MenuItem>
-
-              <MenuItem value={50}>50km</MenuItem>
+              {DISTANCES.map((x) => (
+                <MenuItem key={x} value={x}>{`${x}km`}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 

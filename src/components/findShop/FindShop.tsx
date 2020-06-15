@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -19,17 +19,21 @@ import Header from "../header/Header";
 import LocationSearch from "../filterShops/LocationSearch";
 import ShopResults from "../shopResults/ShopResults";
 import { FindShopProps } from "./FindShopTypes";
+import { LoginContext } from "../App";
+import Login from "./Login";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
-const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps) => {
+const FindShop: React.FC<FindShopProps> = ({ editShop = false, setRoute }: FindShopProps) => {
   const [maxDistance, setMaxDistance] = useState(DISTANCES[0]);
   const [selectedPlace, setSelectedPlace] = useState<AutocompletePrediction | null>(null);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<Position | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const classes = useFilterScreenStyles();
+  const { uid, setUid } = useContext(LoginContext);
+
+  const filterScreenClasses = useFilterScreenStyles();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -60,19 +64,21 @@ const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps
     );
   }
 
-  const canSubmit = useCurrentLocation ? currentLocation !== null : selectedPlace !== null;
+  const canSubmit =
+    (useCurrentLocation ? currentLocation !== null : selectedPlace !== null) &&
+    (!editShop || uid !== null);
 
   return (
-    <div className={classes.container}>
+    <div className={filterScreenClasses.container}>
       <Header onBackClick={() => setRoute("landing")} />
 
-      <Typography variant="h4" color="primary" className={classes.title}>
+      <Typography variant="h4" color="primary" className={filterScreenClasses.title}>
         Which shop are you looking for?
       </Typography>
 
-      <div className={classes.contentContainer}>
-        <FormGroup row className={classes.locationContainer}>
-          <FormControl className={classes.distanceSelect}>
+      <div className={filterScreenClasses.contentContainer}>
+        <FormGroup row className={filterScreenClasses.locationContainer}>
+          <FormControl className={filterScreenClasses.distanceSelect}>
             <InputLabel>Max. distance</InputLabel>
 
             <Select
@@ -85,7 +91,11 @@ const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps
             </Select>
           </FormControl>
 
-          <Divider orientation="vertical" flexItem className={classes.locationDivider} />
+          <Divider
+            orientation="vertical"
+            flexItem
+            className={filterScreenClasses.locationDivider}
+          />
 
           <LocationSearch
             enabled={!useCurrentLocation}
@@ -106,17 +116,19 @@ const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps
         </FormGroup>
       </div>
 
+      {editShop ? <Login {...{ uid, setUid }} /> : undefined}
+
       <Button
         size="large"
         color="primary"
         variant="contained"
         disabled={!canSubmit}
         onClick={() => setSubmitted(true)}
-        className={classes.button}
+        className={filterScreenClasses.button}
       >
         <Typography variant="h6">{"Let's go!"}</Typography>
 
-        <ArrowIcon className={classes.buttonIcon} />
+        <ArrowIcon className={filterScreenClasses.buttonIcon} />
       </Button>
     </div>
   );

@@ -2,6 +2,7 @@ import * as admin from "firebase-admin";
 import { Change } from "firebase-functions";
 import { CallableContext } from "firebase-functions/lib/providers/https";
 import { getPlaceDetails, LocationData } from "./googleMaps";
+import FieldValue = admin.firestore.FieldValue;
 
 type DocumentSnapshot<T> = admin.firestore.DocumentSnapshot<T>;
 
@@ -179,7 +180,8 @@ export const pushUpdates = async (
   type: "stocks" | "safety",
   shopId: string,
   updates: unknown,
-  updateLocationData: boolean
+  updateLocationData: boolean,
+  uid: string
 ): Promise<PushResponse> => {
   const date = formatDate(Date.now());
 
@@ -190,6 +192,7 @@ export const pushUpdates = async (
 
   const shopRef = admin.firestore().collection("shops").doc(shopId);
   const submissionsRef = shopRef.collection(type).doc(date);
+  const userRef = admin.firestore().collection("users").doc(uid);
 
   try {
     const batch = admin.firestore().batch();
@@ -197,6 +200,7 @@ export const pushUpdates = async (
     if (locationData !== null) {
       batch.set(shopRef, { locationData: locationData }, { merge: true });
     }
+    batch.set(userRef, { score: FieldValue.increment(1) }, { merge: true });
     await batch.commit();
     return { success: true as const };
   } catch (e) {

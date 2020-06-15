@@ -21,3 +21,7 @@ export const logIn = async (provider: Provider, notify?: NotifyFunc): Promise<st
   }
   return uid;
 };
+
+export const logOut = async (): Promise<void> => {
+  await auth.signOut();
+};

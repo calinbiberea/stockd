@@ -1,4 +1,9 @@
 export interface FindShopProps {
   setRoute: (Route) => void;
-  editShop: boolean;
+  editShop?: boolean;
+}
+
+export interface LoginProps {
+  uid: string | null;
+  setUid: (newUid: string | null) => void;
 }

@@ -31,8 +31,8 @@ const useStyles = makeStyles(() =>
 const compareByDistance = (a: DBShopData, b: DBShopData) => a.distance - b.distance;
 
 const compareBySafetyScore = (a: DBShopData, b: DBShopData) => {
-  const scoreA = ((a.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
-  const scoreB = ((b.displayed as Record<string, unknown>)?.safetyScore || 0) as number;
+  const scoreA = ((a.displayed as Record<string, unknown>)?.safetyRating || 0) as number;
+  const scoreB = ((b.displayed as Record<string, unknown>)?.safetyRating || 0) as number;
 
   return scoreB - scoreA;
 };

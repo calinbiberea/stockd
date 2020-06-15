@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, makeStyles, createStyles } from "@material-ui/core";
-import { getProduct, ProductId, products } from "../../../util/productsAndSafetyFeatures";
+import { ProductId, products } from "../../../util/productsAndSafetyFeatures";
 import { StocksOverviewProps } from "../ShopTypes";
 import StockItem from "./StockItem";
 
@@ -16,11 +16,11 @@ const useStyles = makeStyles(() =>
 const StocksOverview: React.FC<StocksOverviewProps> = ({ stocks }: StocksOverviewProps) => {
   const classes = useStyles();
 
-  const stockItems = Object.entries(products).map(([productId, { icon, name }]) => {
+  const stockItems = Object.keys(products).map((productId) => {
     const value = stocks[productId as ProductId];
     return (
       <Grid item xs={12} md={6} xl={4} key={productId}>
-        <StockItem icon={icon} name={name} value={value} />
+        <StockItem productId={productId} value={value} />
       </Grid>
     );
   });

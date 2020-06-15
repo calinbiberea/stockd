@@ -82,10 +82,13 @@ export const collectAverages = (
   }, {});
 };
 
-export const collectBooleans = (record: Record<string, number>, threshold = 30) =>
+export const collectBooleans = (
+  record: Record<string, number>,
+  threshold = 30
+): Record<string, boolean> =>
   Object.entries(record).reduce(
     (acc, [product, avg]) => ({
-      [product]: avg > 30,
+      [product]: avg > threshold,
       ...acc,
     }),
     {}
@@ -129,7 +132,7 @@ export const getBeforeAfter = <T extends Entry<S>, S extends Submission>(
   return { before, after };
 };
 
-export const getDateStrings = (): { today: string, tomorrow: string } => {
+export const getDateStrings = (): { today: string; tomorrow: string } => {
   const now = Date.now();
   const today = formatDate(now);
   const tomorrow = formatDate(now + 86400000);

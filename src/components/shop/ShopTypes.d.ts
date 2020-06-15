@@ -61,8 +61,7 @@ export interface SafetyScoreProps {
 }
 
 export interface StockItemProps {
-  icon: string;
-  name: string;
+  productId: string;
   value: number | undefined;
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Typography, makeStyles, createStyles } from "@material-ui/core";
-import { getIconByStockValue } from "../../../util/productsAndSafetyFeatures";
+import { getIconByStockValue, getProduct } from "../../../util/productsAndSafetyFeatures";
 import { StockItemProps } from "../ShopTypes";
 
 const useStyles = makeStyles((theme) =>
@@ -26,9 +26,10 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const StockItem: React.FC<StockItemProps> = ({ icon, name, value }: StockItemProps) => {
+const StockItem: React.FC<StockItemProps> = ({ productId, value }: StockItemProps) => {
   const classes = useStyles();
 
+  const { name, icon } = getProduct(productId);
   const stockValueIcon = getIconByStockValue(value);
 
   return (

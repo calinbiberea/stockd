@@ -8,6 +8,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     container: {
       overflow: "auto",
+      height: "100%",
     },
   })
 );

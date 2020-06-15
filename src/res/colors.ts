@@ -4,5 +4,5 @@ export default {
   blue3: "#acd5ff",
   few: "#ff5656",
   some: "#ffab57",
-  full: "#57ff57",
+  full: "#11ad0e",
 };

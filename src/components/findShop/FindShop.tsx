@@ -2,12 +2,10 @@ import React, { useContext, useState } from "react";
 import {
   Button,
   Checkbox,
-  createStyles,
   Divider,
   FormControl,
   FormControlLabel,
   FormGroup,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -15,8 +13,6 @@ import {
 } from "@material-ui/core";
 import ArrowIcon from "@material-ui/icons/ArrowForward";
 import { useSnackbar } from "notistack";
-import GoogleIcon from "../../res/google.png";
-import FacebookIcon from "../../res/facebook.png";
 import { setLocationState, toggleGeolocationState } from "../../util/geolocate";
 import { DISTANCES, useFilterScreenStyles } from "../../util/consts";
 import Header from "../header/Header";
@@ -24,26 +20,9 @@ import LocationSearch from "../filterShops/LocationSearch";
 import ShopResults from "../shopResults/ShopResults";
 import { FindShopProps } from "./FindShopTypes";
 import { LoginContext } from "../App";
-import { logIn, logOut, Provider } from "../../firebase/firebaseLogin";
-import { makeStyles } from "@material-ui/core/styles";
+import Login from "./Login";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
-
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    icon: {
-      width: "32px",
-      height: "32px",
-    },
-    flexRow: {
-      display: "flex",
-      width: "100%",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  })
-);
 
 const FindShop: React.FC<FindShopProps> = ({ editShop = false, setRoute }: FindShopProps) => {
   const [maxDistance, setMaxDistance] = useState(DISTANCES[0]);
@@ -54,7 +33,6 @@ const FindShop: React.FC<FindShopProps> = ({ editShop = false, setRoute }: FindS
 
   const { uid, setUid } = useContext(LoginContext);
 
-  const classes = useStyles();
   const filterScreenClasses = useFilterScreenStyles();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -89,52 +67,6 @@ const FindShop: React.FC<FindShopProps> = ({ editShop = false, setRoute }: FindS
   const canSubmit =
     (useCurrentLocation ? currentLocation !== null : selectedPlace !== null) &&
     (!editShop || uid !== null);
-
-  const performLogin = (provider: Provider) => async () => {
-    const uid = await logIn(provider, enqueueSnackbar);
-    if (uid !== null) {
-      setUid(uid);
-    }
-  };
-
-  const performLogout = async () => {
-    await logOut();
-    enqueueSnackbar("You've logged out.", { variant: "info" });
-    setUid(null);
-  };
-
-  let login = undefined;
-  if (editShop) {
-    if (uid === null) {
-      login = (
-        <div className={classes.flexRow}>
-          <Typography>
-            <i>Please log in to contribute: </i>
-          </Typography>
-          &nbsp;&nbsp;
-          <IconButton onClick={performLogin("google")} size="small">
-            <img src={GoogleIcon} alt="Log in with Google" className={classes.icon} />
-          </IconButton>
-          &nbsp;
-          <IconButton onClick={performLogin("facebook")} size="small">
-            <img src={FacebookIcon} alt="Log in with Facebook" className={classes.icon} />
-          </IconButton>
-        </div>
-      );
-    } else {
-      login = (
-        <div className={classes.flexRow}>
-          <Typography>
-            <i>Logged in.</i>
-          </Typography>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <Button onClick={performLogout} variant="contained" color="primary" size="small">
-            Log out
-          </Button>
-        </div>
-      );
-    }
-  }
 
   return (
     <div className={filterScreenClasses.container}>
@@ -184,7 +116,7 @@ const FindShop: React.FC<FindShopProps> = ({ editShop = false, setRoute }: FindS
         </FormGroup>
       </div>
 
-      {login}
+      {editShop ? <Login {...{ uid, setUid }} /> : undefined}
 
       <Button
         size="large"

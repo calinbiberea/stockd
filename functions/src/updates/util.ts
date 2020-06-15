@@ -82,6 +82,15 @@ export const collectAverages = (
   }, {});
 };
 
+export const collectBooleans = (record: Record<string, number>, threshold = 30) =>
+  Object.entries(record).reduce(
+    (acc, [product, avg]) => ({
+      [product]: avg > 30,
+      ...acc,
+    }),
+    {}
+  );
+
 export const scanForDifferences = (
   before: Record<string, Submission>,
   after: Record<string, Submission>
@@ -120,9 +129,17 @@ export const getBeforeAfter = <T extends Entry<S>, S extends Submission>(
   return { before, after };
 };
 
+export const getDateStrings = (): { today: string, tomorrow: string } => {
+  const now = Date.now();
+  const today = formatDate(now);
+  const tomorrow = formatDate(now + 86400000);
+  return { today, tomorrow };
+};
+
 export const validate = (
   data: Record<string, unknown>,
-  context: CallableContext
+  context: CallableContext,
+  type: "stocks" | "safety"
 ):
   | { response: PushResponse }
   | { response: null; uid: string; shopId: string; scores: Record<string, number> } => {
@@ -139,15 +156,15 @@ export const validate = (
   }
 
   // Validate scores
-  if (data.scores === null || data.scors === undefined) {
-    return { response: failReason("Invalid args") };
+  if (data.scores === null || data.scores === undefined) {
+    data.scores = {};
   }
   const scores: Record<string, number> = data.scores as Record<string, number>;
   if (Object.keys(scores).length === 0) {
     return { response: { success: true } };
   }
   for (const i of Object.values(scores)) {
-    if (!allowedScores.safety.includes(i)) {
+    if (!allowedScores[type].includes(i)) {
       return { response: failReason("Invalid args") };
     }
   }

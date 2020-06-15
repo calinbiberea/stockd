@@ -1,6 +1,13 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { collectAverages, formatDate, getBeforeAfter, StocksEntry, StockSubmission } from "./util";
+import {
+  collectAverages,
+  collectBooleans,
+  getBeforeAfter,
+  getDateStrings,
+  StocksEntry,
+  StockSubmission,
+} from "./util";
 
 type DocumentSnapshot<T> = admin.firestore.DocumentSnapshot<T>;
 type Change<T> = functions.Change<T>;
@@ -18,16 +25,9 @@ export const onStockUpdate = functions.firestore
 
     const submissions = after.submissions as Record<string, StockSubmission>;
     const averages = collectAverages(submissions, after.prevScores);
-    const booleans = Object.entries(averages).reduce(
-      (acc, [product, avg]) => ({
-        [product]: avg > 30,
-        ...acc,
-      }),
-      {}
-    );
-    const now = Date.now();
-    const today = formatDate(now);
-    const tomorrow = formatDate(now + 86400000);
+    const booleans = collectBooleans(averages);
+
+    const { today, tomorrow } = getDateStrings();
 
     const batch = admin.firestore().batch();
 

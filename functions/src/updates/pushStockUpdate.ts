@@ -3,7 +3,7 @@ import * as admin from "firebase-admin";
 import { pushUpdates, validate } from "./util";
 
 export const pushStockUpdate = functions.https.onCall(async (data, context) => {
-  const result = validate(data, context);
+  const result = validate(data, context, "stocks");
   if (result.response !== null) {
     return result.response;
   }

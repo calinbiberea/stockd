@@ -110,7 +110,7 @@ const Login: React.FC<LoginProps> = ({ uid, setUid }: LoginProps) => {
           </div>
           {nextRank !== null ? (
             <div className={classes.flexRow}>
-              <Typography>{nextRank.score - rank.score} points until</Typography>
+              <Typography>{nextRank.score - userScore} points until</Typography>
               &nbsp;&nbsp;
               <TrophyIcon className={classes.shadow} style={{ color: nextRank.color }} />
               &nbsp;

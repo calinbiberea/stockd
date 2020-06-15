@@ -23,7 +23,7 @@ export const LoginContext = React.createContext({
   uid: null as string | null,
   setUid: (() => {
     /* void */
-  }) as (uid: string) => void,
+  }) as (uid: string | null) => void,
 });
 
 export const HomeContext = React.createContext({

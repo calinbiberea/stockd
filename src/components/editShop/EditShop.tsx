@@ -57,25 +57,25 @@ const EditShop: React.FC<EditShopProps> = ({ setRoute }: EditShopProps) => {
     <>
       <FindShop setRoute={setRoute} editShop />
 
-      <Backdrop className={classes.backdrop} open={uid === null} onClick={onBackClick}>
-        <Card onClick={(e) => e.stopPropagation()} className={classes.cardContainer}>
-          <Typography>Please log in to contribute data:</Typography>
+      {/*<Backdrop className={classes.backdrop} open={uid === null} onClick={onBackClick}>*/}
+      {/*  <Card onClick={(e) => e.stopPropagation()} className={classes.cardContainer}>*/}
+      {/*    <Typography>Please log in to contribute data:</Typography>*/}
 
-          <div className={classes.iconContainer}>
-            <IconButton onClick={performLogin("google")}>
-              <img src={GoogleIcon} alt="Log in with Google" className={classes.icon} />
-            </IconButton>
+      {/*    <div className={classes.iconContainer}>*/}
+      {/*      <IconButton onClick={performLogin("google")}>*/}
+      {/*        <img src={GoogleIcon} alt="Log in with Google" className={classes.icon} />*/}
+      {/*      </IconButton>*/}
 
-            <IconButton onClick={performLogin("facebook")}>
-              <img src={FacebookIcon} alt="Log in with Facebook" className={classes.icon} />
-            </IconButton>
-          </div>
+      {/*      <IconButton onClick={performLogin("facebook")}>*/}
+      {/*        <img src={FacebookIcon} alt="Log in with Facebook" className={classes.icon} />*/}
+      {/*      </IconButton>*/}
+      {/*    </div>*/}
 
-          <Button variant="contained" color="primary" size="small" onClick={onBackClick}>
-            Go back
-          </Button>
-        </Card>
-      </Backdrop>
+      {/*    <Button variant="contained" color="primary" size="small" onClick={onBackClick}>*/}
+      {/*      Go back*/}
+      {/*    </Button>*/}
+      {/*  </Card>*/}
+      {/*</Backdrop*/}
     </>
   );
 };

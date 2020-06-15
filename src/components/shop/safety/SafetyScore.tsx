@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) =>
 const SafetyScore: React.FC<SafetyScoreProps> = ({
   safetyScore,
   setSafetyScore,
+  setHover,
   size = "small",
   updated = true,
 }: SafetyScoreProps) => {
@@ -65,6 +66,11 @@ const SafetyScore: React.FC<SafetyScoreProps> = ({
         defaultValue={canEdit ? undefined : safetyScore}
         value={canEdit ? safetyScore : undefined}
         onChange={onChange}
+        onChangeActive={(e, newHover) => {
+          if (setHover !== undefined) {
+            setHover(newHover);
+          }
+        }}
         precision={0.5}
         emptyIcon={<StarIcon fontSize="inherit" />}
         readOnly={!canEdit}

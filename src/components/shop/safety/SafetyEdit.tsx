@@ -10,6 +10,7 @@ import {
   createStyles,
   RadioGroup,
   Radio,
+  Typography,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import { updateSafety } from "../../../firebase/firebaseApp";
@@ -19,6 +20,7 @@ import { SafetyFeatureId, safetyFeatures } from "../../../util/productsAndSafety
 import { EditResult, SafetyEditProps } from "../ShopTypes";
 import SafetyScore from "./SafetyScore";
 import SafetyItem from "./SafetyItem";
+import { safetyStrings } from "../../../util/safetyStrings";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -82,6 +84,7 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
 }: SafetyEditProps) => {
   const [localSafetyScore, setLocalSafetyScore] = useState<number | undefined>(undefined);
   const [localSafetyFeatures, setLocalSafetyFeatures] = useState<Record<string, boolean>>({});
+  const [hover, setHover] = useState(-1);
 
   const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
 
@@ -98,9 +101,6 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
       const currentValue = localSafetyFeatures[featureId];
       const updated = currentValue !== undefined;
       const last = ix === numSafetyFeatures - 1;
-
-      // const onSwitchChange = (_: React.ChangeEvent<unknown>, newValue: boolean) =>
-      //   setLocalSafetyFeatures((prevState) => ({ ...prevState, [featureId]: newValue }));
 
       const radioColor = updated ? "primary" : "secondary";
       const featureScore = usedSafetyFeatures[featureId as SafetyFeatureId];
@@ -186,15 +186,31 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
     onClearClick();
   };
 
+  let safetyString;
+  if (hover !== -1) {
+    safetyString = `"${safetyStrings[Math.ceil(hover) as 1 | 2 | 3 | 4 | 5]}"`;
+  } else if (localSafetyScore !== undefined) {
+    safetyString = (
+      <b>&quot{safetyStrings[Math.ceil(localSafetyScore) as 1 | 2 | 3 | 4 | 5]}&quot</b>
+    );
+  } else if (safetyScore !== undefined) {
+    safetyString = <i>&quot{safetyStrings[Math.ceil(safetyScore) as 1 | 2 | 3 | 4 | 5]}&quot</i>;
+  } else {
+    safetyString = undefined;
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.safetyScoreContainer}>
         <SafetyScore
           safetyScore={localSafetyScore ?? safetyScore}
           setSafetyScore={setLocalSafetyScore}
+          setHover={setHover}
           size={smallScreen ? "medium" : "large"}
           updated={localSafetyScore !== undefined}
         />
+        <br />
+        <Typography style={{ textAlign: "center" }}>{safetyString}</Typography>
       </div>
 
       <Grid container className={classes.gridContainer}>

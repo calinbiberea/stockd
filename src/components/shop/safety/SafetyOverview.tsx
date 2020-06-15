@@ -4,6 +4,8 @@ import { SafetyFeatureId, safetyFeatures } from "../../../util/productsAndSafety
 import { SafetyOverviewProps } from "../ShopTypes";
 import SafetyScore from "./SafetyScore";
 import SafetyItem from "./SafetyItem";
+import { Typography } from "@material-ui/core";
+import { safetyStrings } from "../../../util/safetyStrings";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -34,6 +36,13 @@ const SafetyOverview: React.FC<SafetyOverviewProps> = ({
 
   const smallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down("xs"));
 
+  let safetyString;
+  if (safetyScore !== undefined) {
+    safetyString = <i>{`"${safetyStrings[Math.ceil(safetyScore) as 1 | 2 | 3 | 4 | 5]}"`}</i>;
+  } else {
+    safetyString = undefined;
+  }
+
   const safetyItems = Object.keys(safetyFeatures).map((feature) => (
     <Grid item xs={12} md={6} xl={4} key={feature}>
       <SafetyItem
@@ -47,6 +56,7 @@ const SafetyOverview: React.FC<SafetyOverviewProps> = ({
     <div className={classes.container}>
       <div className={classes.safetyScoreContainer}>
         <SafetyScore safetyScore={safetyScore} size={smallScreen ? "medium" : "large"} />
+        <Typography style={{ textAlign: "center" }}>{safetyString}</Typography>
       </div>
 
       <Grid container className={classes.gridContainer}>

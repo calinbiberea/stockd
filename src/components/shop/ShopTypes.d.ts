@@ -56,6 +56,7 @@ export interface SafetyEditProps {
 export interface SafetyScoreProps {
   safetyScore: number;
   setSafetyScore?: (newValue: number) => void;
+  setHover?: (newHover: number) => void;
   size?: "small" | "medium" | "large";
   updated?: boolean;
 }

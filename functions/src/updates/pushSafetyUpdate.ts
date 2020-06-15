@@ -17,10 +17,9 @@ export const pushSafetyUpdate = functions.https.onCall(async (data, context) => 
         time: admin.firestore.FieldValue.serverTimestamp(),
         scores,
         ...(rating !== undefined ? { rating } : {}),
-        // rating: data.rating ?? undefined,
       },
     },
   };
 
-  return await pushUpdates("safety", shopId, updates, data.updateLocationData);
+  return await pushUpdates("safety", shopId, updates, data.updateLocationData, uid);
 });

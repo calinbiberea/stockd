@@ -18,5 +18,5 @@ export const pushStockUpdate = functions.https.onCall(async (data, context) => {
     },
   };
 
-  return await pushUpdates("stocks", shopId, updates, data.updateLocationData);
+  return await pushUpdates("stocks", shopId, updates, data.updateLocationData, uid);
 });

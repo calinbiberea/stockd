@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const FindShop: React.FC<FindShopProps> = ({ editShop, setRoute }: FindShopProps) => {
+const FindShop: React.FC<FindShopProps> = ({ editShop = false, setRoute }: FindShopProps) => {
   const [maxDistance, setMaxDistance] = useState(DISTANCES[0]);
   const [selectedPlace, setSelectedPlace] = useState<AutocompletePrediction | null>(null);
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);

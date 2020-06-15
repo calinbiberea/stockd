@@ -5,7 +5,6 @@ import colors from "../res/colors";
 import Landing from "./landing/Landing";
 import FilterShops from "./filterShops/FilterShops";
 import FindShop from "./findShop/FindShop";
-import EditShop from "./editShop/EditShop";
 import CloseSnackbarButton from "./CloseSnackbarButton";
 
 const theme = createMuiTheme({
@@ -45,10 +44,10 @@ const App: React.FC = () => {
       currentScreen = <FilterShops setRoute={setRoute} />;
       break;
     case "findShop":
-      currentScreen = <FindShop editShop={false} setRoute={setRoute} />;
+      currentScreen = <FindShop setRoute={setRoute} />;
       break;
     case "editShop":
-      currentScreen = <EditShop setRoute={setRoute} />;
+      currentScreen = <FindShop editShop setRoute={setRoute} />;
       break;
   }
 

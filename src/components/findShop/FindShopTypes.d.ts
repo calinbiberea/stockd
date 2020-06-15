@@ -1,4 +1,4 @@
 export interface FindShopProps {
   setRoute: (Route) => void;
-  editShop: boolean;
+  editShop?: boolean;
 }

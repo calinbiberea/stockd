@@ -40,7 +40,7 @@ export const findShops = functions.https.onCall(
     }
 
     for (const feature of safetyFeatures) {
-      query = query.where(`query.safetyFeatures.${feature}`, "==", true);
+      query = query.where(`query.safety.${feature}`, "==", true);
     }
 
     const initialResults = (await query.get()).docs;

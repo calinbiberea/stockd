@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 import findShops from "./findShops";
-import { pushStockUpdate, pushSafetyUpdate, onStockUpdate, onSafetyUpdate } from "./stockUpdates";
+import { pushStockUpdate, pushSafetyUpdate, onStockUpdate, onSafetyUpdate } from "./updates";
 
 admin.initializeApp();
 

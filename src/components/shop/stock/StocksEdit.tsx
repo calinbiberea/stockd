@@ -102,7 +102,7 @@ const StocksEdit: React.FC<StocksEditProps> = ({ locationData, stocks }: StocksE
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const stocksAndSliders = Object.entries(products).map(([productId, { name, icon }], ix) => {
+  const stocksAndSliders = Object.entries(products).map(([productId, { name }], ix) => {
     const currentValue = localStocks[productId as ProductId];
     const updated = currentValue !== undefined;
     const last = ix === numStocks - 1;
@@ -113,7 +113,7 @@ const StocksEdit: React.FC<StocksEditProps> = ({ locationData, stocks }: StocksE
     return (
       <Grid item xs={12} key={name} className={classes.gridItem}>
         <div className={classes.stockItem}>
-          <StockItem icon={icon} name={name} value={stocks[productId as ProductId]} />
+          <StockItem productId={productId} value={stocks[productId as ProductId]} />
         </div>
 
         <Slider

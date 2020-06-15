@@ -1,6 +1,13 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { collectAverages, formatDate, getBeforeAfter, SafetyEntry, SafetySubmission } from "./util";
+import {
+  collectAverages,
+  collectBooleans,
+  getBeforeAfter,
+  getDateStrings,
+  SafetyEntry,
+  SafetySubmission,
+} from "./util";
 
 type DocumentSnapshot<T> = admin.firestore.DocumentSnapshot<T>;
 type Change<T> = functions.Change<T>;
@@ -23,10 +30,9 @@ export const onSafetyUpdate = functions.firestore
       ...Object.values(submissions).map((submission) => submission?.rating),
     ].filter((rating) => rating !== undefined && !isNaN(rating)) as number[];
     const averageRating = ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+    const booleans = collectBooleans(averages);
 
-    const now = Date.now();
-    const today = formatDate(now);
-    const tomorrow = formatDate(now + 86400000);
+    const { today, tomorrow } = getDateStrings();
 
     const batch = admin.firestore().batch();
 
@@ -37,6 +43,9 @@ export const onSafetyUpdate = functions.firestore
         displayed: {
           safety: averages,
           ...(ratings.length > 0 ? { safetyRating: averageRating } : {}),
+        },
+        query: {
+          safety: booleans,
         },
         safetyLastUpdated: today,
       },

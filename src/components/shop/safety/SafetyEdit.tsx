@@ -191,10 +191,10 @@ const SafetyEdit: React.FC<SafetyEditProps> = ({
     safetyString = `"${safetyStrings[Math.ceil(hover) as 1 | 2 | 3 | 4 | 5]}"`;
   } else if (localSafetyScore !== undefined) {
     safetyString = (
-      <b>&quot{safetyStrings[Math.ceil(localSafetyScore) as 1 | 2 | 3 | 4 | 5]}&quot</b>
+      <b>&quot;{safetyStrings[Math.ceil(localSafetyScore) as 1 | 2 | 3 | 4 | 5]}&quot;</b>
     );
   } else if (safetyScore !== undefined) {
-    safetyString = <i>&quot{safetyStrings[Math.ceil(safetyScore) as 1 | 2 | 3 | 4 | 5]}&quot</i>;
+    safetyString = <i>&quot;{safetyStrings[Math.ceil(safetyScore) as 1 | 2 | 3 | 4 | 5]}&quot;</i>;
   } else {
     safetyString = undefined;
   }

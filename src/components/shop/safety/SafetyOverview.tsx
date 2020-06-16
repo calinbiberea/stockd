@@ -40,7 +40,7 @@ const SafetyOverview: React.FC<SafetyOverviewProps> = ({
   if (safetyScore !== undefined) {
     safetyString = <i>{`"${safetyStrings[Math.ceil(safetyScore) as 1 | 2 | 3 | 4 | 5]}"`}</i>;
   } else {
-    safetyString = undefined;
+    safetyString = <i>No safety ratings contributed yet.</i>;
   }
 
   const safetyItems = Object.keys(safetyFeatures).map((feature) => (
